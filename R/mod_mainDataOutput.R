@@ -127,7 +127,7 @@ mod_mainData <- function(
     
     # data_day <- siteDroughtdb$get_data("data_day_fire_petita_2")
     
-    data_day <- siteDroughtdb$get_data("data_day_fire_petita_3")
+    data_day <- siteDroughtdb$get_data("data_day_fire")
     
     # ..... Definitiva 2..........
     # ...........................

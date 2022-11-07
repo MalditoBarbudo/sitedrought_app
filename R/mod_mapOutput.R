@@ -654,14 +654,14 @@ mod_map <- function(
           radius = radi,
           color = ~ pal_plot(data_filter[[2]]),
           label = labels_plot,
-          labelOptions = labelOptions(interactive = TRUE)) %>%
+          labelOptions = leaflet::labelOptions(interactive = TRUE)) %>%
         leaflet::clearControls() %>%
         leaflet::addLegend(
           position = "bottomright",
           title = translate_app(variable, lang_declared),
           pal = pal_legend,
           values = value_legend,
-          labFormat = labelFormat(transform = function(x) rev(x)),
+          labFormat = leaflet::labelFormat(transform = function(x) rev(x)),
           opacity = 1)  
 
       

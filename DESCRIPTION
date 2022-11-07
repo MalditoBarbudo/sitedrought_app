@@ -15,6 +15,7 @@ Imports:
     dygraphs,
     glue,
     leaflet,
+    leaflet.extras,
     lubridate,
     magrittr,
     purrr,

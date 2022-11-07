@@ -83,7 +83,7 @@ shiny_set_names <- function(nom,lang) {
 #       .) Usará la tabla THESAURUS de la BBDD 
 #       .) DATOS PRÉVIOS:
 #                .) Creamos de nuevo SiteDroughtDB
-#                .) Creamos variable VAR_THES
+#                .) Creamos variable lfcdata::sitedrought_var_thes
 #                .) Es la tabla THESAURUS_VARIABLE 
 #       .) ARGUMENTOS.
 #                .) LANG = Lengua per definida en menu del NAV
@@ -91,14 +91,10 @@ shiny_set_names <- function(nom,lang) {
 #                .) TYPE = description o units
 
 
-siteDroughtdb <- lfcdata::siteDrought()
-var_thes <- siteDroughtdb$get_data('variables_thesaurus_sitedr')
-
-
 translate_thesaurus_app <- function(id, lang, type) {
   id %>%
     purrr::map_chr(
-      ~ var_thes %>%
+      ~ lfcdata::sitedrought_var_thes %>%
         dplyr::filter(var_id == .x ) %>% {
           data_filtered <- .
           

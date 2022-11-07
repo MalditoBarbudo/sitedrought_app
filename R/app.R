@@ -4,7 +4,7 @@
 #'
 #' @export
 siteDrought_app <- function() {
-  library(leaflet)
+  # library(leaflet)
   source('data-raw/translations.R')
   # source('data-raw/polygon_objects_creation.R')
   source('data-raw/palette_builder.R')
