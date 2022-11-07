@@ -15,12 +15,12 @@
 
 
 all_polygons <- sf::st_read("SHAPES/POLYGONS/all_polygons.shp") %>%
-  rmapshaper::ms_simplify(0.2) %>%
+  # rmapshaper::ms_simplify(0.2) %>%
   sf::st_transform(4326)
 
 all_parques <- sf::st_read("SHAPES/POLYGONS/all_polygons.shp") %>%
   dplyr::filter(Tipus == "OR" | Tipus == "AT" | Tipus == "peri_OR" | Tipus == "peri_AT" ) %>%
-  rmapshaper::ms_simplify(0.5) %>%
+  # rmapshaper::ms_simplify(0.5) %>%
   sf::st_transform(4326)
 
 
