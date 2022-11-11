@@ -106,6 +106,26 @@ siteDrought_data <- function(
     #       .) TAGLIST rea una definición de etiqueta HTML
     #       .) Creamos los elementos HTML5 con TAGS
     #       .) DROPDOWNS (SelectIntpu),...
+    
+    
+    # ...... VARIABLE SELECTINPUT .......
+    # ...................................
+    
+    #       .) Variables según MIQUEL
+    #           .) sequía:              REW, DDS
+    #           .) variable climáticas: PET, Precipitation
+    #           .) variables incendio:  "LFMC","DFMC","SFP","CFP"
+    #           .) quantiles : 
+    
+    
+    drought_vars <- c("REW","DDS") %>%
+      magrittr::set_names(translate_app(., lang_declared))
+    climate_vars <- c("PET", "Precipitation") %>%
+      magrittr::set_names(translate_app(., lang_declared))
+    fire_vars <- c("LFMC","DFMC","SFP","CFP") %>%
+      magrittr::set_names(translate_app(., lang_declared))
+    quantiles_vars <- c("REW_q","DDS_q","LFMC_q") %>%
+      magrittr::set_names(translate_app(., lang_declared))
      
     shiny::tagList(
         
@@ -122,7 +142,17 @@ siteDrought_data <- function(
         shiny::uiOutput(
           ns('selectInput_vars')
         ),
-        
+      
+      # shiny::selectInput(
+      #   ns('variable'), translate_app('var_daily_label', lang_declared),
+      #   choices = shiny_set_names(list(
+      #     'drought variables' = drought_vars,
+      #     'climate variables' = climate_vars,
+      #     'fire variables' = fire_vars,
+      #     'Percentiles variables' = quantiles_vars
+      #   ), lang_declared)
+      # ),
+
 
       # ........ PROBLEMA FECHA ...........
       # ...................................
@@ -205,62 +235,62 @@ siteDrought_data <- function(
   #      .) Donde el OUTPUT indica ( $selectInput_vars )
   
  
-  shiny::observe({   
-    
+  shiny::observe({
+
     # ........ VALUES REACTIVES .........
     # ...................................
-    
+
     #       .) Valores REACTIVES
     #              .) LANGUAGE
     #              .) ORIGEN
 
-    
+
     shiny::validate(shiny::need(input$origen, 'origen no selected') )
-    
+
       lang_reactive   <- shiny::reactive({ lang_declared <- lang()})
       origen_reactive <- shiny::reactive({ input$origen })
-      
-      
+
+
       # ......... INICIALIZAR .............
       # ...................................
-      
+
       #       .) NS = ID's únicos
       #       .) LENGUA = Reactive
       #       .) ORIGEN = Reactive
-      
+
       ns <- session$ns
-      
+
       lang_declared <- lang_reactive()
       origen <-  origen_reactive()
 
-      
-      
+
+
       # ..... MATOLLAR / INCIENDIOS .......
       # ...................................
-      
+
       #       .) En el caso MATOLLAR
       #       .) NO HAY POTENCIAL FUEGO COPA (Ya que son tienen suficiente altura)
       #       .) Por lo tanto:
       #       .) Cuando se seleccione MATOLLAR ("S")
       #       .) No aparecerá CFP
-    
-      
+
+
       switch (origen,
 
               "S" = fire_variables <- c("LFMC","DFMC","SFP"),
               fire_variables <- c("LFMC","DFMC","SFP","CFP")
       )
-      
+
       # ...... VARIABLE SELECTINPUT .......
       # ...................................
-      
+
       #       .) Variables según MIQUEL
       #           .) sequía:              REW, DDS
       #           .) variable climáticas: PET, Precipitation
       #           .) variables incendio:  "LFMC","DFMC","SFP","CFP"
-      #           .) quantiles : 
-      
-      
+      #           .) quantiles :
+
+
       drought_vars <- c("REW","DDS") %>%
         magrittr::set_names(translate_app(., lang_declared))
       climate_vars <- c("PET", "Precipitation") %>%
@@ -269,16 +299,16 @@ siteDrought_data <- function(
         magrittr::set_names(translate_app(., lang_declared))
       quantiles_vars <- c("REW_q","DDS_q","LFMC_q") %>%
         magrittr::set_names(translate_app(., lang_declared))
-      
-      
+
+
       # ............. OUTPUT ..............
       # ...................................
-      
+
       #       .) Indicamos DONDE se harà el cambio  ($selectInput_vars)
       #       .) Indicamos QUE HAREMOS (crear SelectInput)
 
       output$selectInput_vars <- shiny::renderUI({
-        
+
         shiny::selectInput(
           ns('variable'), translate_app('var_daily_label', lang_declared),
           choices = shiny_set_names(list(
@@ -288,12 +318,12 @@ siteDrought_data <- function(
             'Percentiles variables' = quantiles_vars
           ), lang_declared)
         )
-        
-        
+
+
       })
-      
-      
-      
+
+
+
     })
   
   

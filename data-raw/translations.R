@@ -22,17 +22,17 @@ tibble::tribble(
   "PET", "Evapo-transpiració potencial (mm/dia)", "Potential evapo-transpiration (mm/day)", "Evap-transpiración potencial (mm/día)",
   
   "REW", "Aigua disponible sòl (%)", "Available soil water (%)", "Agua disponible suelo (%)",
-  "REW_q", "Percentil Aigua disponible sòl (%)", "Percentile Available soil water (%)", "Percentil Agua disponible suelo (%)",
+  "REW_q", "Percentil aigua disponible sòl (%)", "Percentile available soil water (%)", "Percentil agua disponible suelo (%)",
   
-  "DDS", "Estrés de la vegetació (%)", "Vegetation Stress(%)", "Estrés de la vegetación (%)",
-  "DDS_q", "Percentil Estrés de la vegetació  (%)", "Percentile Stress on vegetation (%)", "Percentil Estrés de la vegetación (%)",
+  "DDS", "Estrés de la vegetació (%)", "Vegetation stress (%)", "Estrés de la vegetación (%)",
+  "DDS_q", "Percentil estrés de la vegetació  (%)", "Percentile vegetation stress (%)", "Percentil estrés de la vegetación (%)",
   
-  "LFMC", "Contingut d’Humitat de Combustible Viu (%)", "Live Fuel Moisture Content (%)","Contendio de Humedad de Combustible Vivo (%)",
-  "LFMC_q", "Percentil Contingut d’Humitat de Combustible Viu (%)", "Percentile Live Fuel Moisture Content (%)","Percentil Contendio de Humedad de Combustible Vivo (%)",
+  "LFMC", "Contingut d’humitat de combustible viu (%)", "Live fuel moisture content (%)","Contendio de humedad de combustible vivo (%)",
+  "LFMC_q", "Percentil contingut d’humitat de combustible viu (%)", "Percentile live fuel moisture content (%)","Percentil contendio de humedad de combustible vivo (%)",
   
-  "DFMC", "Contingut d’Humitat de Combustible Mort (%)", "Dead Fuel Moisture Content (%)","Contendio de Humedad de Combustible Muerto (%)",
-  "SFP","Potencial Foc de Superfície [0-9]","Surface Fire Potential [0-9]","Potencial Fuego de Superficie [0-9]",
-  "CFP","Potencial Foc de Capçada [0-9]","Crown Fire Potential [0-9]","Potencial Fuego de Copa [0-9]",
+  "DFMC", "Contingut d’humitat de combustible mort (%)", "Dead fuel moisture content (%)","Contendio de humedad de combustible muerto (%)",
+  "SFP","Potencial foc de superfície [0-9]","Surface fire potential [0-9]","Potencial fuego de superficie [0-9]",
+  "CFP","Potencial foc de capçada [0-9]","Crown fire potential [0-9]","Potencial fuego de copa [0-9]",
   
  
   
@@ -123,11 +123,10 @@ tibble::tribble(
 
   "PN", "Parcs Nacionals","Nationals Parks","Parques Nacionales",
   "P", "IFN 4", "NFI 4" ,"IFN 4",
-  "A", "Parc Nacional d'Aiguestortes","Aiguestortes National Park","Parque Nacional de Aiguetortes",
+  "A", "Parc Nacional d'Aigüestortes i Estany de Sant Maurici","Aigüestortes i Estany de Sant Maurici National Park","Parque Nacional de Aigüestortes i Estany de Sant Maurici",
   "S", "Matollar","Scrubland","Matorral",
   "T", "Totes les Parcel·les","All Plots","Todas las Parcelas",
-  'AT' ,"Parque Nacional de Aigüestortes i Estany de Sant Maurici","Parque Nacional de Aigüestortes i Estany de Sant Maurici","Parque Nacional de Aigüestortes i Estany de Sant Maurici",
-  'O',"Parque Nacional Ordesa y Monte Perdido","Parque Nacional Ordesa y Monte Perdido","Parque Nacional Ordesa y Monte Perdido",
+  'O',"Parc Nacional d'Ordesa y Monte Perdido","Ordesa y Monte Perdido National Park","Parque Nacional Ordesa y Monte Perdido",
 
   # ....... TIPUS LLEGENDA .......
   # ..............................

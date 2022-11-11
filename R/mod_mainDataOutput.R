@@ -114,29 +114,15 @@ mod_mainData <- function(
     # ...................................
     
     #       .) Usamos siteDrought DB (Definido en APP.R)
-    #       .) Llamamos al M?todo GET DATA
+    #       .) Llamamos al Metodo GET DATA
     #       .) Creamos el SF data_day
     #       .) Es el SF de TODOS los PLOTS / TODAS las fechas
-    #       .) Despu?s ya lo filtraremos
+    #       .) Después ya lo filtraremos
 
-    # ............ PROBES ...........
-    # ...............................
-    # data_day <- siteDroughtdb$get_data("data_day_petita")
-    
-    # data_day <- siteDroughtdb$get_data("data_day_fire_petita")
-    
-    # data_day <- siteDroughtdb$get_data("data_day_fire_petita_2")
-    
+
     data_day <- siteDroughtdb$get_data("data_day_fire")
     
-    # ..... Definitiva 2..........
-    # ...........................
-    # data_day <- siteDroughtdb$get_data("data_day_fire")
-    
-    # ..... Definitiva 1..........
-    # ...........................
-    # data_day <- siteDroughtdb$get_data()
-    
+
     return(data_day)
   })
 

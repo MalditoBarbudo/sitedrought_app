@@ -351,8 +351,7 @@ mod_save <- function(
        #      .) La extensión en FILENAME es .GPKG
        
        sf::st_write(mapInput(), file)
-       
-       
+  
      }
    )
   
