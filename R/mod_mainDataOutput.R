@@ -375,7 +375,8 @@ mod_mainData <- function(
       dygraphs::dyAxis("y2", label = label_axis_q, valueRange = valueRange(var_q)) %>%
       
       dygraphs::dyOptions(fillGraph = TRUE, fillAlpha = 0.1)  %>%
-      dygraphs::dyEvent(fecha, fecha, labelLoc = "top")
+      dygraphs::dyEvent(fecha, fecha, labelLoc = "top") %>%
+      dygraphs::dyLegend(show = "follow")
 
       
     } else {
@@ -386,7 +387,8 @@ mod_mainData <- function(
         dygraphs::dyAxis("y", label = var_def, valueRange = valueRange(variable)) %>%
         
         dygraphs::dyOptions(fillGraph = TRUE, fillAlpha = 0.1)  %>%
-        dygraphs::dyEvent(fecha, fecha, labelLoc = "top")
+        dygraphs::dyEvent(fecha, fecha, labelLoc = "top") %>%
+        dygraphs::dyLegend(show = "follow")
     }
 
 
