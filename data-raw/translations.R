@@ -91,10 +91,9 @@ tibble::tribble(
   'percentiles_axis_label','Percentils Comparació Històrica (1981 - 2020)','Percentiles Historical Comparison (1981 - 2020)','Percentiles Comparación Histórica (1981 - 2020)',
   "save_main_label","Selecciona format per descargar les dades","Select format for downloading data","Selecciona formato para descargas los datos",
   "save_map_button","Guardar el mapa", "Save the map", "Guardar el mapa", 
-  "save_table_button", "Guardar la taula","Save the table", "Guardar la tabla", 
+  "save_table_button", "Descarrega","Download", "Descarga", 
   'help_description','Descripció : ','Description : ','Descripción : ',
   'units_description','Unitats : ','Units : ','Unidades : ',
-  # 'reverse_legend','Invertir Llegenda', 'Reverse Legend','Invertir Leyenda',
   'reverse_legend', "Invertir la paleta?","Reverse the palette?", "¿Invertir la paleta?", 
   
   # ........... SAVE .............
@@ -105,8 +104,12 @@ tibble::tribble(
   
   "data_colum_label","¿Totes les dades o només les columnes visibles?", "All data or visible data?", "¿Todos los datos o solo las columnas visibles?", 
   "select_format_label", "Selecciona el format","Choose the output format", "Selecciona el formato", 
+  "select_day_table","Rang de dades","Data range","Rango de datos",
   "csv", "Text (csv)","Text (csv)", "Texto (csv)", 
   "xlsx", "MS Excel (xlsx)","MS Excel (xlsx)", "MS Excel (xlsx)",
+  "gpkg", "Espacial (GPKG)","Spatial (GPKG)", "Espacial (GPKG)",
+  "table","Tota la base de dades","Entire database","Toda la base de datos",
+  "day","Dia seleccionat","Day selected","Día seleccionado",
   
   
   # ....... SCREEN WAITING .......

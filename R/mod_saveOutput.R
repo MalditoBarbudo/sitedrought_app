@@ -71,51 +71,22 @@ mod_save <- function(
         shiny::fluidRow(translate_app("save_main_label", lang_declared), style = "text-align: center;"),  
         shiny::br(),
         shiny::fluidRow(
-          
-  
-          # -----------------     ROW BUTTONS    ----------------
-          # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-          
-          #       .) Fila de BUTTONS
-          #       .) MAP_SAVE / TABLE_SAVE
-          
-          shiny::br(),
-          shiny::fluidRow(
-            shiny::column(6, align = 'center',
-                          
-                # .......... BUTTON MAP .............
-                # ...................................
-                
-                #       .) Button que DESCARGA GEOPACK 
-                            
-                shiny::downloadButton(ns("map_save"), translate_app("save_map_button", lang_declared))
-            ),
-            
-            shiny::column(6, align = 'center',
-                          
-                # ......... TABLE BUTTON ............
-                # ...................................
-                
-                #       .) Button que DESCARGA TABLA
-                #       .) Puede ser en formato CSV/XLSX
-                #       .) Puede tener TODAS COLUMNAS VARIABLES / UN COLUMNA VARIABLE              
-                            
-                shiny::downloadButton(ns("table_save"), translate_app("save_table_button",lang_declared))
-            )
+          shiny::fluidRow( align = 'center',
+                           
+              # ....... DOWNLOAD BUTTON ...........
+              # ...................................
+              
+              #       .) Button que DESCARGA los datos
+              #       .) Puede ser en formato CSV/XLSX/GPKG
+              #       .) Puede tener TODAS COLUMNAS VARIABLES / UN COLUMNA VARIABLE              
+              
+              shiny::downloadButton(ns("table_save"), translate_app("save_table_button",lang_declared)),
           ),
           
-         
-          # ------------------    ROW COLUMNS    ----------------
-          # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-          
-          #       .) Fila de COLUMNAS
-          #       .) DATA_COLUMN / FORMAT COLUMNS
-          
           shiny::br(),
-          shiny::fluidRow(
-            shiny::column(6, offset = 6, align = 'center',
+          shiny::fluidRow( align = 'center',
               
-              # ......... RADIO BUTTONS ...........
+              # ........ COLUMNS BUTTONS ..........
               # ...................................
               
               #       .) Botones selección COLUMNAS
@@ -130,24 +101,36 @@ mod_save <- function(
                 
               ),
               
-              # ......... RADIO BUTTONS ...........
+              # ......... FORMAT BUTTONS ..........
               # ...................................
               
               #       .) Botones selección FORMATO
-              #       .) Dos tipos = CSV / XLSX
+              #       .) Dos tipos = CSV / XLSX / GPKG
               
               shinyWidgets::prettyRadioButtons(
                 ns("data_format"),translate_app("select_format_label", lang_declared),
                 shiny_set_names(c("csv"  = "csv",
-                                  "xlsx" = "xlsx"),lang_declared),
+                                  "xlsx" = "xlsx",
+                                  "gpkg" = "gpkg"),lang_declared),
+                status = 'success', fill = TRUE, shape = 'round'
+              ),
+              
+              # ......... RANGE BUTTONS ...........
+              # ...................................
+              
+              #       .) Botones selección RANGO DATOS
+              #       .) Dos tipos = ALL DATABASE / DAY
+              
+              shinyWidgets::prettyRadioButtons(
+                ns("day_table"),translate_app("select_day_table", lang_declared),
+                shiny_set_names(c("day"  = "day",
+                                  "table" = "table"),lang_declared),
                 status = 'success', fill = TRUE, shape = 'round'
               )
-              
-              
-            ) # end colum
-          )# end fluid row
-        )# end fluid row  
-    ) # end of tagList
+
+          ) # end fluid row
+        )   # end fluid row  
+      )     # end of tagList
 
   })  
   
@@ -191,50 +174,31 @@ mod_save <- function(
     
     
     if( input$data_columns == "col_all" ) {
-      sf  %>%
+      sf_data_columns <- sf  %>%
         dplyr::filter(date == fecha) %>%
         dplyr::mutate(lon_WGS84 = sf::st_coordinates(.data$geometry)[,1],
                       lat_WGS84 = sf::st_coordinates(.data$geometry)[,2],
                       lon_ETRS89 = sf::st_coordinates(sf::st_transform(.data$geometry, 25831))[,1],
                       lat_ETRS89 = sf::st_coordinates(sf::st_transform(.data$geometry, 25831))[,2]
-        ) %>% data.frame() %>% dplyr::select(-geometry)  
-      
+        )
     } else if (input$data_columns == "col_vis") {
-      sf %>%
+      sf_data_columns <- sf %>%
         dplyr::filter(date == fecha) %>%
-        dplyr::select(plot_id, selected_var, date, plot_origin) %>%
+        dplyr::select(plot_id, selected_var, date, plot_origin) %>%  
         dplyr::mutate(lon_WGS84 = sf::st_coordinates(.data$geometry)[,1],
                       lat_WGS84 = sf::st_coordinates(.data$geometry)[,2],
                       lon_ETRS89 = sf::st_coordinates(sf::st_transform(.data$geometry, 25831))[,1],
                       lat_ETRS89 = sf::st_coordinates(sf::st_transform(.data$geometry, 25831))[,2]
-        ) %>% data.frame() %>% dplyr::select(-geometry)
+        )
     } 
     
-  })
-  
-  # *****************  REACTIVE MAP  *******************
-  # ****************************************************
-  
-  #      .) REACTIVE
-  #      .) SIEMPRE devuelve el mismo DF
-  #      .) INCLUYE Gemoetry (ya que es un GEOPACK)
-  
-  mapInput <- reactive({
     
-    fecha <- data_reactives$fecha_reactive
-    sf <- main_data_reactives$data_day  
-    
-    variable <- data_reactives$variable_reactive
-    num_i <- as.numeric(match(variable,names(sf)))
-    selected_var <- as.symbol(names(sf)[num_i])
-    
-    sf  %>%
-      dplyr::filter(date == fecha) %>%
-      dplyr::mutate(lon_WGS84 = sf::st_coordinates(.data$geometry)[,1],
-                    lat_WGS84 = sf::st_coordinates(.data$geometry)[,2],
-                    lon_ETRS89 = sf::st_coordinates(sf::st_transform(.data$geometry, 25831))[,1],
-                    lat_ETRS89 = sf::st_coordinates(sf::st_transform(.data$geometry, 25831))[,2]
-      ) %>% data.frame()
+    if(input$data_format == "gpkg"){
+      sf_data_columns %>% data.frame()
+    } else {
+      sf_data_columns %>% data.frame() %>% dplyr::select(-geometry)
+    }
+
     
   })
   
@@ -264,7 +228,8 @@ mod_save <- function(
   format_selected <- function() {
     switch (input$data_format,
             "csv" = format <- ".csv", 
-            "xlsx" = format <- ".xlsx" 
+            "xlsx" = format <- ".xlsx",
+            "gpkg" = format <- ".gpkg"
     )
   }
   
@@ -275,10 +240,24 @@ mod_save <- function(
   #      .) Del archivo a descargar
   
   column_selected <- function() {
-    switch (input$data_columns,
-            "col_vis" = format <- "_specific_columns", 
-            "col_all" = format <- "_all_columns" 
-    )
+    
+    if(input$data_format == "gpkg") {
+      
+      switch (input$data_columns,
+              "col_vis" = format <- "_map_specific_columns", 
+              "col_all" = format <- "_map_all_columns" 
+      )
+      
+    } else {
+      
+      switch (input$data_columns,
+              "col_vis" = format <- "_specific_columns", 
+              "col_all" = format <- "_all_columns" 
+      )
+    }
+    
+    
+    
   }
   
   # ----- DATE STRING ----------
@@ -303,7 +282,7 @@ mod_save <- function(
   #               .) CONTENT  Function  => f(x) WRITE
   
   
-  # ******** TABLE SAVE ********
+  # ******** DATA SAVE *********
   # ****************************
   
   #      .) DOWNLOADHANDLER
@@ -324,7 +303,8 @@ mod_save <- function(
    
       switch (input$data_format,
               "csv" = write.csv(datasetInput(), file, row.names = FALSE),
-              "xlsx" = writexl::write_xlsx(datasetInput(), file) 
+              "xlsx" = writexl::write_xlsx(datasetInput(), file),
+              "gpkg" = sf::st_write(datasetInput(), file)
               )
      
 
@@ -332,28 +312,6 @@ mod_save <- function(
   )
    
 
-   # ******** TABLE SAVE ********
-   # ****************************
-   
-   #      .) DOWNLOADHANDLER
-   #      .) Para crear f(x) MAP DWONLOAD
-
-   output$map_save <- downloadHandler(
-     filename = function() {
-       paste(date_str,'_map.gpkg', sep = "")
-     },
-     content = function(file) {
-       
-       # ....... WRITE GEOPACK ...........
-       # .............................
-       
-       #      .) Usamos f(x) ST_WRITE
-       #      .) La extensión en FILENAME es .GPKG
-       
-       sf::st_write(mapInput(), file)
-  
-     }
-   )
   
  
   
