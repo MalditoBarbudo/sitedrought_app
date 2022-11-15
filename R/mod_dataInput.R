@@ -76,27 +76,21 @@ siteDrought_data <- function(
 
 
     if( is.null((data_day))){
-      
+
       date_max <- Sys.Date()+1
       date_min <- Sys.Date()-1
 
     } else {
-      
+
       # data_day <- main_data_reactives$data_day
 
       date_max <- max(data_day$date)
       date_min <- min(data_day$date)
 
-     
     }
 
-    
     dif_days <- as.numeric(difftime(date_max, date_min, units = "days"))
     date_midel <- as.Date(date_min) + round(dif_days/2, digits = 0)
-    
-    
-    
-    
     
     
     # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -117,6 +111,8 @@ siteDrought_data <- function(
     #           .) variables incendio:  "LFMC","DFMC","SFP","CFP"
     #           .) quantiles : 
     
+    
+    
     # fire_variables <- c("LFMC","DFMC","SFP","CFP")
     # 
     # drought_vars <- c("REW","DDS") %>%
@@ -127,6 +123,8 @@ siteDrought_data <- function(
     #   magrittr::set_names(translate_app(., lang_declared))
     # quantiles_vars <- c("REW_q","DDS_q","LFMC_q") %>%
     #   magrittr::set_names(translate_app(., lang_declared))
+    
+    
      
     shiny::tagList(
    

@@ -112,7 +112,7 @@ tibble::tribble(
   # ....... SCREEN WAITING .......
   # ..............................
   
-  "progress_plots", "Obtenció de les parcel·les", "Retrieving the Plots", "Obteniendo las parcelas",
+  "progress_plots", "Obtenció de dades", "Obtaining data", "Obteniendo datos",
   "progress_detail_plots", "Això pot trigar una mica", "This may take some time", "Esto puede llevar algo de tiempo",
   
   "progress_detail_raster", "Això pot trigar una mica", "This may take some time", "Esto puede llevar algo de tiempo",
