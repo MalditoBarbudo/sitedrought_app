@@ -129,8 +129,7 @@ siteDrought_data <- function(
     #   magrittr::set_names(translate_app(., lang_declared))
      
     shiny::tagList(
-        
-      
+   
         # ...... SELECCION VARIABLE CAMBIENTE .....
         # .........................................
         
@@ -189,22 +188,25 @@ siteDrought_data <- function(
           "A"="A",
           "O"="O",
           "S"="S"), lang_declared)
-      ),  
-      
+      ),
+                      
       # ..... RADIO BUT LEGEND COLOR ......
       # ...................................
       
       #      .) Dejo COMENTADA el CANVIO de COLOR de LEYENDA
       #      .) Me espero a hablar-lo con Miquel y Víctor
-      
-      shiny:: radioButtons(
-        ns("legend_modify"),translate_app("type_legend_label", lang_declared),
-        shiny_set_names(c("estandard_label" = "estandard",
-                          "1st_label" = "tip_1",
-                          "2nd_label" = "tip_2"),lang_declared)
+                
+      shinyWidgets::radioGroupButtons(
+        ns("legend_modify"),
+        translate_app("type_legend_label", lang_declared),
+        size = 'normal',
+        choices = shiny_set_names(c("estandard_label" = "estandard",
+                                    "1st_label" = "tip_1",
+                                    "2nd_label" = "tip_2"),lang_declared),
+        selected = 'estandard', direction = 'vertical',
+        status = 'lfc_radiogroupbuttons'
       ),
-      
-      
+                
       # ... CHEK BUTTON LEGEND INVERT .....
       # ...................................
       
@@ -217,11 +219,8 @@ siteDrought_data <- function(
         status = 'success', shape = 'curve', fill = TRUE
       )
       
-      
-
-    ) # end of tagList
-
-  })           
+   ) # end of tagList
+}) # end RENDER UI         
 
 
   

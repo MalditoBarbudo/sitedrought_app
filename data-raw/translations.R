@@ -86,14 +86,16 @@ tibble::tribble(
   "tech_specs_translation", "Especificacions tècniques", "Technical specifications", "Especificaciones técnicas",
   "date_daily_label", 'Data', 'Date', 'Fecha',
   'series_tab_translation', "Sèries temporals", "Time series", "Series temporales",
-  "type_legend_label", "Canvi Llegenda", 'Legend Change','Cambio Leyenda',
+  "type_legend_label", "Configurar paleta","Config palette", "Configurar paleta",
+  
   'percentiles_axis_label','Percentils Comparació Històrica (1981 - 2020)','Percentiles Historical Comparison (1981 - 2020)','Percentiles Comparación Histórica (1981 - 2020)',
   "save_main_label","Selecciona format per descargar les dades","Select format for downloading data","Selecciona formato para descargas los datos",
   "save_map_button","Guardar el mapa", "Save the map", "Guardar el mapa", 
   "save_table_button", "Guardar la taula","Save the table", "Guardar la tabla", 
   'help_description','Descripció : ','Description : ','Descripción : ',
   'units_description','Unitats : ','Units : ','Unidades : ',
-  'reverse_legend','Invertir Llegenda', 'Reverse Legend','Invertir Leyenda',
+  # 'reverse_legend','Invertir Llegenda', 'Reverse Legend','Invertir Leyenda',
+  'reverse_legend', "Invertir la paleta?","Reverse the palette?", "¿Invertir la paleta?", 
   
   # ........... SAVE .............
   # ..............................
