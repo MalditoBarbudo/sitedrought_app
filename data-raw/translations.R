@@ -115,7 +115,7 @@ tibble::tribble(
   # ....... SCREEN WAITING .......
   # ..............................
   
-  "progress_ddbb", "Descarga de la base de dades", "Database download", "Descarga de la base de datos",
+  "progress_ddbb", "Descargant tota la base de dades", "Downloading the complete database", "Descargando toda la base de datos",
   "progress_plots", "Obtenció de dades", "Obtaining data", "Obteniendo datos",
   "progress_detail_plots", "Això pot trigar una mica", "This may take some time", "Esto puede llevar algo de tiempo",
   
