@@ -124,7 +124,7 @@ mod_save <- function(
               shinyWidgets::prettyRadioButtons(
                 ns("day_table"),translate_app("select_day_table", lang_declared),
                 shiny_set_names(c("day"  = "day",
-                                  "table" = "table"),lang_declared),
+                                  "ddbb" = "ddbb"),lang_declared),
                 status = 'success', fill = TRUE, shape = 'round'
               )
 
@@ -161,6 +161,14 @@ mod_save <- function(
   #      .) ELIMINAMOS
   #               .) Columna GEOMETRY
   #               .) Ya que en el EXCEL y CSV no aporta info
+  
+  
+  
+  # ............ DATABASE only DAY ...............
+  # ..............................................
+  
+  #      .) Función para download SOLO UN DÍA
+  #      .) Puedes seleccionar COLUMNAS y GEOPAK 
 
   datasetInput <- reactive({
     
@@ -199,6 +207,37 @@ mod_save <- function(
       sf_data_columns %>% data.frame() %>% dplyr::select(-geometry)
     }
 
+    
+  })
+  
+  
+  # .......... DOWNLOAD all DATABASE .............
+  # ..............................................
+  
+  #      .) Función para download TODA la BBDD
+  #      .) Puedes seleccionar GEOPAK
+  
+  
+  databaseInput <- reactive({
+    
+    sf <- main_data_reactives$data_day
+
+    if( input$data_columns == "col_all" | input$data_columns == "col_vis" ) {
+      sf_data <- sf  %>%
+        dplyr::mutate(lon_WGS84 = sf::st_coordinates(.data$geometry)[,1],
+                      lat_WGS84 = sf::st_coordinates(.data$geometry)[,2],
+                      lon_ETRS89 = sf::st_coordinates(sf::st_transform(.data$geometry, 25831))[,1],
+                      lat_ETRS89 = sf::st_coordinates(sf::st_transform(.data$geometry, 25831))[,2]
+        )
+    } 
+
+
+    if(input$data_format == "gpkg"){
+      sf_data %>% data.frame()
+    } else {
+      sf_data %>% data.frame() %>% dplyr::select(-geometry)
+    }
+    
     
   })
   
@@ -291,7 +330,13 @@ mod_save <- function(
  
    output$table_save <- downloadHandler(
     filename = function() {
-      paste(date_str,column_selected(),format_selected(), sep = "")
+      
+      if (input$day_table == "ddbb"){
+        paste(date_str,'_all_ddbb.csv', sep = "")
+      } else {
+        paste(date_str,column_selected(),format_selected(), sep = "")
+      }
+     
     },
     content = function(file) {
       
@@ -300,18 +345,95 @@ mod_save <- function(
       
       #      .) en f(x) del formato
       #      .) usaremos WRITE.CSV o WRITE_XLSX para descargar
-   
-      switch (input$data_format,
-              "csv" = write.csv(datasetInput(), file, row.names = FALSE),
-              "xlsx" = writexl::write_xlsx(datasetInput(), file),
-              "gpkg" = sf::st_write(datasetInput(), file)
-              )
-     
+      
+      if (input$day_table == "ddbb" ) {
+        
+        
+        # ....... WAITER / HOSTESS ..........
+        # ...................................
+        
+        #       .) https://shiny.john-coene.com/waiter/
+        #       .) Paquete de R que permite crear LOADING SCREENS
+        
+        #       .) INICIALIZAMOS:
+        #              .) Fuera de REACTIVE careamos OBJECTO con la classe:
+        #              .) WAITER::HOSTESS$new
+        #       .) SEGUNDO
+        #              .) SET_LOADER = image SVG, tipo progress y fill direction
+        
+        
+        
+        
+        hostess_plots <- waiter::Hostess$new(infinite = TRUE)
+        hostess_plots$set_loader(waiter::hostess_loader(
+          svg = 'images/hostess_image.svg',
+          progress_type = 'fill',
+          fill_direction = 'btt'
+        ))
+        
+        # ....... WAITER / HOSTESS ..........
+        # ...................................
+        
+        #       .) TERCERO:
+        #       .) Definir LUGAR de aparición = ID ( en APP.R / mainPanel)
+        #       .) Definir => Get_Loader() definido anteriormente + HTML H3 + P
+        
+        
+        waiter_ddbb <- waiter::Waiter$new(
+          id = 'overlay_div',
+          html = shiny::tagList(
+            hostess_plots$get_loader(),
+            shiny::h3(translate_app("progress_ddbb", lang())),
+            shiny::p(translate_app("progress_detail_plots", lang()))
+          ),
+          color = "#E8EAEB"  # color del fondo
+          
+          
+        )
+        #       .) CUARTO: Show MAP + Star HOSTESS
+        #       .) QUINTO: Definir EXIT Hostess / Map 
+        
+        
+        waiter_ddbb$show()
+        hostess_plots$start()
+        on.exit(hostess_plots$close(), add = TRUE)
+        on.exit(waiter_ddbb$hide(), add = TRUE)
+        
+       
+        
+        write.csv(databaseInput(), file, row.names = FALSE)
+        
+        # switch (input$data_format,
+        #         "csv" = write.csv(databaseInput(), file, row.names = FALSE),
+        #         "xlsx" = writexl::write_xlsx(databaseInput(), file),
+        #         "gpkg" = sf::st_write(databaseInput(), file)
+        # )
+        
+      } else {
+        
+        switch (input$data_format,
+                "csv" = write.csv(datasetInput(), file, row.names = FALSE),
+                "xlsx" = writexl::write_xlsx(datasetInput(), file),
+                "gpkg" = sf::st_write(datasetInput(), file)
+        )
+      }
+
 
     }
   )
    
 
+   
+   # siteDroughtdb <- lfcdata::siteDrought()
+   # d <- siteDroughtdb$get_data("data_day_fire")
+   # 
+   # 
+   # start_time <- Sys.time()
+   # write.csv(d, 'C:/OLEGUER/all_ddbb.csv')             # 600 Mb - 2 min
+   # # writexl::write_xlsx(d, 'C:/OLEGUER/all_ddbb.xlsx')    # ERROR!  - demasiadas líneas
+   # # sf::st_write(d, 'C:/OLEGUER/all_ddbb.gpkg')           # 400 Mb - 3 mIN
+   # end_time <- Sys.time()
+   # end_time - start_time
   
  
   

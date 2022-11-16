@@ -108,13 +108,14 @@ tibble::tribble(
   "csv", "Text (csv)","Text (csv)", "Texto (csv)", 
   "xlsx", "MS Excel (xlsx)","MS Excel (xlsx)", "MS Excel (xlsx)",
   "gpkg", "Espacial (GPKG)","Spatial (GPKG)", "Espacial (GPKG)",
-  "table","Tota la base de dades","Entire database","Toda la base de datos",
+  "ddbb","Tota la base de dades (només CSV)","Entire database (only CSV)","Toda la base de datos (sólo CSV)",
   "day","Dia seleccionat","Day selected","Día seleccionado",
   
   
   # ....... SCREEN WAITING .......
   # ..............................
   
+  "progress_ddbb", "Descarga de la base de dades", "Database download", "Descarga de la base de datos",
   "progress_plots", "Obtenció de dades", "Obtaining data", "Obteniendo datos",
   "progress_detail_plots", "Això pot trigar una mica", "This may take some time", "Esto puede llevar algo de tiempo",
   

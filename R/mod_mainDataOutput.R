@@ -122,7 +122,6 @@ mod_mainData <- function(
 
     data_day <- siteDroughtdb$get_data("data_day_fire")
     
-
     return(data_day)
   })
 
