@@ -56,12 +56,14 @@ mod_save <- function(
     
     
     # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    # -------------------------     ESTRUCTURA HTML5   ------------------------------
+    # -----------------------------    RENDER UI   ---------------------------------
     # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-
     
-    #       .) TAGLIST rea una definición de etiqueta HTML
+    # ........ ESTRUCTURA HTML5 .........
+    # ...................................
+    
+    #       .) TAGLIST crea una definición de etiqueta HTML
     #       .) Creamos los elementos HTML5 con TAGS
     #       .) DROPDOWNS (SelectIntpu),...
      
@@ -105,7 +107,7 @@ mod_save <- function(
               # ...................................
               
               #       .) Botones selección FORMATO
-              #       .) Dos tipos = CSV / XLSX / GPKG
+              #       .) Tres tipos = CSV / XLSX / GPKG
               
               shinyWidgets::prettyRadioButtons(
                 ns("data_format"),translate_app("select_format_label", lang_declared),
@@ -119,7 +121,7 @@ mod_save <- function(
               # ...................................
               
               #       .) Botones selección RANGO DATOS
-              #       .) Dos tipos = ALL DATABASE / DAY
+              #       .) Dos tipos = ALL DATABASE / ONE DAY
               
               shinyWidgets::prettyRadioButtons(
                 ns("day_table"),translate_app("select_day_table", lang_declared),
@@ -138,37 +140,43 @@ mod_save <- function(
 
   
   # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  # ---------------------    ESTRUCTURA BOTON DOWNLOAD  --------------------------
+  # -----------------------------   DOWNLOAD  -----------------------------------
   # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   
+  
+  #      .) Los botones DOWNLOAD funciona con 2 ESTRUCTURAS
 
-  #      .) Se compone de 2 ESTRUCTURAS
-  #               .) REACTIVE
-  #               .) DOWNLOADHANDLER
+  #               .) REACTIVE         = Nos da los datos a descargar
+  #               .) DOWNLOADHANDLER  = Función de descargar
   
+  #      .) Usaremos 2 Reactives para obtener datos
+  
+  #               .) REACTIVE Database ONE DAY =
+  #               .) REACTIVE all Database     = 
 
-  # ****************  REACTIVE TABLE  ******************
-  # ****************************************************
+
   
-  #      .) REACTIVE
-  #      .) En f(x) del tipo de DATA_COLUMNS
-  #      .) Nos devuelve un DF 
-  #               .) con TODAS COLUMNAS
-  #               .) con SOLO COLUMNA VARIABLE SELECCIONADA
-  #      .) CREAMOS
-  #               .) lat/long (ETRS89)
-  #               .) lat/long (WGS84)
-  #      .) ELIMINAMOS
-  #               .) Columna GEOMETRY
-  #               .) Ya que en el EXCEL y CSV no aporta info
-  
-  
-  
-  # ............ DATABASE only DAY ...............
+  # .......... DATABASE ONLY ONE DAY .............
   # ..............................................
   
-  #      .) Función para download SOLO UN DÍA
-  #      .) Puedes seleccionar COLUMNAS y GEOPAK 
+  #      .) REACTIVE para DESCARGA de SOLO UN DÍA
+  #      .) CREAMOS en el data set 4 columnas
+  #               .) lat/long (ETRS89)
+  #               .) lat/long (WGS84)
+  
+  
+  #      .) PRIMER IF  
+  #               .) con TODAS COLUMNAS
+  #               .) con SOLO COLUMNA VARIABLE SELECCIONADA
+  
+  #      .) SEGUNDO IF  
+  #               .) Si NO es GPKG
+  #                  .) Eliminamos columna GEOMETRY
+  #                  .) Ya que en el EXCEL y CSV no aporta info
+  #               .) Si es GPKG
+  #                  .) Manetnemos columna GEOMETRY
+  #                  .) Es necesaria para el GPKG
+  
 
   datasetInput <- reactive({
     
@@ -200,7 +208,6 @@ mod_save <- function(
         )
     } 
     
-    
     if(input$data_format == "gpkg"){
       sf_data_columns %>% data.frame()
     } else {
@@ -211,12 +218,23 @@ mod_save <- function(
   })
   
   
-  # .......... DOWNLOAD all DATABASE .............
-  # ..............................................
+  # ..............  DOWNLOAD all DATABASE .............
+  # ...................................................
   
   #      .) Función para download TODA la BBDD
-  #      .) Puedes seleccionar GEOPAK
   
+  #      .) PRIMER IF 
+  #               .) Tanto si seleccionamos ALL Colums / Columna VISIBLE
+  #               .) Se descarga TODA la BBDD
+  #               .) Creamos 4 columna Lat / Lon
+  
+  #      .) SEGUNDO IF
+  #               .) Si NO es GPKG
+  #                  .) Eliminamos columna GEOMETRY
+  #                  .) Ya que en el EXCEL y CSV no aporta info
+  #               .) Si es GPKG
+  #                  .) Manetnemos columna GEOMETRY
+  #                  .) Es necesaria para el GPKG
   
   databaseInput <- reactive({
     
@@ -242,26 +260,26 @@ mod_save <- function(
   })
   
   
-  # ****************  DOWNLOADHANDLER  ******************
-  # ****************************************************
+  # %%%%%%%%%%%%%%%%  DOWNLOADHANDLER  %%%%%%%%%%%%%%%%%
+  # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   
-  #      .) NECEISITA
-  #           .) FILENAME Function  => nombre de archivo
-  #           .) CONTENT  Function  => f(x) WRITE
+  #      .) NECESSITA
+  #           .) FILENAME Function  => crea ek nombre de archivo
+  #           .) CONTENT  Function  => f(x) DOWNLOAD
+  
+  #      .) FILENAME
+  #           .) Crearemos 3 f(x) que nos ayudaran
+  #              .) FORMAT_SELECTED   
+  #              .) COLUMN_SELECTED   
+  #              .) DATE_STR
+  
+
   
   
-  # ................ VARIABLES ...................
+  # ............... f(x) FROMATO .................
   # ..............................................
   
-  #      .) Variables Necesarias para el SAVE TABLE
-  #          .) FORMATO
-  #          .) COLUMN_SELECTED
-  #          .) DATE_STRING
-  
-  # ----- FORMATO SELECTED -----
-  # ----------------------------
-  
-  #      .) Función que asigna EXENCIÓN del archivo
+  #      .) Función que asigna EXTENCIÓN del archivo
   #      .) CSV o XLSX
   
   format_selected <- function() {
@@ -272,8 +290,8 @@ mod_save <- function(
     )
   }
   
-  # ----- COLUMN SELECTED ------
-  # ----------------------------
+  # ............... f(x) COLUMNA .................
+  # ..............................................
   
   #      .) Función que asigna parte del nombre
   #      .) Del archivo a descargar
@@ -295,12 +313,10 @@ mod_save <- function(
       )
     }
     
-    
-    
   }
   
-  # ----- DATE STRING ----------
-  # ----------------------------
+  # ........... f(x) DATA to STRING ..............
+  # ..............................................
   
   #      .) Función que asigna crea STRING DATE
   #      .) Une Year/month/day en un solo STRING sin guiones
@@ -310,24 +326,19 @@ mod_save <- function(
     stringr::str_c(., collapse = "")
   
   
- 
-  # .............. DOWNLOADHANDLER ...............
-  # ..............................................
+  
+  # %%%%%%%%%%%%%%%%  DOWNLOADHANDLER  %%%%%%%%%%%%%%%%%
+  # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
   
   #      .) Es un OUTPUT
-  #      .) En este caso irá al ID = TABLE_SAVE
+  #      .) Apunta al ID = TABLE_SAVE
   #      .) ESTRUCUTRA:
-  #               .) FILENAME Function  => nombre de archivo
-  #               .) CONTENT  Function  => f(x) WRITE
+  #               .) FILENAME Function  => crea nombre de archivo
+  #               .) CONTENT  Function  => f(x) DOWNLOAD 
   
   
-  # ******** DATA SAVE *********
-  # ****************************
-  
-  #      .) DOWNLOADHANDLER
-  #      .) Para crear f(x) TABLE DWONLOAD
 
- 
    output$table_save <- downloadHandler(
     filename = function() {
       
@@ -344,7 +355,11 @@ mod_save <- function(
       # .............................
       
       #      .) en f(x) del formato
-      #      .) usaremos WRITE.CSV o WRITE_XLSX para descargar
+      #      .) lo DESCARGA en diferentes formatos (CSV, XLSX, GPKG)
+      
+      #      .) PRIMERO Diferenciamos
+      #              .) SI es DDBB => Descarga TODA la BBDD solo en CSV
+      #              .) NO es DDBB => Puedes descargar en CSV, XLSL o GPKG
       
       if (input$day_table == "ddbb" ) {
         
@@ -352,15 +367,14 @@ mod_save <- function(
         # ....... WAITER / HOSTESS ..........
         # ...................................
         
-        #       .) https://shiny.john-coene.com/waiter/
-        #       .) Paquete de R que permite crear LOADING SCREENS
+        #       .) El descargar TODA la BBDD en CSV tarda 2 min o mas
+        #       .) Por eso usamos el WAITER para que el usuario vea la progresión del procesos
         
-        #       .) INICIALIZAMOS:
-        #              .) Fuera de REACTIVE careamos OBJECTO con la classe:
-        #              .) WAITER::HOSTESS$new
+        #       .) PRIMERO:
+        #              .) creamos OBJECTO con la classe = WAITER::HOSTESS$new
         #       .) SEGUNDO
-        #              .) SET_LOADER = image SVG, tipo progress y fill direction
-        
+        #              .) SET_LOADER  
+        #              .) Especificamos: image SVG, tipo progress y fill direction
         
         
         
@@ -387,11 +401,10 @@ mod_save <- function(
             shiny::p(translate_app("progress_detail_plots", lang()))
           ),
           color = "#E8EAEB"  # color del fondo
-          
-          
         )
-        #       .) CUARTO: Show MAP + Star HOSTESS
-        #       .) QUINTO: Definir EXIT Hostess / Map 
+        
+        #       .) CUARTO: Show WAITER + Star HOSTESS
+        #       .) QUINTO: Definir EXIT Hostess / WAITER 
         
         
         waiter_ddbb$show()
@@ -400,6 +413,12 @@ mod_save <- function(
         on.exit(waiter_ddbb$hide(), add = TRUE)
         
        
+        # ...... FUNCIÓN CREAR CSV ..........
+        # ...................................
+        
+        #       .) Función de crear CSV
+        #       .) Tarda unos 2 min
+        #       .) Por esto añadimos previamente el WAITER
         
         write.csv(databaseInput(), file, row.names = FALSE)
         
@@ -422,21 +441,6 @@ mod_save <- function(
     }
   )
    
-
-   
-   # siteDroughtdb <- lfcdata::siteDrought()
-   # d <- siteDroughtdb$get_data("data_day_fire")
-   # 
-   # 
-   # start_time <- Sys.time()
-   # write.csv(d, 'C:/OLEGUER/all_ddbb.csv')             # 600 Mb - 2 min
-   # # writexl::write_xlsx(d, 'C:/OLEGUER/all_ddbb.xlsx')    # ERROR!  - demasiadas líneas
-   # # sf::st_write(d, 'C:/OLEGUER/all_ddbb.gpkg')           # 400 Mb - 3 mIN
-   # end_time <- Sys.time()
-   # end_time - start_time
-  
- 
-  
 
 }
 

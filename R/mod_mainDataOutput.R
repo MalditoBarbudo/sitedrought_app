@@ -40,11 +40,11 @@ mod_mainData <- function(
   #       .) https://shiny.john-coene.com/waiter/
   #       .) Paquete de R que permite crear LOADING SCREENS
   
-  #       .) INICIALIZAMOS:
-  #              .) Fuera de REACTIVE careamos OBJECTO con la classe:
-  #              .) WAITER::HOSTESS$new
+  #       .) PRIMERO:
+  #              .) creamos OBJECTO con la classe = WAITER::HOSTESS$new
   #       .) SEGUNDO
-  #              .) SET_LOADER = image SVG, tipo progress y fill direction
+  #              .) SET_LOADER  
+  #              .) Especificamos: image SVG, tipo progress y fill direction
   
     
   
@@ -99,8 +99,8 @@ mod_mainData <- function(
        
        
     )
-    #       .) CUARTO: Show MAP + Star HOSTESS
-    #       .) QUINTO: Definir EXIT Hostess / Map 
+    #       .) CUARTO: Show WAITER + Star HOSTESS
+    #       .) QUINTO: Definir EXIT Hostess / WAITER 
     
     
     waiter_map$show()
