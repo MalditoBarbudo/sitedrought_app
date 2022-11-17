@@ -141,6 +141,13 @@ tibble::tribble(
   "1st_label", "Tipus A", "Type A" ,"Tipo A", 
   "2nd_label", "Tipus B", "Type B" ,"Tipo B",
   
+  # ........ MAPAS FONDO .........
+  # ..............................
+  
+  "Relief","Relleu","Relief","Relieve",
+  "Imagery","Satèl·lit","Satellite","Satélite",
+  "OSM","OSM","OSM","OSM",
+  
  
   
 ) %>%

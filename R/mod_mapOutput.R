@@ -65,14 +65,14 @@ mod_map <- function(
       leaflet::addTiles(group = "OSM") %>%
       leaflet::addProviderTiles(
         leaflet::providers$Esri.WorldShadedRelief,
-        group = translate_app('Relief', lang())
+        group = translate_app('Relief', lang())   
       ) %>%
       leaflet::addProviderTiles(
         leaflet::providers$Esri.WorldImagery,
         group = translate_app('Imagery', lang())
       ) %>%
       leaflet::addLayersControl(
-        baseGroups = c(translate_app('Relief', lang()),translate_app('Imagery', lang()), "OSM"),
+        baseGroups = c(translate_app('Relief', lang()),translate_app('Imagery', lang()), translate_app('OSM', lang())),
         options = leaflet::layersControlOptions(collapsed = FALSE, autoZIndex = FALSE)
       )     
       
