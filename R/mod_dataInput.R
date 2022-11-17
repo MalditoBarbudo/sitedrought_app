@@ -56,41 +56,23 @@ siteDrought_data <- function(
     # ------       FECHAS DATE INPUT     ---------
     # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    #       .) OBJETIVO
-    #       .) Quiero LIMITAR el CALENDARIO (DateInput)
+    #       .) Queremos el rango de fechas de toda la base de datos
+    #       .) Pero la queremos ANTES de que carge toda la bbdd
+    #       .) Lo hacemos usando GETQUERY
+    #       .) De forma inmediata nos da el rango de fechas
     
-    #       .) NECESITO
-    #       .) Date Max / Date Min
-    #       .) En función de la TABLA (Data_day) de la BBDD
     
-    #       .) PROBLEMA
-    #       .) Mientras se CARGA la TABLA dela BBDD
-    #       .) Necesitamos UNA DATA para que el CALENDARIO no se BLOQUE
+    dates_available <- pool::dbGetQuery(
+      siteDroughtdb$.__enclos_env__$private$pool_conn, glue::glue(
+        ' SELECT 
+        MAX(date) as "MAX_DATE",
+        MIN(date) as "MIN_DATE"
+        FROM data_day_fire '
+      )
+    )
     
-    #       .) SOLUCION
-    #       .) Cuando DATA_DAY es NULL (se està cargando la TABLA)
-    #       .) Asignaré al CALENDARIO una MAX DATE y MIN DATE respecto la data de HOY
-    #       .) Después usarà el MAX y MIN en f(x) de la TABLA
-    
-    data_day <- main_data_reactives$data_day
-
-
-    if( is.null((data_day))){
-
-      date_max <- Sys.Date()+1
-      date_min <- Sys.Date()-1
-
-    } else {
-
-      # data_day <- main_data_reactives$data_day
-
-      date_max <- max(data_day$date)
-      date_min <- min(data_day$date)
-
-    }
-
-    dif_days <- as.numeric(difftime(date_max, date_min, units = "days"))
-    date_midel <- as.Date(date_min) + round(dif_days/2, digits = 0)
+    date_max <- as.Date(dates_available[[1]]) 
+    date_min <- as.Date(dates_available[[2]]) 
     
     
     # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -109,7 +91,7 @@ siteDrought_data <- function(
     #           .) sequía:              REW, DDS
     #           .) variable climáticas: PET, Precipitation
     #           .) variables incendio:  "LFMC","DFMC","SFP","CFP"
-    #           .) quantiles : 
+    #           .) quantiles :          "REW_q","DDS_q","LFMC_q"
     
     
     
@@ -167,7 +149,7 @@ siteDrought_data <- function(
         
       shiny::dateInput(
         ns("fecha"), translate_app('date_daily_label', lang_declared),
-        value = date_midel,
+        value = date_max,
         format = "yyyy/mm/dd",
         max = date_max,
         min = date_min
