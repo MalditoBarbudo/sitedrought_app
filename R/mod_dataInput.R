@@ -28,7 +28,7 @@ mod_dataInput <- function(id) {
 #' @export
 siteDrought_data <- function(   
   input, output, session,
-  siteDroughtdb, lang, main_data_reactives
+  siteDroughtdb, lang, main_data_reactives  
    
 ) {
   
@@ -65,23 +65,18 @@ siteDrought_data <- function(
     # ...................................
     
     #       .) Queremos el rango de fechas de toda la base de datos
-    #       .) Pero la queremos ANTES de que carge toda la bbdd
-    #       .) Lo hacemos usando GETQUERY
-    #       .) De forma inmediata nos da el rango de fechas
+    #       .) Pero MINETRAS de DESCARGA TODA la BBDD
+    #       .) Le tenemos que indicar una fecha (la actual)
     
+    #       .) Una vez DESCARGADA la BBDD 
+    #       .) Ya podemos cargar TODO el RANGO de fechas de la BBDD
+    #       .) El OBSERVER EVENT con UPDATEDATEINIPUT lo hace
     
-    dates_available <- pool::dbGetQuery(
-      siteDroughtdb$.__enclos_env__$private$pool_conn, glue::glue(
-        ' SELECT 
-        MAX(date) as "MAX_DATE",
-        MIN(date) as "MIN_DATE"
-        FROM data_day_fire '
-      )
-    )
-    
-    date_max <- as.Date(dates_available[[1]]) 
-    date_min <- as.Date(dates_available[[2]]) 
-    
+
+
+    date_max <- Sys.Date() - 1
+    date_min <- Sys.Date() - 2
+
     
     # ...... VARIABLE SELECTINPUT .......
     # ...................................
@@ -115,19 +110,19 @@ siteDrought_data <- function(
      
     shiny::tagList(
    
-        # ...... SELECCION VARIABLE CAMBIENTE .....
+        # ........... SELECCION VARIABLE ..........
         # .........................................
         
-        #      .) Creamos un UIOUTPUT
         #      .) Queremos un SELECTINPUT que varie en f(x) de ORIGEN
         #      .) Si el ORIGEN es = MATOLLAR
-        #      .) El select INPUT varia
+        #      .) No tiene que aparecer la variable CFP
+      
+        #      .) Pero INCIALMENTE asignamos TODAS las VARIABLES
+        #      .) y si SE SELECCCIONE MATOLLAR 
+        #      .) Eliminaremos CFP
+        #      .) El OBSERVER EVENT con UPDATESELECTINIPUT lo hace
+      
         
-        
-        # shiny::uiOutput(
-        #   ns('selectInput_vars')
-        # ),
-        # 
       
         shiny::selectInput(
           ns('variable'), translate_app('var_daily_label', lang_declared),
@@ -217,9 +212,13 @@ siteDrought_data <- function(
   
 
   # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  # --------------------   OBSERVE EVENT  ------------------------
+  # --------------------   OBSERVE EVENTS  ------------------------
   # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   
+  
+  
+  # ........ O.E. MATOLLAR ............
+  # ...................................
   
   #      .) Es un OBSERVEREVENT de => ORIGEN 
   #      .) Activa un UPDATESELECTINPUT
@@ -227,7 +226,7 @@ siteDrought_data <- function(
   #      .) Cada vez que variamos ORIGEN
   #      .) MODIFICA el SELECT INPUT Original
   #              .) Si seleccionamos MATOLLAR
-  #              .) No aparecerá FOC CAPAÇADA
+  #              .) No aparecerá FOC CAPAÇADA (CFP)
   
 
   shiny::observeEvent(
@@ -275,6 +274,40 @@ siteDrought_data <- function(
       
       
     })
+  
+  
+  
+  # ........ O.E. FECHA ..............
+  # ...................................
+  
+  #      .) Es un OBSERVEREVENT de => MAIN_DATA_REACTIVES$DATA_DAY 
+  #      .) Activa un UPDATEDATEINPUT
+  
+  #      .) Cada vez que variamos DATA_DAY (solo AL inicializar la APP)
+  #      .) MODIFICA el DATE INPUT Original
+  #              .) Obtenemos TODO el rango de fechas
+  #              .) Indicamos el Max y el Mín
+  
+  
+  shiny::observeEvent(
+    eventExpr = main_data_reactives$data_day,
+    handlerExpr = {
+      
+      data_day <- main_data_reactives$data_day
+        
+      date_max <- max(data_day$date)
+      date_min <- min(data_day$date)  
+        
+      
+      updateDateInput(
+        session, 
+        "fecha",
+           value = date_max,
+           min   = date_min,
+           max   = date_max
+      )
+
+  })
   
   
   # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
