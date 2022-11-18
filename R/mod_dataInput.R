@@ -174,36 +174,43 @@ siteDrought_data <- function(
           "O"="O",
           "S"="S"), lang_declared)
       ),
+      
+      shiny::fluidRow(
+        shiny::column(6, align = 'center',
                       
-      # ..... RADIO BUT LEGEND COLOR ......
-      # ...................................
-      
-      #      .) Dejo COMENTADA el CANVIO de COLOR de LEYENDA
-      #      .) Me espero a hablar-lo con Miquel y Víctor
+            # ..... RADIO BUT LEGEND COLOR ......
+            # ...................................
+            
+            #      .) Dejo COMENTADA el CANVIO de COLOR de LEYENDA
+            #      .) Me espero a hablar-lo con Miquel y Víctor
+                      
+            shinyWidgets::radioGroupButtons(
+              ns("legend_modify"),
+              translate_app("type_legend_label", lang_declared),
+              size = 'normal',
+              choices = shiny_set_names(c("estandard_label" = "estandard",
+                                          "1st_label" = "tip_1",
+                                          "2nd_label" = "tip_2"),lang_declared),
+              selected = 'estandard', direction = 'vertical',
+              status = 'lfc_radiogroupbuttons'
+            )
+        ),
+        
+        shiny::column(6, align = 'center',
                 
-      shinyWidgets::radioGroupButtons(
-        ns("legend_modify"),
-        translate_app("type_legend_label", lang_declared),
-        size = 'normal',
-        choices = shiny_set_names(c("estandard_label" = "estandard",
-                                    "1st_label" = "tip_1",
-                                    "2nd_label" = "tip_2"),lang_declared),
-        selected = 'estandard', direction = 'vertical',
-        status = 'lfc_radiogroupbuttons'
-      ),
-                
-      # ... CHEK BUTTON LEGEND INVERT .....
-      # ...................................
-      
-      #      .) Check Button
-      #      .) Para invertir Leyenda
-      
-      shinyWidgets::prettyCheckbox(
-        ns('legend_check'),
-        translate_app('reverse_legend', lang_declared),
-        status = 'success', shape = 'curve', fill = TRUE
-      )
-      
+            # ... CHEK BUTTON LEGEND INVERT .....
+            # ...................................
+            
+            #      .) Check Button
+            #      .) Para invertir Leyenda
+            
+            shinyWidgets::prettyCheckbox(
+              ns('legend_check'),
+              translate_app('reverse_legend', lang_declared),
+              status = 'success', shape = 'curve', fill = TRUE
+            )
+        )
+      ) # end of Fluid Row
    ) # end of tagList
 }) # end RENDER UI         
 

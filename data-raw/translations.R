@@ -39,18 +39,6 @@ tibble::tribble(
   # .......... VARIABLES SHORT .........
   # ..............................
   
-  # "short_Precipitation", "Precipitació", "Precipitation", "Precipitación ",
-  # "short_PET", "Evapo-transpiració", "Evapo-transpiration", "Evap-transpiración potencial (mm/día)",
-  # 
-  # "short_Percentile", "Percentil Històric", "Historical Percentile", "Percentil Histórico",
-  # "short_REW", "Aigua disponible", "Available soil", "Agua disponible",
-  # "short_DDS", "Estrés vegetació", "Stress vegetation", "Estrés vegetación",
-  # "short_LFMC", "H.Combustible Viu", "L.Fuel Moisture","H.Combustible Vivo",
-  # 
-  # "short_DFMC", "H.Combustible Mort", "D.Fuel Moisture","H. Combustible Muerto",
-  # "short_SFP","P.Foc Superfície","P.Surface Fire","P.Fuego Superficie",
-  # "short_CFP","P.Foc Capçada","P.Crown Fire","P.Fuego Copa",
-  
   "short_Precipitation", "Precip.", "Precip.", "Precip. ",
   "short_PET", "E-T", "E-T", "E-T",
   
@@ -76,9 +64,9 @@ tibble::tribble(
   # ........... TÍTULOS ..........
   # ..............................
   
-  "plot_origin_label", 'Conjunt de Parcel·les', 'Set of Plots', 'Conjunto de Parcelas',
+  "plot_origin_label", 'Conjunt de parcel·les', 'Set of plots', 'Conjunto de parcelas',
   "var_daily_label", 'Tria la variable', 'Choose variable', 'Elige la variable',
-  "main_tab_translation", "Explora Parceles", "Plots Explore", "Explora Parcelas",
+  "main_tab_translation", "Explorador de parcel·les", "Plot explorer", "Explorador de parcelas",
   "data_translation", "Dades", "Data", "Datos",
   "map_translation", "Mapa", "Map", "Mapa",
   "save_translation", "Guardar", "Save", "Guardar",
@@ -104,11 +92,11 @@ tibble::tribble(
   
   "data_colum_label","¿Totes les dades o només les columnes visibles?", "All data or visible data?", "¿Todos los datos o solo las columnas visibles?", 
   "select_format_label", "Selecciona el format","Choose the output format", "Selecciona el formato", 
-  "select_day_table","Rang de dades","Data range","Rango de datos",
+  "select_by_date","Rang de dates","Date range","Rango de fechas",
   "csv", "Text (csv)","Text (csv)", "Texto (csv)", 
-  "xlsx", "MS Excel (xlsx)","MS Excel (xlsx)", "MS Excel (xlsx)",
-  "gpkg", "Espacial (GPKG)","Spatial (GPKG)", "Espacial (GPKG)",
-  "ddbb","Tota la base de dades (només CSV)","Entire database (only CSV)","Toda la base de datos (sólo CSV)",
+  # "xlsx", "MS Excel (xlsx)","MS Excel (xlsx)", "MS Excel (xlsx)",
+  "gpkg", "Espacial (gpkg)","Spatial (gpkg)", "Espacial (gpkg)",
+  "ddbb","Any natural","Calendar year","Año natural",
   "day","Dia seleccionat","Day selected","Día seleccionado",
   
   
@@ -130,8 +118,8 @@ tibble::tribble(
   "PN", "Parcs Nacionals","Nationals Parks","Parques Nacionales",
   "P", "IFN 4", "NFI 4" ,"IFN 4",
   "A", "Parc Nacional d'Aigüestortes i Estany de Sant Maurici","Aigüestortes i Estany de Sant Maurici National Park","Parque Nacional de Aigüestortes i Estany de Sant Maurici",
-  "S", "Matollar","Scrubland","Matorral",
-  "T", "Totes les Parcel·les","All Plots","Todas las Parcelas",
+  "S", "Matollar","Shrubland","Matorral",
+  "T", "Totes les parcel·les","All plots","Todas las parcelas",
   'O',"Parc Nacional d'Ordesa y Monte Perdido","Ordesa y Monte Perdido National Park","Parque Nacional Ordesa y Monte Perdido",
 
   # ....... TIPUS LLEGENDA .......

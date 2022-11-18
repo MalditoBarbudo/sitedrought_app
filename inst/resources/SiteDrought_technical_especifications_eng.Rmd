@@ -16,7 +16,7 @@ The application **SiteDrought** provides daily estimates of drought impacts and 
 **SiteDroughtApp** currently provides information for four sets of vegetation plots:
 
   (a) Plots of the fourth National Forest Inventory (IFN4) in Catalonia.
-  (b) Shrubland monitoring plots ([MatoSeg](https://matoseg.ctfc.es) project, CTFC).
+  (b) Shrubland monitoring plots from the [MatoSeg](https://matoseg.ctfc.es) project, supported by *Fundación Biodiversidad* from *Ministerio para la Transición Ecológica y el Reto Demográfico*.
   (c) Permanent forest plots of the *Aigüestortes i Estany de Sant Maurici* National Park.
   (d) Plots of the National Forest Inventory (IFN3) of the *Ordesa y Monteperdido* National Park.
 
@@ -84,7 +84,13 @@ The following people have worked in the development of **SiteDrought**:
  + Calculation engine - **Miquel De Cáceres**
  + Database design and development of shiny app - **Oleguer Amorós** i **Victor Granda**
  
-The authors express their gratitude towards the [*Agencia Estatal de Meteorologia* (AEMET)](http://www.aemet.es) and the [*Servei Meteorologic de Catalunya (SMC)*](http://www.meteo.cat) for providing daily meteorological data necessary for this application; and to the Catalan Fire Prevention Service for advice on its development.
+The authors express their gratitude towards the [*Agencia Estatal de Meteorologia* (AEMET)](http://www.aemet.es) and the [*Servei Meteorologic de Catalunya (SMC)*](http://www.meteo.cat) for providing daily meteorological data necessary for this application; and to *Servei de Prevenció d'Incendis Forestals* from *Generalitat de Catalunya* for their advice on its development.
+
+### Funding
+
+**MODOSIN** (*Monitoreo y modelización integrados en un sistema de alerta de la vulnerabilidad climática en bosques de montaña*) project has been conducted with support from *Ministerio de Agricultura, Alimentación y Medio Ambiente (Organismo Autónomo de Parques Nacionales)*.
+
+**MatoSeg**  (*Red de detección, predicción y seguimiento de los efectos de la sequía sobre la estructura y biodiversidad de formaciones arbustivas mediterráneas del este peninsular*) project has been conducted thanks to the funding provided by *Fundación Biodiversidad*, from *Ministerio para la Transición Ecológica y el Reto Demográfico* and an agreement with *Servei de Prevenció d’Incendis Forestals* from *Generalitat de Catalunya*.
 
 ### References
 

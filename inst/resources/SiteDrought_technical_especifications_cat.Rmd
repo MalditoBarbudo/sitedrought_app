@@ -16,7 +16,7 @@ L'aplicació **SiteDrought App** proporciona estimacions diàries d'**impacte de
 Actualment, l'aplicació **SiteDrought App** proporciona informació per a quatre conjunts de parcel·les de vegetació:
 
    (a) Parcel·les del quart Inventari Forestal Nacional (IFN4) a Catalunya.
-   (b) Parcel·les de seguiment de matollar (projecte [MatoSeg](https://matoseg.ctfc.es), CTFC).
+   (b) Parcel·les de seguiment de matollar del projecte [MatoSeg](https://matoseg.ctfc.es), amb el recolzament de la *Fundación Biodiversidad*, del *Ministerio para la Transición Ecológica y el Reto Demográfico*.
    (c) Parcel·les forestals permanents del Parc Nacional d'Aigüestortes i Estany de Sant Maurici.
    (d) Parcel·les de l'Inventari Forestal Nacional (IFN3) del Parc Nacional d'Ordesa y Monteperdido.
 
@@ -85,8 +85,13 @@ Les següents persones han treballat en el desenvolupament de **SiteDrought**:
  + Motor de càlcul de l'aplicació - **Miquel De Cáceres**
  + Disseny de la base de dades i aplicació shiny - **Oleguer Amorós** i **Victor Granda**
  
-Els autors expressen la seva gratitut vers l'[Agencia Estatal de Meteorologia (AEMET)](http://www.aemet.es) i el [Servei Meteorologic de Catalunya (SMC)](http://www.meteo.cat) per proporcionar diàriament dades meteorològiques necessaries per aquesta aplicació; i al  Servei de Prevenció d'Incendis per als consells en el seu desenvolupament.
+Els autors expressen la seva gratitut vers l'[Agencia Estatal de Meteorologia (AEMET)](http://www.aemet.es) i el [Servei Meteorologic de Catalunya (SMC)](http://www.meteo.cat) per proporcionar diàriament dades meteorològiques necessaries per aquesta aplicació; i al *Servei de Prevenció d'Incendis Forestals* de la *Generalitat de Catalunya* per als consells en el seu desenvolupament.
 
+### Financiació
+
+El projecte **MODOSIN** (*Monitoreo y modelización integrados en un sistema de alerta de la vulnerabilidad climática en bosques de montaña*) s'ha dut a terme amb el suport del *Ministerio de Agricultura, Alimentación y Medio Ambiente (Organismo Autónomo de Parques Nacionales)*.
+
+El projecte **MatoSeg**  (*Red de detección, predicción y seguimiento de los efectos de la sequía sobre la estructura y biodiversidad de formaciones arbustivas mediterráneas del este peninsular*) s'ha dut a terme amb el suport de la *Fundación Biodiversidad*, del *Ministerio para la Transición Ecológica y el Reto Demográfico* i un conveni amb el *Servei de Prevenció d’Incendis Forestals* de la *Generalitat de Catalunya*.
 
 
 ### Bibliografia

@@ -103,6 +103,19 @@ mod_save <- function(
                 
               ),
               
+              # ......... RANGE BUTTONS ...........
+              # ...................................
+              
+              #       .) Botones selección RANGO DATOS
+              #       .) Dos tipos = ALL DATABASE / ONE DAY
+              
+              shinyWidgets::prettyRadioButtons(
+                ns("day_table"),translate_app("select_by_date", lang_declared),
+                shiny_set_names(c("day"  = "day",
+                                  "ddbb" = "ddbb"),lang_declared),
+                status = 'success', fill = TRUE, shape = 'round'
+              ),
+              
               # ......... FORMAT BUTTONS ..........
               # ...................................
               
@@ -112,23 +125,12 @@ mod_save <- function(
               shinyWidgets::prettyRadioButtons(
                 ns("data_format"),translate_app("select_format_label", lang_declared),
                 shiny_set_names(c("csv"  = "csv",
-                                  "xlsx" = "xlsx",
+                                  # "xlsx" = "xlsx",
                                   "gpkg" = "gpkg"),lang_declared),
                 status = 'success', fill = TRUE, shape = 'round'
-              ),
-              
-              # ......... RANGE BUTTONS ...........
-              # ...................................
-              
-              #       .) Botones selección RANGO DATOS
-              #       .) Dos tipos = ALL DATABASE / ONE DAY
-              
-              shinyWidgets::prettyRadioButtons(
-                ns("day_table"),translate_app("select_day_table", lang_declared),
-                shiny_set_names(c("day"  = "day",
-                                  "ddbb" = "ddbb"),lang_declared),
-                status = 'success', fill = TRUE, shape = 'round'
               )
+              
+              
 
           ) # end fluid row
         )   # end fluid row  
@@ -285,7 +287,7 @@ mod_save <- function(
   format_selected <- function() {
     switch (input$data_format,
             "csv" = format <- ".csv", 
-            "xlsx" = format <- ".xlsx",
+            # "xlsx" = format <- ".xlsx",
             "gpkg" = format <- ".gpkg"
     )
   }
@@ -315,6 +317,22 @@ mod_save <- function(
     
   }
   
+  # ............... f(x) DAY .....................
+  # ..............................................
+  
+  #      .) Función que asigna DIA o AÑO
+  #      .) Del archivo a descargar
+  
+  day_selected <- function() {
+    
+    switch (input$day_table,
+            "day" = format <- "_day", 
+            "ddbb" = format <- "_year" 
+    )
+  
+  }
+  
+  
   # ........... f(x) DATA to STRING ..............
   # ..............................................
   
@@ -342,11 +360,13 @@ mod_save <- function(
    output$table_save <- downloadHandler(
     filename = function() {
       
-      if (input$day_table == "ddbb"){
-        paste(date_str,'_all_ddbb.csv', sep = "")
-      } else {
-        paste(date_str,column_selected(),format_selected(), sep = "")
-      }
+      paste(date_str,day_selected(),column_selected(),format_selected(), sep = "")
+      
+      # if (input$day_table == "ddbb"){
+      #   paste(date_str,'_all_ddbb.csv', sep = "")
+      # } else {
+      #   paste(date_str,column_selected(),format_selected(), sep = "")
+      # }
      
     },
     content = function(file) {
@@ -420,19 +440,18 @@ mod_save <- function(
         #       .) Tarda unos 2 min
         #       .) Por esto añadimos previamente el WAITER
         
-        write.csv(databaseInput(), file, row.names = FALSE)
+        # write.csv(databaseInput(), file, row.names = FALSE)
         
-        # switch (input$data_format,
-        #         "csv" = write.csv(databaseInput(), file, row.names = FALSE),
-        #         "xlsx" = writexl::write_xlsx(databaseInput(), file),
-        #         "gpkg" = sf::st_write(databaseInput(), file)
-        # )
+        switch (input$data_format,
+                "csv" = write.csv(databaseInput(), file, row.names = FALSE),
+                "gpkg" = sf::st_write(databaseInput(), file)
+        )
         
       } else {
         
         switch (input$data_format,
                 "csv" = write.csv(datasetInput(), file, row.names = FALSE),
-                "xlsx" = writexl::write_xlsx(datasetInput(), file),
+                # "xlsx" = writexl::write_xlsx(datasetInput(), file),
                 "gpkg" = sf::st_write(datasetInput(), file)
         )
       }
