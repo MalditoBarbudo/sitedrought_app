@@ -136,6 +136,11 @@ tibble::tribble(
   "Imagery","Satèl·lit","Satellite","Satélite",
   "OSM","OSM","OSM","OSM",
   
+  # ..... TIME SERIE EXPLICATION .....
+  # ..................................
+  
+  'expl_percentiles','La diferència de percentils històrics es basa en ...','The historical percentile difference is based on this .....','La diferencia de percentiles históricos se base en ...',
+  
  
   
 ) %>%
