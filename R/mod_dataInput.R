@@ -268,8 +268,7 @@ siteDrought_data <- function(
           'climate variables' = climate_vars,
           'fire variables' = fire_vars,
           'Percentiles variables' = quantiles_vars
-        ), lang_declared) #,
-        #selected = tail(x, 1)
+        ), lang_declared) 
       )
       
       

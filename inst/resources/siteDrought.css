@@ -73,6 +73,7 @@ span>a.paginate_button.current {
 /* dygraphs */
 .dygraphs {
   background-color: var(--main-bg-color) !important;
+ 
 }
 
 .dygraph-label {
@@ -91,8 +92,10 @@ dygraph-axis-label.dygraph-axis-label-y {
 }
 
 .dygraph-legend {
-  color: #c8cac8;
-  background-color: #647a8d !important;
+  /*color: #c8cac8;*/
+  /*background-color: #647a8d !important;*/
+  color: #424242;
+  background-color: #d9dadb !important;
   border-radius: 5px;
   padding: 5px;
 }
