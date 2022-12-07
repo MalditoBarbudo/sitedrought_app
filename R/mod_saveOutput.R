@@ -125,7 +125,6 @@ mod_save <- function(
               shinyWidgets::prettyRadioButtons(
                 ns("data_format"),translate_app("select_format_label", lang_declared),
                 shiny_set_names(c("csv"  = "csv",
-                                  # "xlsx" = "xlsx",
                                   "gpkg" = "gpkg"),lang_declared),
                 status = 'success', fill = TRUE, shape = 'round'
               )
@@ -287,7 +286,6 @@ mod_save <- function(
   format_selected <- function() {
     switch (input$data_format,
             "csv" = format <- ".csv", 
-            # "xlsx" = format <- ".xlsx",
             "gpkg" = format <- ".gpkg"
     )
   }

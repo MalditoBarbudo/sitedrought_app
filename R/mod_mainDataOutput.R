@@ -222,7 +222,8 @@ mod_mainData <- function(
 
     
     num_i <- as.numeric(match(variable,names(data_day_clicked_plot)))
-    fecha_inicial <- data_day_clicked_plot$date[1]
+    fecha_inicial <- min(data_day_clicked_plot$date)
+
     
     var_def <- translate_app(variable, lang_declared)
     var_short <- translate_app(paste0("short_",variable), lang_declared)

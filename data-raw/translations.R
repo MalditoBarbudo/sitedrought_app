@@ -123,10 +123,11 @@ tibble::tribble(
 
   # ....... TIPUS LLEGENDA .......
   # ..............................
+
   
-  "estandard_label","Estàndar","Standard","Estándar",
-  "1st_label", "Tipus A", "Type A" ,"Tipo A", 
-  "2nd_label", "Tipus B", "Type B" ,"Tipo B",
+  "estandard_label", "Normal", "Normal", "Normal",
+  "1st_label", "Discriminar valors alts","Discriminate higher values", "Discriminar valores altos",  
+  "2nd_label","Discriminar valors baixos","Discriminate lower values", "Discriminar valores bajos",
   
   # ........ MAPAS FONDO .........
   # ..............................
@@ -138,7 +139,7 @@ tibble::tribble(
   # ..... TIME SERIE EXPLICATION .....
   # ..................................
   
-  'expl_percentiles','Percentil del comparació històrica (1981 - 2020) i la variació anual de la variable seleccionada (remarcada en el gràfic). ','Percentage of the historical comparison (1981-2020) and the annual variation of the selected variable (highlighted in the graph).','Porcentil de la comparación histórica (1981-2020) y la variación anual de la variable seleccionada (remarcada en el gráfico).',
+  'expl_percentiles','Variació anual de la variable seleccionada de color verd i percentil del comparació històrica (1981 - 2020) en color blau. La variable seleccionada queda remarcada en el gràfic.','Annual variation of the selected variable in green and percentile of the historical comparison (1981-2020) in blue. The selected variable is highlighted in the graph.','Variación anual de la variable seleccionada de color verde y percentil de la comparación histórica (1981-2020) en color azul. La variable seleccionada queda remarcada en el gráfico.',
   
  
   

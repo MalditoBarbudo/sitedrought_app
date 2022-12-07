@@ -60,23 +60,6 @@ siteDrought_data <- function(
       'eng' = 'en'              
     )
     
-
-    # ....... INICIALIZAR FECHAS ........
-    # ...................................
-    
-    #       .) Queremos el rango de fechas de toda la base de datos
-    #       .) Pero MINETRAS de DESCARGA TODA la BBDD
-    #       .) Le tenemos que indicar una fecha (la actual)
-    
-    #       .) Una vez DESCARGADA la BBDD 
-    #       .) Ya podemos cargar TODO el RANGO de fechas de la BBDD
-    #       .) El OBSERVER EVENT con UPDATEDATEINIPUT lo hace
-    
-
-
-    date_max <- Sys.Date() - 1
-    date_min <- Sys.Date() - 2
-
     
     # ...... VARIABLE SELECTINPUT .......
     # ...................................
@@ -133,6 +116,19 @@ siteDrought_data <- function(
             'Percentiles variables' = quantiles_vars
           ), lang_declared)
         ),
+        
+      # ....... INICIALIZAR FECHAS ........
+      # ...................................
+      
+      #       .) Queremos el rango de fechas de toda la base de datos
+      #       .) Pero MINETRAS de DESCARGA TODA la BBDD
+      #       .) Le tenemos que indicar una fecha (la actual - un día) =  Sys.Date() - 1
+      
+      #       .) Una vez DESCARGADA la BBDD 
+      #       .) Ya podemos cargar TODO el RANGO de fechas de la BBDD
+      #       .) El OBSERVER EVENT con UPDATEDATEINIPUT lo hace
+        
+      
       
       # ........ PROBLEMA FECHA ...........
       # ...................................
@@ -149,10 +145,10 @@ siteDrought_data <- function(
         
       shiny::dateInput(
         ns("fecha"), translate_app('date_daily_label', lang_declared),
-        value = date_max,
+        value = Sys.Date() - 1,
         format = "yyyy/mm/dd",
-        max = date_max,
-        min = date_min
+        max = Sys.Date() - 1,
+        min = Sys.Date() - 1
       ),
       
       
@@ -183,9 +179,9 @@ siteDrought_data <- function(
               ns("legend_modify"),
               translate_app("type_legend_label", lang_declared),
               size = 'normal',
-              choices = shiny_set_names(c("estandard_label" = "estandard",
-                                          "1st_label" = "tip_1",
-                                          "2nd_label" = "tip_2"),lang_declared),
+              choices = shiny_set_names(c( "1st_label" = "tip_1",
+                                           "estandard_label" = "estandard",
+                                           "2nd_label" = "tip_2"),lang_declared),
               selected = 'estandard', direction = 'vertical',
               status = 'lfc_radiogroupbuttons'
             )
@@ -296,9 +292,8 @@ siteDrought_data <- function(
         
       date_max <- max(data_day$date)
       date_min <- min(data_day$date)  
-        
       
-      updateDateInput(
+      shiny::updateDateInput(
         session, 
         "fecha",
            value = date_max,
