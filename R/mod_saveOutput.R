@@ -361,12 +361,6 @@ mod_save <- function(
     filename = function() {
       
       paste(date_str,day_selected(),column_selected(),format_selected(), sep = "")
-      
-      # if (input$day_table == "ddbb"){
-      #   paste(date_str,'_all_ddbb.csv', sep = "")
-      # } else {
-      #   paste(date_str,column_selected(),format_selected(), sep = "")
-      # }
      
     },
     content = function(file) {

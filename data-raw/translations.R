@@ -76,7 +76,7 @@ tibble::tribble(
   'series_tab_translation', "Sèries temporals", "Time series", "Series temporales",
   "type_legend_label", "Configurar paleta","Config palette", "Configurar paleta",
   
-  'percentiles_axis_label','Percentils Comparació Històrica (1981 - 2020)','Percentiles Historical Comparison (1981 - 2020)','Percentiles Comparación Histórica (1981 - 2020)',
+  'percentiles_axis_label','Percentils comparació històrica (1981 - 2020)','Percentiles historical comparison (1981 - 2020)','Percentiles comparación histórica (1981 - 2020)',
   "save_main_label","Selecciona format per descargar les dades","Select format for downloading data","Selecciona formato para descargas los datos",
   "save_map_button","Guardar el mapa", "Save the map", "Guardar el mapa", 
   "save_table_button", "Descarrega","Download", "Descarga", 
@@ -94,7 +94,6 @@ tibble::tribble(
   "select_format_label", "Selecciona el format","Choose the output format", "Selecciona el formato", 
   "select_by_date","Rang de dates","Date range","Rango de fechas",
   "csv", "Text (csv)","Text (csv)", "Texto (csv)", 
-  # "xlsx", "MS Excel (xlsx)","MS Excel (xlsx)", "MS Excel (xlsx)",
   "gpkg", "Espacial (gpkg)","Spatial (gpkg)", "Espacial (gpkg)",
   "ddbb","Any natural","Calendar year","Año natural",
   "day","Dia seleccionat","Day selected","Día seleccionado",
@@ -139,7 +138,7 @@ tibble::tribble(
   # ..... TIME SERIE EXPLICATION .....
   # ..................................
   
-  'expl_percentiles','La diferència de percentils històrics es basa en ...','The historical percentile difference is based on this .....','La diferencia de percentiles históricos se base en ...',
+  'expl_percentiles','Percentil del comparació històrica (1981 - 2020) i la variació anual de la variable seleccionada (remarcada en el gràfic). ','Percentage of the historical comparison (1981-2020) and the annual variation of the selected variable (highlighted in the graph).','Porcentil de la comparación histórica (1981-2020) y la variación anual de la variable seleccionada (remarcada en el gráfico).',
   
  
   

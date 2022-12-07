@@ -204,9 +204,7 @@ mod_map <- function(
     #      .) Asigon "ESTANDARD" a valor de LEYENDA
     
     leyenda_modif <- data_reactives$legend_modify_reactive
-    # leyenda_modif <-"estandard"
-    
-    
+
     
     # ........ LENGUA SELECTED  .........
     # ...................................

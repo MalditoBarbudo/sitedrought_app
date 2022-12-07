@@ -111,6 +111,12 @@ div#shiny-notification-panel {
   color: var(--main-bg-color);
 }
 
+#mod_tsOutput-explanation_percentiles{
+  text-align: center;
+  color: #424242;
+  font-style: italic;
+}
+
 /* waiter-waitress css custom */
 .waitress-overlay-content {
   top: 5px;
