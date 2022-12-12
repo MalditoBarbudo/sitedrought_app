@@ -94,7 +94,7 @@ shiny_set_names <- function(nom,lang) {
 translate_thesaurus_app <- function(id, lang, type) {
   id %>%
     purrr::map_chr(
-      ~ lfcdata::sitedrought_var_thes %>%
+      ~ sitedrought_var_thes %>%
         dplyr::filter(var_id == .x ) %>% {
           data_filtered <- .
           

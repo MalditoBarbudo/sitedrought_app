@@ -64,15 +64,12 @@ siteDrought_app <- function() {
       # js script,
       shiny::tags$script(keep_alive_script),
       
-      
       # custom css
       shiny::includeCSS(system.file('resources', 'siteDrought.css', package = 'siteDroughtApp')),
       # corporative image css
       shiny::includeCSS(system.file('resources', 'corp_image.css', package = 'siteDroughtApp')),
       # setting css sitedrought
       shiny::includeCSS(system.file('resources','siteDrought_settings.css', package = 'siteDroughtApp')),
-      
-      
       
       # # custom css
       # shiny::includeCSS("inst/resources/siteDrought.css"),
@@ -84,8 +81,7 @@ siteDrought_app <- function() {
       
     ),
     
-    
-
+  
     # **************************************************************************************
     # ------------------------------  //  NAVBAR   // --------------------------------------
     # **************************************************************************************
