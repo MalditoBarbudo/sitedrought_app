@@ -40,11 +40,11 @@ mod_mainData <- function(
   #       .) https://shiny.john-coene.com/waiter/
   #       .) Paquete de R que permite crear LOADING SCREENS
   
-  #       .) INICIALIZAMOS:
-  #              .) Fuera de REACTIVE careamos OBJECTO con la classe:
-  #              .) WAITER::HOSTESS$new
+  #       .) PRIMERO:
+  #              .) creamos OBJECTO con la classe = WAITER::HOSTESS$new
   #       .) SEGUNDO
-  #              .) SET_LOADER = image SVG, tipo progress y fill direction
+  #              .) SET_LOADER  
+  #              .) Especificamos: image SVG, tipo progress y fill direction
   
     
   
@@ -99,8 +99,8 @@ mod_mainData <- function(
        
        
     )
-    #       .) CUARTO: Show MAP + Star HOSTESS
-    #       .) QUINTO: Definir EXIT Hostess / Map 
+    #       .) CUARTO: Show WAITER + Star HOSTESS
+    #       .) QUINTO: Definir EXIT Hostess / WAITER 
     
     
     waiter_map$show()
@@ -114,28 +114,13 @@ mod_mainData <- function(
     # ...................................
     
     #       .) Usamos siteDrought DB (Definido en APP.R)
-    #       .) Llamamos al M?todo GET DATA
+    #       .) Llamamos al Metodo GET DATA
     #       .) Creamos el SF data_day
     #       .) Es el SF de TODOS los PLOTS / TODAS las fechas
-    #       .) Despu?s ya lo filtraremos
+    #       .) Después ya lo filtraremos
 
-    # ............ PROBES ...........
-    # ...............................
-    # data_day <- siteDroughtdb$get_data("data_day_petita")
-    
-    # data_day <- siteDroughtdb$get_data("data_day_fire_petita")
-    
-    # data_day <- siteDroughtdb$get_data("data_day_fire_petita_2")
-    
+
     data_day <- siteDroughtdb$get_data("data_day_fire")
-    
-    # ..... Definitiva 2..........
-    # ...........................
-    # data_day <- siteDroughtdb$get_data("data_day_fire")
-    
-    # ..... Definitiva 1..........
-    # ...........................
-    # data_day <- siteDroughtdb$get_data()
     
     return(data_day)
   })
@@ -237,7 +222,8 @@ mod_mainData <- function(
 
     
     num_i <- as.numeric(match(variable,names(data_day_clicked_plot)))
-    fecha_inicial <- data_day_clicked_plot$date[1]
+    fecha_inicial <- min(data_day_clicked_plot$date)
+
     
     var_def <- translate_app(variable, lang_declared)
     var_short <- translate_app(paste0("short_",variable), lang_declared)
@@ -389,7 +375,8 @@ mod_mainData <- function(
       dygraphs::dyAxis("y2", label = label_axis_q, valueRange = valueRange(var_q)) %>%
       
       dygraphs::dyOptions(fillGraph = TRUE, fillAlpha = 0.1)  %>%
-      dygraphs::dyEvent(fecha, fecha, labelLoc = "top")
+      dygraphs::dyEvent(fecha, fecha, labelLoc = "top") %>%
+      dygraphs::dyLegend(show = "follow")
 
       
     } else {
@@ -400,7 +387,8 @@ mod_mainData <- function(
         dygraphs::dyAxis("y", label = var_def, valueRange = valueRange(variable)) %>%
         
         dygraphs::dyOptions(fillGraph = TRUE, fillAlpha = 0.1)  %>%
-        dygraphs::dyEvent(fecha, fecha, labelLoc = "top")
+        dygraphs::dyEvent(fecha, fecha, labelLoc = "top") %>%
+        dygraphs::dyLegend(show = "follow")
     }
 
 

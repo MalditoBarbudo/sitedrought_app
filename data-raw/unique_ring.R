@@ -9,8 +9,10 @@ usethis::use_data(
   all_polygons, all_parques, provincias, catalunya, parques, ordesa, aiguestortes, peri_total, peri_ordesa, peri_aiguestortes,
   palettes_dictionary,
   language_dictionary,
+  sitedrought_var_thes,
 
   internal = TRUE, overwrite = TRUE
 )
-# 
-#  
+
+
+  

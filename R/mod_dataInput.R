@@ -28,14 +28,23 @@ mod_dataInput <- function(id) {
 #' @export
 siteDrought_data <- function(   
   input, output, session,
-  siteDroughtdb, lang, main_data_reactives
+  siteDroughtdb, lang, main_data_reactives  
    
 ) {
-
-  # renderUI ####
+  
+  # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  # ------------------------   RENDER UI  ------------------------
+  # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
   output$mod_data_container <- shiny::renderUI({
     
-    # ......... INICIALIZAR .............
+    
+    # //////////////////////////////////
+    # --      INICIALIZAR DATOS       --
+    # //////////////////////////////////
+    
+    
+    # ... INICIALIZAR NS / LANGUAGE .....
     # ...................................
     
     #       .) NS = IDs únicos
@@ -51,79 +60,76 @@ siteDrought_data <- function(
       'eng' = 'en'              
     )
     
+    
+    # ...... VARIABLE SELECTINPUT .......
+    # ...................................
+    
+    #       .) Variables según MIQUEL
+    #           .) sequía:              REW, DDS
+    #           .) variable climáticas: PET, Precipitation
+    #           .) variables incendio:  "LFMC","DFMC","SFP","CFP"
+    #           .) quantiles :          "REW_q","DDS_q","LFMC_q"
+    
+    
 
-    # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    # ------       FECHAS DATE INPUT     ---------
-    # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-    #       .) OBJETIVO
-    #       .) Quiero LIMITAR el CALENDARIO (DateInput)
-    
-    #       .) NECESITO
-    #       .) Date Max / Date Min
-    #       .) En función de la TABLA (Data_day) de la BBDD
-    
-    #       .) PROBLEMA
-    #       .) Mientras se CARGA la TABLA dela BBDD
-    #       .) Necesitamos UNA DATA para que el CALENDARIO no se BLOQUE
-    
-    #       .) SOLUCION
-    #       .) Cuando DATA_DAY es NULL (se està cargando la TABLA)
-    #       .) Asignaré al CALENDARIO una MAX DATE y MIN DATE respecto la data de HOY
-    #       .) Después usarà el MAX y MIN en f(x) de la TABLA
-    
-    data_day <- main_data_reactives$data_day
-
-
-    if( is.null((data_day))){
-      
-      date_max <- Sys.Date()+1
-      date_min <- Sys.Date()-1
-
-    } else {
-      
-      # data_day <- main_data_reactives$data_day
-
-      date_max <- max(data_day$date)
-      date_min <- min(data_day$date)
-
-     
-    }
-
-    
-    dif_days <- as.numeric(difftime(date_max, date_min, units = "days"))
-    date_midel <- as.Date(date_min) + round(dif_days/2, digits = 0)
+    drought_vars <- c("REW","DDS") %>%
+      magrittr::set_names(translate_app(., lang_declared))
+    climate_vars <- c("PET", "Precipitation") %>%
+      magrittr::set_names(translate_app(., lang_declared))
+    fire_vars <- c("LFMC","DFMC","SFP","CFP") %>%
+      magrittr::set_names(translate_app(., lang_declared))
+    quantiles_vars <- c("REW_q","DDS_q","LFMC_q") %>%
+      magrittr::set_names(translate_app(., lang_declared))
     
     
+    # //////////////////////////////////
+    # --        ETIQUETAS HTML5       --
+    # //////////////////////////////////
     
     
-    
-    
-    # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    # ----------     ETIQUETAS HTML5    ----------
-    # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-    #       .) TAGLIST rea una definición de etiqueta HTML
+    #       .) TAGLIST crea una definición de etiqueta HTML
     #       .) Creamos los elementos HTML5 con TAGS
     #       .) DROPDOWNS (SelectIntpu),...
      
     shiny::tagList(
-        
-      
-        # ...... SELECCION VARIABLE CAMBIENTE .....
+   
+        # ........... SELECCION VARIABLE ..........
         # .........................................
         
-        #      .) Creamos un UIOUTPUT
         #      .) Queremos un SELECTINPUT que varie en f(x) de ORIGEN
         #      .) Si el ORIGEN es = MATOLLAR
-        #      .) El select INPUT varia
+        #      .) No tiene que aparecer la variable CFP
+      
+        #      .) Pero INCIALMENTE asignamos TODAS las VARIABLES
+        #      .) y si SE SELECCCIONE MATOLLAR 
+        #      .) Eliminaremos CFP
+        #      .) El OBSERVER EVENT con UPDATESELECTINIPUT lo hace
+      
         
-        
-        shiny::uiOutput(
-          ns('selectInput_vars')
+      
+        shiny::selectInput(
+          ns('variable'), translate_app('var_daily_label', lang_declared),
+          choices = shiny_set_names(list(
+            'drought variables' = drought_vars,
+            'climate variables' = climate_vars,
+            'fire variables' = fire_vars,
+            'Percentiles variables' = quantiles_vars
+          ), lang_declared)
         ),
         
-
+      # ....... INICIALIZAR FECHAS ........
+      # ...................................
+      
+      #       .) Queremos el rango de fechas de toda la base de datos
+      #       .) Pero MINETRAS de DESCARGA TODA la BBDD
+      #       .) Le tenemos que indicar una fecha (la actual - un día) =  Sys.Date() - 1
+      
+      #       .) Una vez DESCARGADA la BBDD 
+      #       .) Ya podemos cargar TODO el RANGO de fechas de la BBDD
+      #       .) El OBSERVER EVENT con UPDATEDATEINIPUT lo hace
+        
+      
+      
       # ........ PROBLEMA FECHA ...........
       # ...................................
       
@@ -139,10 +145,10 @@ siteDrought_data <- function(
         
       shiny::dateInput(
         ns("fecha"), translate_app('date_daily_label', lang_declared),
-        value = date_midel,
+        value = Sys.Date() - 1,
         format = "yyyy/mm/dd",
-        max = date_max,
-        min = date_min
+        max = Sys.Date() - 1,
+        min = Sys.Date() - 1
       ),
       
       
@@ -158,107 +164,85 @@ siteDrought_data <- function(
           "A"="A",
           "O"="O",
           "S"="S"), lang_declared)
-      ),  
-      
-      # ..... RADIO BUT LEGEND COLOR ......
-      # ...................................
-      
-      #      .) Dejo COMENTADA el CANVIO de COLOR de LEYENDA
-      #      .) Me espero a hablar-lo con Miquel y Víctor
-      
-      shiny:: radioButtons(
-        ns("legend_modify"),translate_app("type_legend_label", lang_declared),
-        shiny_set_names(c("estandard_label" = "estandard",
-                          "1st_label" = "tip_1",
-                          "2nd_label" = "tip_2"),lang_declared)
       ),
       
-      
-      # ... CHEK BUTTON LEGEND INVERT .....
-      # ...................................
-      
-      #      .) Check Button
-      #      .) Para invertir Leyenda
-      
-      shinyWidgets::prettyCheckbox(
-        ns('legend_check'),
-        translate_app('reverse_legend', lang_declared),
-        status = 'success', shape = 'curve', fill = TRUE
-      )
-      
-      
-
-    ) # end of tagList
-
-  })           
-
+      shiny::fluidRow(
+        shiny::column(6, align = 'center',
+                      
+            # ..... RADIO BUT LEGEND COLOR ......
+            # ...................................
+            
+            #      .) Dejo COMENTADA el CANVIO de COLOR de LEYENDA
+            #      .) Me espero a hablar-lo con Miquel y Víctor
+                      
+            shinyWidgets::radioGroupButtons(
+              ns("legend_modify"),
+              translate_app("type_legend_label", lang_declared),
+              size = 'normal',
+              choices = shiny_set_names(c( "1st_label" = "tip_1",
+                                           "estandard_label" = "estandard",
+                                           "2nd_label" = "tip_2"),lang_declared),
+              selected = 'estandard', direction = 'vertical',
+              status = 'lfc_radiogroupbuttons'
+            )
+        ),
+        
+        shiny::column(6, align = 'center',
+                
+            # ... CHEK BUTTON LEGEND INVERT .....
+            # ...................................
+            
+            #      .) Check Button
+            #      .) Para invertir Leyenda
+            
+            shinyWidgets::prettyCheckbox(
+              ns('legend_check'),
+              translate_app('reverse_legend', lang_declared),
+              status = 'success', shape = 'curve', fill = TRUE
+            )
+        )
+      ) # end of Fluid Row
+   ) # end of tagList
+}) # end RENDER UI         
 
   
-  # %%%%%%%%%%%%%%%%%%   OBSERVE SELECT INPUT  %%%%%%%%%%%%%%%%%%%
+
+  # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  # --------------------   OBSERVE EVENTS  ------------------------
   # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   
-  #      .) Es un OBSERVER de => LENGUA / ORIGEN 
-  #      .) Crea un SELECTINPUT en el OUTPUT RENDER UI 
   
-  #      .) Cada vez que variamos LENGUA / ORIGEN
-  #      .) SE CREA un nuevo SELECT INPUT
-  #      .) Donde el OUTPUT indica ( $selectInput_vars )
   
- 
-  shiny::observe({   
-    
-    # ........ VALUES REACTIVES .........
-    # ...................................
-    
-    #       .) Valores REACTIVES
-    #              .) LANGUAGE
-    #              .) ORIGEN
+  # ........ O.E. MATOLLAR ............
+  # ...................................
+  
+  #      .) Es un OBSERVEREVENT de => ORIGEN 
+  #      .) Activa un UPDATESELECTINPUT
+  
+  #      .) Cada vez que variamos ORIGEN
+  #      .) MODIFICA el SELECT INPUT Original
+  #              .) Si seleccionamos MATOLLAR
+  #              .) No aparecerá FOC CAPAÇADA (CFP)
+  
 
-    
-    shiny::validate(shiny::need(input$origen, 'origen no selected') )
-    
-      lang_reactive   <- shiny::reactive({ lang_declared <- lang()})
-      origen_reactive <- shiny::reactive({ input$origen })
+  shiny::observeEvent(
+    eventExpr = input$origen,
+    handlerExpr = {
       
+      origen <- input$origen
       
-      # ......... INICIALIZAR .............
-      # ...................................
-      
-      #       .) NS = ID's únicos
-      #       .) LENGUA = Reactive
-      #       .) ORIGEN = Reactive
-      
-      ns <- session$ns
-      
-      lang_declared <- lang_reactive()
-      origen <-  origen_reactive()
-
-      
-      
-      # ..... MATOLLAR / INCIENDIOS .......
-      # ...................................
-      
-      #       .) En el caso MATOLLAR
-      #       .) NO HAY POTENCIAL FUEGO COPA (Ya que son tienen suficiente altura)
-      #       .) Por lo tanto:
-      #       .) Cuando se seleccione MATOLLAR ("S")
-      #       .) No aparecerá CFP
-    
+      lang_declared <- lang()
+      dates_lang <- switch(
+        lang_declared,
+        'cat' = 'ca',
+        'spa' = 'es',
+        'eng' = 'en'
+      )
       
       switch (origen,
-
               "S" = fire_variables <- c("LFMC","DFMC","SFP"),
               fire_variables <- c("LFMC","DFMC","SFP","CFP")
       )
-      
-      # ...... VARIABLE SELECTINPUT .......
-      # ...................................
-      
-      #       .) Variables según MIQUEL
-      #           .) sequía:              REW, DDS
-      #           .) variable climáticas: PET, Precipitation
-      #           .) variables incendio:  "LFMC","DFMC","SFP","CFP"
-      #           .) quantiles : 
       
       
       drought_vars <- c("REW","DDS") %>%
@@ -271,36 +255,59 @@ siteDrought_data <- function(
         magrittr::set_names(translate_app(., lang_declared))
       
       
-      # ............. OUTPUT ..............
-      # ...................................
       
-      #       .) Indicamos DONDE se harà el cambio  ($selectInput_vars)
-      #       .) Indicamos QUE HAREMOS (crear SelectInput)
-
-      output$selectInput_vars <- shiny::renderUI({
-        
-        shiny::selectInput(
-          ns('variable'), translate_app('var_daily_label', lang_declared),
-          choices = shiny_set_names(list(
-            'drought variables' = drought_vars,
-            'climate variables' = climate_vars,
-            'fire variables' = fire_vars,
-            'Percentiles variables' = quantiles_vars
-          ), lang_declared)
-        )
-        
-        
-      })
-      
+      shiny::updateSelectInput(
+        session,
+        'variable',
+        choices = shiny_set_names(list(
+          'drought variables' = drought_vars,
+          'climate variables' = climate_vars,
+          'fire variables' = fire_vars,
+          'Percentiles variables' = quantiles_vars
+        ), lang_declared) 
+      )
       
       
     })
   
   
   
+  # ........ O.E. FECHA ..............
+  # ...................................
   
-  # %%%%%%%%%%%%%%%%%%%%  DEVOLVER REACTIVOS  %%%%%%%%%%%%%%%%%%%%
+  #      .) Es un OBSERVEREVENT de => MAIN_DATA_REACTIVES$DATA_DAY 
+  #      .) Activa un UPDATEDATEINPUT
+  
+  #      .) Cada vez que variamos DATA_DAY (solo AL inicializar la APP)
+  #      .) MODIFICA el DATE INPUT Original
+  #              .) Obtenemos TODO el rango de fechas
+  #              .) Indicamos el Max y el Mín
+  
+  
+  shiny::observeEvent(
+    eventExpr = main_data_reactives$data_day,
+    handlerExpr = {
+      
+      data_day <- main_data_reactives$data_day
+        
+      date_max <- max(data_day$date)
+      date_min <- min(data_day$date)  
+      
+      shiny::updateDateInput(
+        session, 
+        "fecha",
+           value = date_max,
+           min   = date_min,
+           max   = date_max
+      )
+
+  })
+  
+  
   # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  # ----------------------   REACTIVES  --------------------------
+  # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  
   
   #      .) Creamos DATA REACTIVE
   #      .) ASSIGNAMOS los OBERSVERS

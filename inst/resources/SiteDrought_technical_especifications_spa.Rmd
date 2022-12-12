@@ -22,12 +22,12 @@ edáficos (derivadas de bases de datos globales) y de vegetación.
 Actualmente, la aplicación **SiteDrought App** proporciona información para
 cuatro conjuntos de parcelas de vegetación:
 
-1. Parcelas del cuarto Inventario Forestal Nacional (IFN4) en Cataluña.
-2. Parcelas de seguimiento de matorral (proyecto
-     [MatoSeg](https://matoseg.ctfc.es), CTFC).
-3. Parcelas forestales permanentes del Parque Nacional de Aigüestortes y
+(a) Parcelas del cuarto Inventario Forestal Nacional (IFN4) en Cataluña.
+(b) Parcelas de seguimiento de matorral del proyecto
+     [MatoSeg](https://matoseg.ctfc.es), con el apoyo de la *Fundación Biodiversidad*, del *Ministerio para la Transición Ecológica y el Reto Demográfico*.
+(c) Parcelas forestales permanentes del Parque Nacional de Aigüestortes y
      Estanque de San Mauricio.
-4. Parcelas del Inventario Forestal Nacional (IFN3) del Parque Nacional
+(d) Parcelas del Inventario Forestal Nacional (IFN3) del Parque Nacional
      de Ordesa y Monteperdido.
 
 Es importante recordar que los datos proporcionados incluyen cálculos
@@ -51,14 +51,7 @@ diferencias notables respecto a mediciones reales.
     provienen de la base de datos global **SoilGrids** a 250 m (Hengl et
     al. 2017), mientras que la profundidad de la roca madre proviene de
     Shangguan et al. (2017), también a 250 m de resolución.
-- **Vegetación** - Se utilizan tres fuentes de datos de la composición y
-    estructura del bosque:
-    1. Mapa Forestal de España a 1:25000 (MFE25)
-    2. Cuarto Inventario Forestal Nacional (ver aplicación **IFN App**)
-        o datos de campo equivalentes, para los demás grupos de parcelas
-        de vegetación.
-    3. Variables biofísicas derivadas de LiDAR, en su edición de
-        2016-2017 (ver aplicación **LiDAR App**)
+- **Vegetación** - Las fuentes de datos de parcelas de vegetación citadas en la introducción.
 
 
 ### Modelo de balance hídrico
@@ -169,9 +162,13 @@ Las siguientes personas han trabajado en el desarrollo de **SiteDrought**:
   + Motor de cálculo de la aplicación - **Miquel De Cáceres**
   + Diseño de la base de datos y aplicación shiny - **Oleguer Amorós** y **Victor Granda**
  
-Los autores expresan su gratitud hacia la [Agencia Estatal de Meteorología (AEMET)](http://www.aemet.es) y el [Servicio Meteorológico de Cataluña (SMC)](http://www.meteo.cat ) para proporcionar diariamente datos meteorológicos necesarios para esta aplicación; y al Servicio de Prevención de Incendios para los consejos en su desarrollo.
+Los autores expresan su gratitud hacia la [Agencia Estatal de Meteorología (AEMET)](http://www.aemet.es) y el [Servicio Meteorológico de Cataluña (SMC)](http://www.meteo.cat ) para proporcionar diariamente datos meteorológicos necesarios para esta aplicación; y al *Servei de Prevenció d' Incendis Forestals* de la *Generalitat de Catalunya* para los consejos en su desarrollo.
 
+### Financiación
 
+El proyecto **MODOSIN** (*Monitoreo y modelización integrados en un sistema de alerta de la vulnerabilidad climática en bosques de montaña*) se llevado a cabo con el apoyo del *Ministerio de Agricultura, Alimentación y Medio Ambiente (Organismo Autónomo de Parques Nacionales)*.
+
+El proyecto **MatoSeg** (*Red de detección, predicción y seguimiento de los efectos de la sequía sobre la estructura y biodiversidad de formaciones arbustivas mediterráneas del este peninsular*) se ha llevado a cabo con el apoyo de la *Fundación Biodiversidad*, del *Ministerio para la Transición Ecológica y el Reto Demográfico* y un convenio con el *Servei de Prevenció d’Incendis Forestals* de la *Generalitat de Catalunya*.
 
 ### Bibliografía
 
