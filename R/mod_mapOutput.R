@@ -629,7 +629,7 @@ mod_map <- function(
         
         
         parts <- c(part_1, part_2, part_3, part_4,part_5) %>% 
-          set_names(c(r(p_1,p_2), r(p_2,p_3), r(p_3,p_4), r(p_4,p_5), r(p_5,max_value))) 
+          magrittr::set_names(c(r(p_1,p_2), r(p_2,p_3), r(p_3,p_4), r(p_4,p_5), r(p_5,max_value))) 
         
         print(' %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
         print(variable)
@@ -656,8 +656,10 @@ mod_map <- function(
         
         num_13 <-ifelse(percent >=0.13, 1, 2) %>%
           data.frame() %>%
-          set_names('num') %>%
-          count(., num == 1)  %>% .[2,2]
+          magrittr::set_names('num') %>%
+          dplyr::count(., num == 1)  %>% .[2,2]
+        
+        #    .) Indicar en consola el numero rangos con % >= 13 %
         
         print(paste0('val>13% = ',num_13))
         
