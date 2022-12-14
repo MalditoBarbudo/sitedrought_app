@@ -128,6 +128,7 @@ tibble::tribble(
   "estandard_label", "Normal", "Normal", "Normal",
   "1st_label", "Discriminar valors alts","Discriminate higher values", "Discriminar valores altos",  
   "2nd_label","Discriminar valors baixos","Discriminate lower values", "Discriminar valores bajos",
+  "3rd_label","Contrast de màxims","Contrast of maximums","Contraste de máximos",
   
   # ........ MAPAS FONDO .........
   # ..............................

@@ -535,10 +535,235 @@ mod_map <- function(
         palette_min <- c(ra2,rb2,rc2,rd2,re2)
         
         
+        # %%%%%%%%%%%%%%%   LEYENDA Contraste MAXIMOS   %%%%%%%%%%%
+        # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        
+        #      .) Contrasta los rango de valores que son máximos
+        #      .) Los rango de valores que son más de un 13% del total, los destacamos
+        
+        
+        # ..... CALCULO PERCENTAJES  .....
+        # ................................
+        
+        #    .) Quiero DIVIDIR los valores de la variable en 5 RANGOS
+        #    .) Cada RANGO quiero saber el %
+        #    .) EJ.
+        #          Rango valores  [0.1-1.3]  [1.3-2.4]  [2.4-3.6]  [3.6-4.7]  [4.7-5.9]
+        #              num plots     432        1181       2225       1249        50
+        #                     %       8          23         43         24          1
+        
+        
+        # ....... RANGO / PARTES  ........
+        # ................................
+        
+        #    .) Obtengo los todos los valores de la variable
+        #    .) Obtengo Max + Min (0.1 - 5.9)
+        #    .) Divido entre 5 partes iguales
+       
+        val_legend <- variable_valores_noNA
+        
+        max_value <- max(val_legend) 
+        min_value <- min(val_legend) 
+        
+        part <-  (max_value-min_value)/5 
+        
+        p_1 <- min_value 
+        p_2 <- p_1  + part
+        p_3 <- p_2  + part
+        p_4 <- p_3  + part
+        p_5 <- p_4  + part
+        
+        part_1 <- 0
+        part_2 <- 0
+        part_3 <- 0 
+        part_4 <- 0 
+        part_5 <- 0 
+        
+        # ......... PROCENTAJES  .........
+        # ................................
+        
+        #    .) Quiero saber el % de cada RANGO/PARTE
+        #    .) Hago LOOP para saber cuantos plots hay port RANGO (part_1,2,...)
+        #    .) Obtengo el número de plots por parte
+        #    .) Obtengo el %de plots por parte
+       
+        for (i in 1:length(val_legend)) {  
+          
+          if (val_legend[i] >= p_1 & val_legend[i]<= p_2 ) {
+            part_1 <- part_1 + 1
+          } else if (val_legend[i] > p_2 & val_legend[i]<= p_3 ) {
+            part_2 <- part_2 + 1
+          } else if (val_legend[i] > p_3 & val_legend[i]<= p_4 ) {
+            part_3 <- part_3 + 1
+          } else if (val_legend[i] > p_4 & val_legend[i]<= p_5 ) {
+            part_4 <- part_4 + 1
+          } else if (val_legend[i] > p_5 & val_legend[i]<= max_value ) {
+            part_5 <- part_5 + 1
+          }
+          
+        }
+        
+        total <- part_1 + part_2+ part_3+ part_4+ part_5
+        
+        per_1 <- round((part_1/total), digits = 2)
+        per_2 <- round((part_2/total), digits = 2)
+        per_3 <- round((part_3/total), digits = 2)
+        per_4 <- round((part_4/total), digits = 2)
+        per_5 <- round((part_5/total), digits = 2)
+        
+        
+        # ..... REPORTAR EL PROCESO  .....
+        # ................................
+        
+        #    .) Hago PRINTS para reportar el proceso
+        #    .) Descrivo los resultados
+        
+        percent <- c(per_1, per_2, per_3, per_4, per_5)
+        
+        
+        r <- function(a,b){
+          round_a <- round(a, digits = 1)
+          round_b <- round(b, digits = 1)
+          paste0('v[',round_a,'-',round_b,']')
+        }
+        
+        
+        parts <- c(part_1, part_2, part_3, part_4,part_5) %>% 
+          set_names(c(r(p_1,p_2), r(p_2,p_3), r(p_3,p_4), r(p_4,p_5), r(p_5,max_value))) 
+        
+        print(' %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
+        print(variable)
+        print(parts)
+        print("  GROC  -------------------------------------  LILA ") 
+        
+        
+        # ...... PERCENTAJES >= 13% ......
+        # ................................
+        
+        #    .) Obtenemos un número = NUM_13
+        #    .) Indica cuantos percentajes >= 13% hay
+        
+        #    .) EJ.
+        #          Rango valores  [0.1-1.3]  [1.3-2.4]  [2.4-3.6]  [3.6-4.7]  [4.7-5.9]
+        #              num plots     432        1181       2225       1249        50
+        #                     %       8          23         43         24          1
+        #                 NUM_13 = 3
+        
+        #    .) Quiero saber cuantos 5 rangos de valores son mayores a 13 % del total
+        #    .) En función de cuantos GRUPOS sean mayores de 13 %
+        #    .) Usaré una o otra representación de colores en la leyenda
+        
+        
+        num_13 <-ifelse(percent >=0.13, 1, 2) %>%
+          data.frame() %>%
+          set_names('num') %>%
+          count(., num == 1)  %>% .[2,2]
+        
+        print(paste0('val>13% = ',num_13))
+        
+        
+        # .... FUNCION PALETE PERCENT ....
+        # ................................
+        
+        #      .) Retorna un NÚMERO
+        #      .) Este número será el valor de la amplitud del rango del color
+        #           .) EJ: para el rango (2.3  - 15.7) la amplitud será 4
+        #           .) EJ: para el rango (15.7 - 21.2) la amplitud será 49
+        #      .) La función depender de PER y NUM
+        #           .) PER = Percentaje (hay 5 perentajes. La suma de ellos es 100%)
+        #           .) NUM = Cuantos percentajes de >= 13% hay
+        
+        palete_percent <- function(per,num){
+          
+          if (num == 1) {
+            
+            if (is_quantil(variable)) {
+              
+              if(per >= 0.13){ return(180) } 
+              else           { return(5)   }
+              
+            } else {
+              
+              if(per >= 0.13){ return(4)  } 
+              else           { return(49) }
+              
+            }
+            
+          } else if (num == 2) {
+            
+            if (is_quantil(variable)) {
+              
+              if(per >= 0.13){ return(90) } 
+              else           { return(7)  }
+              
+            } else {
+              
+              if(per >= 0.13){ return(5)  } 
+              else           { return(63) }
+              
+            }
+            
+          } else if (num == 3) {
+            
+            if (is_quantil(variable)) {
+              
+              if(per >= 0.13){ return(63) } 
+              else           { return(5)  }
+              
+            } else {
+              
+              if(per >= 0.13){ return(7)  } 
+              else           { return(90) }
+            }
+            
+          } else if (num == 4) {
+            
+            if (is_quantil(variable)) {
+              
+              if(per >= 0.13){ return(49)} 
+              else           { return(4) }
+              
+            } else {
+              
+              if(per >= 0.13){ return(15)  } 
+              else           { return(150) }
+            }
+          } 
+        }
+        
+        
+        
+        ra3 <- colorRampPalette(colors = c('#111689','#501ea2'), space = "Lab")(palete_percent(per_5,num_13))   # lila
+        rb3 <- colorRampPalette(colors = c('#501ea2','#9024a4'), space = "Lab")(palete_percent(per_4,num_13))
+        rc3 <- colorRampPalette(colors = c('#9024a4','#cf4c73'), space = "Lab")(palete_percent(per_3,num_13))
+        rd3 <- colorRampPalette(colors = c('#cf4c73','#fba337'), space = "Lab")(palete_percent(per_2,num_13))   
+        re3 <- colorRampPalette(colors = c('#fba337','#f1f425'), space = "Lab")(palete_percent(per_1,num_13))   # groc
+        
+        print(paste0('Legend = ',"LILA ----------- GROC"))
+        
+        a <- palete_percent(per_1,num_13)
+        b <- palete_percent(per_2,num_13)
+        c <- palete_percent(per_3,num_13)
+        d <- palete_percent(per_4,num_13)
+        e <- palete_percent(per_5,num_13)
+        
+        print(paste0('Legend = ',paste(c(a,b,c,d,e),collapse="   ")))
+        print(paste0('%      = ',(paste0(percent,collapse=" "))))
+        
+        palette_contrast <- c(ra3,rb3,rc3,rd3,re3)
+        
+        
+        # .......... SELECT TIPO de PALETA  ............
+        # ..............................................
+        
+        #      .) En función del BOTON de LEYENDA SELECCIONADO (Estandard, Descartar maximos...)
+        #      .) Seleccionaremos uno o otro tipo de visualización de la leyenda
+        
         switch (leyenda_modif,
                 "estandard" = palete_value <- palettes_dictionary[[variable]][['pal']],
                 "tip_1"     = palete_value <- palette_min,
-                "tip_2"     = palete_value <- palette_max
+                "tip_2"     = palete_value <- palette_max,
+                "tip_3"     = palete_value <- palette_contrast
         )
         
         
@@ -668,8 +893,6 @@ mod_map <- function(
           values = value_legend,
           labFormat = leaflet::labelFormat(transform = function(x) rev(x)),
           opacity = 1)  
-
-      
 
       
 })
