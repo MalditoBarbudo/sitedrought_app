@@ -204,6 +204,7 @@ mod_map <- function(
     #      .) Asigon "ESTANDARD" a valor de LEYENDA
     
     leyenda_modif <- data_reactives$legend_modify_reactive
+    
 
     
     # ........ LENGUA SELECTED  .........
@@ -500,39 +501,45 @@ mod_map <- function(
           
         }
         
-        # ...... LEYENDA para VALORES EXTREMOS ........
-        # ..............................................
+        # ..... PALETA DESCARTAR MAXIMOS / MINIMOS .......
+        # ................................................
         
-        #      .) Creo un leyenda para valores extremos
-        #      .) Son tipos de color que pueden ayudar a visualizar algunos resultados
+        #      .) Creo rampa color Discriminando Máximo y Mínimo
+        #      .) La rampa de color se divide en 5 partes
+        #      .) La modifico para poder discriminar máximos y mínimos
         
-        #      .) https://stackoverflow.com/questions/49126405/how-to-set-up-asymmetrical-color-gradient-for-a-numerical-variable-in-leaflet-in
+        #      .) Distribución estandard
+        #           .) Cada rango tien el 20 % de los valors
+        #           .) Cada rango tiene el valor de 40
+        #           .) El total es 200 ( 40 -  40 - 40 - 40 - 40)
+        #           .) Los colores son ( Azul    .....  Amarillo)
         
-        #      .) Es una leyenda donde si hay pocs valores grandes y muchos de pequeños
-        #      .) Corrige el rango de la escala de color para que los menores destaquen
+        #      .) Distribución Discriminar Máximos
+        #           .) Hacemos mas grandes los RANGOS AMARILLOS (85 cada uno)
+        #           .) Hacemos mas pequeños los RANGOS AZULES (10 cada uno)
         
-        #      .) RC1 = 20  colores para RAMPA (valores GRANDES)
-        #      .) RC2 = 180 colores para RAMPA (valores PEQUEÑOS)
+        #      .) Distribución Discriminar Mínimos
+        #           .) Hacemos mas pequeños los RANGOS AMARILLOS (10 cada uno)
+        #           .) Hacemos mas grandes los RANGOS AZULES (85 cada uno)
         
         
         
  
-        ra <- colorRampPalette(colors = c('#111689','#501ea2'), space = "Lab")(85)   # lila
+        ra <- colorRampPalette(colors = c('#111689','#501ea2'), space = "Lab")(85)   # azul
         rb <- colorRampPalette(colors = c('#501ea2','#9024a4'), space = "Lab")(85)
         rc <- colorRampPalette(colors = c('#9024a4','#cf4c73'), space = "Lab")(10)
         rd <- colorRampPalette(colors = c('#cf4c73','#fba337'), space = "Lab")(10)
-        re <- colorRampPalette(colors = c('#fba337','#f1f425'), space = "Lab")(10)   # groc
+        re <- colorRampPalette(colors = c('#fba337','#f1f425'), space = "Lab")(10)   # amarillo
         
-        palette_max <- c(ra,rb,rc,rd,re)
+        palette_a <- c(ra,rb,rc,rd,re)
         
-        ra2 <- colorRampPalette(colors = c('#111689','#501ea2'), space = "Lab")(10)   # lila
+        ra2 <- colorRampPalette(colors = c('#111689','#501ea2'), space = "Lab")(10)   # azul
         rb2 <- colorRampPalette(colors = c('#501ea2','#9024a4'), space = "Lab")(10)
         rc2 <- colorRampPalette(colors = c('#9024a4','#cf4c73'), space = "Lab")(10)
         rd2 <- colorRampPalette(colors = c('#cf4c73','#fba337'), space = "Lab")(85)
-        re2 <- colorRampPalette(colors = c('#fba337','#f1f425'), space = "Lab")(85)   # groc
+        re2 <- colorRampPalette(colors = c('#fba337','#f1f425'), space = "Lab")(85)   # amarillo
       
-        
-        palette_min <- c(ra2,rb2,rc2,rd2,re2)
+        palette_b <- c(ra2,rb2,rc2,rd2,re2)
         
         
         # %%%%%%%%%%%%%%%   LEYENDA Contraste MAXIMOS   %%%%%%%%%%%
@@ -763,8 +770,8 @@ mod_map <- function(
         
         switch (leyenda_modif,
                 "estandard" = palete_value <- palettes_dictionary[[variable]][['pal']],
-                "tip_1"     = palete_value <- palette_min,
-                "tip_2"     = palete_value <- palette_max,
+                "tip_1"     = palete_value <- palette_b,
+                "tip_2"     = palete_value <- palette_a,
                 "tip_3"     = palete_value <- palette_contrast
         )
         
