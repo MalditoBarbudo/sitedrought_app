@@ -140,7 +140,7 @@ tibble::tribble(
   # ..... TIME SERIE EXPLICATION .....
   # ..................................
   
-  'expl_percentiles','Variació anual de la variable seleccionada de color verd i percentil del comparació històrica (1981 - 2020) en color blau. La variable seleccionada queda remarcada en el gràfic.','Annual variation of the selected variable in green and percentile of the historical comparison (1981-2020) in blue. The selected variable is highlighted in the graph.','Variación anual de la variable seleccionada de color verde y percentil de la comparación histórica (1981-2020) en color azul. La variable seleccionada queda remarcada en el gráfico.',
+  'expl_percentiles','Variació anual de la variable seleccionada de color verd i percentil del comparació històrica (1981 - 2020) de color blau. La variable seleccionada queda remarcada en el gràfic.','Annual variation of the selected variable in green and percentile of the historical comparison (1981-2020) in blue. The selected variable is highlighted in the graph.','Variación anual de la variable seleccionada de color verde y percentil de la comparación histórica (1981-2020) de color azul. La variable seleccionada queda remarcada en el gráfico.',
   
  
   
