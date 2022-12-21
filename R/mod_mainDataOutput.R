@@ -363,18 +363,87 @@ mod_mainData <- function(
         width_1 <- 2 
         width_2 <- 1
       }
+      
+      # ............... Fill SELECCION ....................
+      # ...................................................
+      
+      #       .) Función para RELLENO SOLO la variable SELECCIONADA
+      #       .) Devuelve TRUE si:
+      
+      #             .) la variabla introducida (var o var_q)
+      #             .) Es IGUAL a la variable seleccionada (variable)
+      
+      fill <- function(a){
+        if (a == variable) {
+          return(TRUE)
+        } else {
+          return(FALSE)
+        }
+      }
              
 
     data_days_layers %>%
-      dygraphs::dygraph(. , main = paste("Plot_id = ",click_plot_id)) %>%
       
-      dygraphs::dySeries(label = var_short, axis = 'y', strokeWidth = width_1) %>%
+      # ............ DYGRAPHS RELLENO IGUAL ...............
+      # ...................................................
+      
+      #       .) Versión ORIGINAL
+      #       .) Relleno las dos VARIABLES
+      
+      
+      
+      # dygraphs::dygraph(. , main = paste("Plot_id = ",click_plot_id)) %>%
+      # 
+      # dygraphs::dySeries(label = var_short, axis = 'y', strokeWidth = width_1) %>%
+      # dygraphs::dyAxis("y", label = var_def, valueRange = valueRange(var)) %>%
+      # 
+      # dygraphs::dySeries(label = var_short_q, axis = 'y2', strokeWidth = width_2) %>%
+      # dygraphs::dyAxis("y2", label = label_axis_q, valueRange = valueRange(var_q)) %>%
+      # 
+      # dygraphs::dyOptions(fillGraph = TRUE, fillAlpha = 0.1)  %>%
+      # dygraphs::dyEvent(fecha, fecha, labelLoc = "top") %>%
+      # dygraphs::dyLegend(show = "follow")
+    
+    
+    
+      # ..........  DYGRAPHS RELLENO SELECCIÓN .............
+      # ...................................................
+      
+      #       .) Versión 2da
+      #       .) Relleno SOLO la variabla SELECCIONADA
+    
+    
+    
+      # dygraphs::dygraph(. , main = paste("Plot_id = ",click_plot_id)) %>%
+      # 
+      # dygraphs::dySeries(label = var_short, axis = 'y', strokeWidth = width_1, fillGraph = fill(var)) %>%
+      # dygraphs::dyAxis("y", label = var_def, valueRange = valueRange(var)) %>%
+      # 
+      # dygraphs::dySeries(label = var_short_q, axis = 'y2', strokeWidth = width_2, fillGraph = fill(var_q)) %>%
+      # dygraphs::dyAxis("y2", label = label_axis_q, valueRange = valueRange(var_q)) %>%
+      # 
+      # # dygraphs::dyOptions(fillGraph = TRUE, fillAlpha = 0.1)  %>%
+      # dygraphs::dyEvent(fecha, fecha, labelLoc = "top") %>%
+      # dygraphs::dyLegend(show = "follow")
+      
+    
+      # ..........  DYGRAPHS RELLENO SELECCIÓN .............
+      # ...................................................
+      
+      #       .) Versión 3ra
+      #       .) Relleno SOLO la variabla PERCENTIL Histórico
+    
+    
+      
+      dygraphs::dygraph(. , main = paste("Plot_id = ",click_plot_id)) %>%
+
+      dygraphs::dySeries(label = var_short, axis = 'y', strokeWidth = 2 ) %>%
       dygraphs::dyAxis("y", label = var_def, valueRange = valueRange(var)) %>%
 
-      dygraphs::dySeries(label = var_short_q, axis = 'y2', strokeWidth = width_2) %>%
+      dygraphs::dySeries(label = var_short_q, axis = 'y2', strokeWidth = 1, fillGraph = 0.1) %>%
       dygraphs::dyAxis("y2", label = label_axis_q, valueRange = valueRange(var_q)) %>%
-      
-      dygraphs::dyOptions(fillGraph = TRUE, fillAlpha = 0.1)  %>%
+
+      # dygraphs::dyOptions(fillGraph = TRUE, fillAlpha = 0.1)  %>%
       dygraphs::dyEvent(fecha, fecha, labelLoc = "top") %>%
       dygraphs::dyLegend(show = "follow")
 
@@ -383,7 +452,7 @@ mod_mainData <- function(
       data_days_layers %>%
         dygraphs::dygraph(. , main = paste("Plot_id = ",click_plot_id)) %>%
         
-        dygraphs::dySeries(label = var_short, axis = 'y') %>%
+        dygraphs::dySeries(label = var_short, axis = 'y', strokeWidth = 2) %>%
         dygraphs::dyAxis("y", label = var_def, valueRange = valueRange(variable)) %>%
         
         dygraphs::dyOptions(fillGraph = TRUE, fillAlpha = 0.1)  %>%
