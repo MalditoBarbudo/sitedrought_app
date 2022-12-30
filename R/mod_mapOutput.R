@@ -638,10 +638,7 @@ mod_map <- function(
         parts <- c(part_1, part_2, part_3, part_4,part_5) %>% 
           magrittr::set_names(c(r(p_1,p_2), r(p_2,p_3), r(p_3,p_4), r(p_4,p_5), r(p_5,max_value))) 
         
-        print(' %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
-        print(variable)
-        print(parts)
-        print("  GROC  -------------------------------------  LILA ") 
+       
         
         
         # ...... PERCENTAJES >= 13% ......
@@ -668,7 +665,7 @@ mod_map <- function(
         
         #    .) Indicar en consola el numero rangos con % >= 13 %
         
-        print(paste0('val>13% = ',num_13))
+        
         
         
         # .... FUNCION PALETE PERCENT ....
@@ -748,7 +745,7 @@ mod_map <- function(
         rd3 <- colorRampPalette(colors = c('#cf4c73','#fba337'), space = "Lab")(palete_percent(per_2,num_13))   
         re3 <- colorRampPalette(colors = c('#fba337','#f1f425'), space = "Lab")(palete_percent(per_1,num_13))   # groc
         
-        print(paste0('Legend = ',"LILA ----------- GROC"))
+        
         
         a <- palete_percent(per_1,num_13)
         b <- palete_percent(per_2,num_13)
@@ -756,8 +753,15 @@ mod_map <- function(
         d <- palete_percent(per_4,num_13)
         e <- palete_percent(per_5,num_13)
         
-        print(paste0('Legend = ',paste(c(a,b,c,d,e),collapse="   ")))
-        print(paste0('%      = ',(paste0(percent,collapse=" "))))
+        
+        # print(' %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ')
+        # print(variable)
+        # print(parts)
+        # print("  GROC  -------------------------------------  LILA ") 
+        # print(paste0('val>13% = ',num_13))
+        # print(paste0('Legend = ',"LILA ----------- GROC"))
+        # print(paste0('Legend = ',paste(c(a,b,c,d,e),collapse="   ")))
+        # print(paste0('%      = ',(paste0(percent,collapse=" "))))
         
         palette_contrast <- c(ra3,rb3,rc3,rd3,re3)
         
