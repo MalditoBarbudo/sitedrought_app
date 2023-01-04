@@ -183,8 +183,9 @@ siteDrought_data <- function(
               size = 'normal',
               choices = shiny_set_names(c( "1st_label" = "tip_1",
                                            "estandard_label" = "estandard",
-                                           "2nd_label" = "tip_2",
-                                           "3rd_label" = "tip_3"),lang_declared),
+                                           "2nd_label" = "tip_2"#,
+                                           #"3rd_label" = "tip_3"
+                                           ),lang_declared),
               selected = 'estandard', direction = 'vertical',
               status = 'lfc_radiogroupbuttons'
             )
