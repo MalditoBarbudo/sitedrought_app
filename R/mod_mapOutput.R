@@ -775,8 +775,8 @@ mod_map <- function(
         switch (leyenda_modif,
                 "estandard" = palete_value <- palettes_dictionary[[variable]][['pal']],
                 "tip_1"     = palete_value <- palette_b,
-                "tip_2"     = palete_value <- palette_a,
-                "tip_3"     = palete_value <- palette_contrast
+                "tip_2"     = palete_value <- palette_a #,
+                #"tip_3"     = palete_value <- palette_contrast
         )
         
         
