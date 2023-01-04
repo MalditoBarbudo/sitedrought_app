@@ -49,8 +49,7 @@ mod_ts <- function(
     
     var <- data_reactives$variable_reactive
     timeseries_data <- main_data_reactives$timeserie 
-
-    timeseries_data
+    
   })
   
   # ......... OUTPUT / EXPLICACIÓN .........

@@ -38,7 +38,7 @@ siteDrought_data <- function(
   
   output$mod_data_container <- shiny::renderUI({
     
-    
+  
     # //////////////////////////////////
     # --      INICIALIZAR DATOS       --
     # //////////////////////////////////
@@ -122,11 +122,11 @@ siteDrought_data <- function(
       
       #       .) Queremos el rango de fechas de toda la base de datos
       #       .) Pero MINETRAS de DESCARGA TODA la BBDD
-      #       .) Le tenemos que indicar una fecha (la actual - un día) =  Sys.Date() - 1
+      #       .) Le tenemos que indicar una fecha [max = Sys.Date() - 1 / min = Sys.Date() - 365]
       
       #       .) Una vez DESCARGADA la BBDD 
-      #       .) Ya podemos cargar TODO el RANGO de fechas de la BBDD
-      #       .) El OBSERVER EVENT con UPDATEDATEINIPUT lo hace
+      #       .) Cada vez que se actualiza la UI por canviar la lengua
+      #       .) Usaremos un OBSERVER EVENT para ver si las fechas de la BBDD estan o no actualizadas
         
       
       
@@ -141,15 +141,17 @@ siteDrought_data <- function(
       #           .) El Z-INDEX indica PRIORIDA de aparecer ENCIMA
       #           .) Como MAYOR el Z-INDEX mas encima de todo
       #       .) El cambio lo hago en archivo CSS (siteDrought_settings.R)
-    
-        
+      
+         
       shiny::dateInput(
         ns("fecha"), translate_app('date_daily_label', lang_declared),
         value = Sys.Date() - 1,
         format = "yyyy/mm/dd",
         max = Sys.Date() - 1,
-        min = Sys.Date() - 1
+        min = Sys.Date() - 365
       ),
+     
+
       
       
       # ...... SELECCION ORIGEN PLOT ......
@@ -181,7 +183,9 @@ siteDrought_data <- function(
               size = 'normal',
               choices = shiny_set_names(c( "1st_label" = "tip_1",
                                            "estandard_label" = "estandard",
-                                           "2nd_label" = "tip_2"),lang_declared),
+                                           "2nd_label" = "tip_2"#,
+                                           #"3rd_label" = "tip_3"
+                                           ),lang_declared),
               selected = 'estandard', direction = 'vertical',
               status = 'lfc_radiogroupbuttons'
             )
@@ -272,36 +276,49 @@ siteDrought_data <- function(
   
   
   
-  # ........ O.E. FECHA ..............
+  # ......... OBSERVE FECHA ...........
   # ...................................
   
-  #      .) Es un OBSERVEREVENT de => MAIN_DATA_REACTIVES$DATA_DAY 
-  #      .) Activa un UPDATEDATEINPUT
+  #      .) Es un OBSERVEREVENT de => LANGUAGE 
+  #      .) Cada vez que cambiamos de lengua
+  #      .) Comprobamos que la BBDD esté actualizada a la última fecha
   
-  #      .) Cada vez que variamos DATA_DAY (solo AL inicializar la APP)
-  #      .) MODIFICA el DATE INPUT Original
-  #              .) Obtenemos TODO el rango de fechas
-  #              .) Indicamos el Max y el Mín
+  #      .) En caso contrario (la BBDD no está actualizada)
+  #      .) El DATE INPUT tendrá fecha máxima/mínima
+  #      .) en función de SU MÁXIMO / MÍNIMO
   
   
   shiny::observeEvent(
-    eventExpr = main_data_reactives$data_day,
+    eventExpr = data_reactives$lang_reactive,
     handlerExpr = {
       
-      data_day <- main_data_reactives$data_day
-        
-      date_max <- max(data_day$date)
-      date_min <- min(data_day$date)  
-      
-      shiny::updateDateInput(
-        session, 
-        "fecha",
-           value = date_max,
-           min   = date_min,
-           max   = date_max
+      shiny::validate(
+        shiny::need(main_data_reactives$data_day, 'No data_day selected')
       )
 
+      data_day <- main_data_reactives$data_day
+
+      date_max <- max(data_day$date)
+      date_min <- min(data_day$date)
+
+      max = Sys.Date() - 1
+      min = Sys.Date() - 365
+
+      if (min != date_min) {
+
+        shiny::updateDateInput(
+          session,
+          "fecha",
+          value = date_max,
+          min   = date_min,
+          max   = date_max
+        )
+
+      }
   })
+  
+  
+  
   
   
   # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -334,6 +351,7 @@ siteDrought_data <- function(
     data_reactives$origen_reactive <- input$origen
     data_reactives$legend_check <- input$legend_check
     data_reactives$legend_modify_reactive <- input$legend_modify
+    data_reactives$lang_reactive <- lang()
     
   })
   
