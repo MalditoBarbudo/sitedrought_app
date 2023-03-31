@@ -1,14 +1,12 @@
-#' function to launch the siteDrought app
-#'
-#' @importFrom magrittr %>%
-#'
+#' SiteDrought app function
 #' @export
-siteDrought_app <- function() {
+sitedrought_app <- function() {
   
-  ### DB access ################################################################
-  siteDroughtdb <- lfcdata::siteDrought()
-
-  ## JS code needed ############################################################
+  # DB access ---------------------------------------------------------------
+  sddb <- lfcdata::siteDrought()
+  
+  # JS code needed ----------------------------------------------------------
+  # keep alive to avoid shinyproxy and shiny grey screen
   keep_alive_script <- shiny::HTML(
     " var socket_timeout_interval;
       var n = 0;
@@ -23,10 +21,8 @@ siteDrought_app <- function() {
         clearInterval(socket_timeout_interval)
       }); "
   )
-
-
-
-  ### Language input ###########################################################
+  
+  # Language input ----------------------------------------------------------
   shiny::addResourcePath(
     'images', system.file('resources', 'images', package = 'siteDroughtApp')
   )
@@ -37,73 +33,41 @@ siteDrought_app <- function() {
     glue::glue("<img class='flag-image' src='images/eng.png' width=20px><div class='flag-lang'>%s</div></img>")
   )
   
-   
-  # ++++++++++++++++++++++++++++++++ //  UI // ++++++++++++++++++++++++++++++++
-  # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  ## UI ####
-
+  # Static data -------------------------------------------------------------
+  # Main table is static, we only need to load it once, so better at the
+  # beginning. We also calculate the min and max date already
+  tictoc::tic()
+  main_data <- sddb$get_data()
+  main_date_range <- c(
+    max = main_data$date |> max(na.rm = TRUE),
+    min = main_data$date |> min(na.rm = TRUE)
+  )
+  tictoc::toc()
+  
+  # UI ------------------------------------------------------------------------------------------
   ui <- shiny::tagList(
-
-    # ............... INICIALIZAR ................
-    # ............................................
-
-    #       .) SHINYJS / Waiter / Hostess
-    #       .) Head:
-    #             .) JS files
-    #             .) CSS files
-
-    # shinyjs
+    
+    # needed initializations
     shinyjs::useShinyjs(),
-    # waiter
     waiter::use_waiter(),
     waiter::use_hostess(),
-
-    # css
-  
+    
+    # head
     shiny::tags$head(
-      # js script,
+      # js scripts
       shiny::tags$script(keep_alive_script),
-      
-      # custom css
-      shiny::includeCSS(system.file('resources', 'siteDrought.css', package = 'siteDroughtApp')),
-      # corporative image css
-      shiny::includeCSS(system.file('resources', 'corp_image.css', package = 'siteDroughtApp')),
-      # setting css sitedrought
-      shiny::includeCSS(system.file('resources','siteDrought_settings.css', package = 'siteDroughtApp')),
-      
-      # # custom css
-      # shiny::includeCSS("inst/resources/siteDrought.css"),
-      # # corporative image css
-      # shiny::includeCSS("inst/resources/corp_image.css"),
-
-      # # responsive css
-      # shiny::includeCSS("inst/resources/siteDrought_responsive_v2.css"),
-      
+      # ci and custom css
+      shiny::includeCSS(system.file("resources", "sitedrought.css", package = "sitedroughtapp")),
+      shiny::includeCSS(system.file("resources", "corp_image.css", package = "sitedroughtapp"))
     ),
     
-  
-    # **************************************************************************************
-    # ------------------------------  //  NAVBAR   // --------------------------------------
-    # **************************************************************************************
-
-    #       .) Titulo
-    #       .) 2 Pestañas   = tabPanel
-    #                 .) Explora
-    #                 .) Especificación Técnica
-    #       .) Dropdown Lenguas  =pickerInput
-    
-
     navbarPageWithInputs(
       # opts
       title = 'SiteDrought App',
       id = 'nav', collapsible = TRUE,
-
+      
       # navbar with inputs (helpers.R) accepts an input argument, we use it for the lang
       # selector
-
-      # ............ Dropdown Lenguas ..............
-      # ............................................
-
       inputs = shinyWidgets::pickerInput(
         'lang', NULL,
         choices = lang_choices,
@@ -118,112 +82,54 @@ siteDrought_app <- function() {
         )
       ),
       
-      
-      
-      # **************************************************************************************
-      # ----------------------  //  Pestaña PLOTS Data_Day   // -------------------------------
-      # **************************************************************************************
-      
-      #       .) Tiene dos parte:
-      #       .) MENÚ Izq = sidebarPanel
-      #       .) MAPA     = mainPanel BLUE
-      
-      
       # navbarPage contents
+      # main tab
       shiny::tabPanel(
-        title = mod_tab_translateOutput('main_tab_translation'),
+        title = mod_tab_translateOutput("main_tab_translation"),
+        
+        # sidebar with modules
         shiny::sidebarLayout(
-          ## options
-          # position = 'left', fluid = TRUE,
-
-          # //////////////////////////////////////////////
-          # ------------    MENÚ IZQUIERDA   -------------
-          # //////////////////////////////////////////////
-
-          #       .) 3 Pestañas
-          #              .) DATOS
-          #              .) GUARDAR
-          #              .) AYUDA
-
           sidebarPanel = shiny::sidebarPanel(
             width = 4,
-            # this is gonna be a tabsetPanel, for data selection, save and help.
-            # tabset panel
+            # this is gonna be a tabsetPanel, for data sel/viz, saving and help.
+            # tabsetpanel
             shiny::tabsetPanel(
-                  # id = 'sidebar_tabset', type = 'pills',
-                  id = 'menu_izq', type = 'pills',
-
-                  # ............... Pestaña PLOTS ..............
-                  # ............................................
-                  
-                  #       .) Pestaña que visualiza PLOTS
-                  #       .) En función de FECHA / VARIABLE
-                  
-                  
-                  # data panel
-                  shiny::tabPanel(
-                    title = mod_tab_translateOutput('data_translation'),
-                    value = 'data_inputs_panel',
-                    mod_dataInput('siteDrought_DATA')
-                  ), # end of data panel
-
-                  # .............. Pestaña GUARDAR .............
-                  # ............................................
-                  
-                  #       .) Pestaña para GUARDAR
-                  #       .) Guardamos lo visualizado
-                  #       .) En diferente formato
-                  
-                  # save panel
-                  shiny::tabPanel(
-                    title = mod_tab_translateOutput('save_translation'),
-                    value = 'save_panel',
-                    mod_saveOutput('mod_saveOutput')
-                  ),
-                  
-                  # .............. Pestaña AYUDA ...............
-                  # ............................................
-                  
-                  #       .) Pestaña de AYUDA
-                  #       .) Ofrece descripción de diferentes VARIABLES
-                  #       .) Es una descripción corta
-                  
-                  # help panel
-                  shiny::tabPanel(
-                    # title = mod_tab_translateOutput('help_translation'),
-                    title = mod_tab_translateOutput('help_translation'),
-                    value = 'help_panel',
-                    mod_helpInput('help_data')
-                  )
+              id = "sidebar_tabset", type = "pills",
+              # data panel
+              shiny::tabPanel(
+                title = mod_tab_translateOutput("data_translation"),
+                value = "data_inputs_panel",
+                mod_dataInput("mod_dataInput")
+              ),
+              # save panel
+              shiny::tabPanel(
+                title = mod_tab_translateOutput("save_translation"),
+                value = "save_panel",
+                mod_saveOutput("mod_saveOutput")
+              ),
+              # help panel
+              shiny::tabPanel(
+                title = mod_tab_translateOutput("help_translation"),
+                value = "help_panel",
+                mod_helpOutput("mod_helpOutput")
+              )
             )
           ), # end of sidebarPanel
-          
-          # //////////////////////////////////////////////
-          # -------------    MAPA DERECHA   --------------
-          # //////////////////////////////////////////////
-
-          #       .) 2 Pestañas
-          #                 .) MAPA
-          #                 .) SERIES TEMPORALS
-
+          # main panel, for map and time series, so a tabset panel. We also use an overlay div for
+          # placing waiter output
           mainPanel = shiny::mainPanel(
             width = 8,
             shiny::div(
-              id = 'overlay_div',
+              id = "overlay_div",
               shiny::tabsetPanel(
-                id = 'main_panel_tabset_plots', type = 'pills',
-
-                # ......... MAPA .........
-                # ........................
+                id  = "main_panel_tabset", type = "pills",
+                # map
                 shiny::tabPanel(
-                  # 'map',
-                  title = mod_tab_translateOutput('map_translation'),
-                  value = 'map_panel',
-                  mod_mapOutput('mod_mapOutput')
+                  title = mod_tab_translateOutput("map_translation"),
+                  value = "map_panel",
+                  mod_mapOutput("mod_mapOutput")
                 ),
-
-                # .... SERIE TEMPORAL ....
-                # ........................
+                # ts
                 shiny::tabPanel(
                   title = mod_tab_translateOutput('series_tab_translation'),
                   value = 'series_panel',
@@ -231,145 +137,67 @@ siteDrought_app <- function() {
                 )
               )
             )
-          )
-        )
-      ),   
-
-      # .................. Pestaña ESPECIFICACIONES TECNICAS ...................
-      # ........................................................................
-
-      #       .) Tiene UNA parte:
-      #       .) Ecplicacion de la APP
-
+          ) # end of mainPanel
+          
+          
+          
+        ) # end of sidebarLayout
+      ), # end of main tab
+      
+      # technical specifications tab
       shiny::tabPanel(
         title = mod_tab_translateOutput('tech_specs_translation'),
         value = 'tech_spec_panel',
         mod_techSpecsOutput('mod_techSpecsOutput')
-        
-        
       )
-
-
-    ) # end of navbar
+    ) # enf od navbar 
   ) # end of UI
-
-
-  # ++++++++++++++++++++++++++++++ // SERVER // +++++++++++++++++++++++++++++++
-  # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  ## SERVER ####
+  
+  
+  # Server --------------------------------------------------------------------------------------
   server <- function(input, output, session) {
-
-    # .......... LANGUAGE REACTIVE ...............
-    # ............................................
-
-    #       .) Detecta el cambio de Lenguaje
-    #       .) Lo Módulos depende este
-
-    # lang reactive ####
+    
+    # lang reactive
     lang <- shiny::reactive({
       input$lang
     })
-
-    # ............... ACTIVAR FUNCIONES DE MODULOS .................
-    # ..............................................................
-
-    # ....... DATA INPUTS ..........
-    # ..............................
-
-    #       .) siteDrought_data  = f(x) a LLAMAR ( principal del Módulo )
-    #       .) siteDrought_DATA  = Es el ID usaremos a la UI cuando llamemos la f(x)
-    #       .) siteDroughtdb     = DDBB del LfcData
-    #       .) Lang          = lenguaje del REACTIVE
-
     
-    # ....... 1ra PESTAÑA ..........
-    # ..............................
-    
-    # data_input
-    data_reactives <- shiny::callModule(
-      siteDrought_data ,'siteDrought_DATA', siteDroughtdb, 
-      lang,  main_data_reactives
-     
-    )
-    
-    # help_input
-    help_reactives <- shiny::callModule(
-      help_data ,'help_data', siteDroughtdb, 
-      lang,  main_data_reactives
-      
-    )
-    
+    # modules
+    # data input
+    data_reactives <- shiny::callModule(mod_data, "mod_dataInput", main_data, main_date_range, lang)
     # map
     map_reactives <- shiny::callModule(
-      mod_map, 'mod_mapOutput',
-      data_reactives, main_data_reactives,
-      session, lang
+      mod_map, "mod_mapOutput", data_reactives, main_data_reactives, session, lang
     )
-    
-    # main data
+    # main_data reactives
     main_data_reactives <- shiny::callModule(
-      mod_mainData, 'mod_mainDataOutput',
-      data_reactives, map_reactives,
-      siteDroughtdb, lang
+      mod_mainData, "mod_mainDataOutput", data_reactives, map_reactives, main_data, lang
     )
+    # # help
+    # shiny::callModule(mod_help, "mod_helpOutput", main_data_reactives, lang)
+    # # ts
+    # timseries_reactives <- shiny::callModule(
+    #   mod_ts, 'mod_tsOutput', data_reactives, main_data_reactives, lang
+    # )
+    # # save
+    # shiny::callModule(mod_save, 'mod_saveOutput', data_reactives, main_data_reactives, lang)
+    # # tech specs
+    # shiny::callModule(mod_techSpecs, 'mod_techSpecsOutput', lang)
     
-   
-    # ....... TIMESERIES ...........
-    # ..............................
+    # translation modules
+    c(
+      "main_tab_translation", "data_translation", "save_translation", "help_translation",
+      "map_translation", "series_tab_translation", "tech_specs_translation"
+    ) |>
+      purrr::map(
+        .f = \(id) {
+          shiny::callModule(mod_tab_translate, id, id, lang)
+        }
+      )
     
-    timseries_reactives <- shiny::callModule(
-      mod_ts, 'mod_tsOutput',
-      data_reactives, main_data_reactives,
-      lang
-    )
-    
-    # ........... SAVE .............
-    # ..............................
-    
-    shiny::callModule(
-      mod_save, 'mod_saveOutput',
-      main_data_reactives, data_reactives, lang
-    )
-    
-    # technical specifications module
-    shiny::callModule(
-      mod_techSpecs, 'mod_techSpecsOutput',
-      lang
-    )
-
-     
-    # ..... TABS TRANSLATIONS ......
-    # ..............................
-    
-    #       .) Uso la función => CALL_MODULE_FUNCTION
-    #       .) Función creada en HELPERS.R
-    
-    #       .) Necesita 2 ATRIBUTOS 
-    #                 .) TABS = Todas la etiquetas a traducir
-    #                 .) LANG = Lengua seleccionada
-    
-    
-    # TODAS las etiquetas a TRADUCIR
-    tabs <- c('main_tab_translation','data_translation',
-              'map_translation','series_tab_translation','save_translation',
-              'save_translation','tech_specs_translation','help_translation',
-              'mod_saveOutput')
-    
-    # Funcion que llama a TODOS los CALL MODULES
-    callModule_function(tabs,lang)
-    
+  } # end of server
   
-
-  } # end of server function
-
-  # Run the application
-  siteDroughtApp <- shiny::shinyApp(
-    ui = ui, server = server
-  )
-
-  # shiny::runApp(nfi_app)
-  return(siteDroughtApp)
-
+  # run the app
+  sitedroughtapp <- shiny::shinyApp(ui = ui, server = server)
+  return(sitedroughtapp)
 }
-
-

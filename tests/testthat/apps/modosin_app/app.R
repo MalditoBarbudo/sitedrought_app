@@ -1,2 +1,2 @@
 library(siteDroughtApp)
-siteDrought_app()
+sitedrought_app()

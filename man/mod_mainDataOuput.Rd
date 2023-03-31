@@ -10,7 +10,7 @@ mod_mainData(
   session,
   data_reactives,
   map_reactives,
-  siteDroughtdb,
+  main_data,
   lang
 )
 }
@@ -23,9 +23,9 @@ mod_mainData(
 
 \item{data_reactives, map_reactives}{reactives from modules}
 
-\item{lang}{lang selected}
+\item{main_data}{main_data table}
 
-\item{catdroughtdb}{object to access the meteoland db}
+\item{lang}{lang selected}
 }
 \description{
 mod_mainData server function
