@@ -146,8 +146,18 @@ mod_map <- function(
     # palettes
     viz_pal_config <- data_reactives$viz_pal_config
     viz_pal_reverse <- data_reactives$viz_pal_reverse
+    palette_domain <- c(
+      palettes_dictionary[[var_daily_sel]]$min,
+      palettes_dictionary[[var_daily_sel]]$max
+    )
     
-    browser("points_map_obs")
+    if (var_daily_sel %in% c("Precipitation", "LFMC", "DFMC")) {
+      palette_domain <- c(
+        0, max(data_map[[var_daily_sel]])
+      )
+    }
+    
+    # browser("points_map_obs")
     
     pal <- switch(
       viz_pal_config,
@@ -155,19 +165,19 @@ mod_map <- function(
         scales::gradient_n_pal(
           palettes_dictionary[[var_daily_sel]]$pal(9), c(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.35, 0.55, 1)
         ),
-        domain = c(palettes_dictionary[[var_daily_sel]]$min, palettes_dictionary[[var_daily_sel]]$max),
+        domain = palette_domain,
         reverse = palettes_dictionary[[var_daily_sel]]$rev, na.color = 'gray'
       ),
       "high" = leaflet::colorNumeric(
         scales::gradient_n_pal(
           palettes_dictionary[[var_daily_sel]]$pal(9), c(0, 0.45, 0.65, 0.75, 0.8, 0.85, 0.9, 0.95, 1)
         ),
-        domain = c(palettes_dictionary[[var_daily_sel]]$min, palettes_dictionary[[var_daily_sel]]$max),
+        domain = palette_domain,
         reverse = palettes_dictionary[[var_daily_sel]]$rev, na.color = 'gray'
       ),
       "normal" = leaflet::colorNumeric(
         palettes_dictionary[[var_daily_sel]]$pal(256),
-        domain = c(palettes_dictionary[[var_daily_sel]]$min, palettes_dictionary[[var_daily_sel]]$max),
+        domain = palette_domain,
         reverse = palettes_dictionary[[var_daily_sel]]$rev, na.color = 'gray'
       )
     )
@@ -178,19 +188,19 @@ mod_map <- function(
         scales::gradient_n_pal(
           palettes_dictionary[[var_daily_sel]]$pal(9), c(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.35, 0.55, 1)
         ),
-        domain = c(palettes_dictionary[[var_daily_sel]]$min, palettes_dictionary[[var_daily_sel]]$max),
+        domain = palette_domain,
         reverse = !palettes_dictionary[[var_daily_sel]]$rev, na.color = 'gray'
       ),
       "high" = leaflet::colorNumeric(
         scales::gradient_n_pal(
           palettes_dictionary[[var_daily_sel]]$pal(9), c(0, 0.45, 0.65, 0.75, 0.8, 0.85, 0.9, 0.95, 1)
         ),
-        domain = c(palettes_dictionary[[var_daily_sel]]$min, palettes_dictionary[[var_daily_sel]]$max),
+        domain = palette_domain,
         reverse = !palettes_dictionary[[var_daily_sel]]$rev, na.color = 'gray'
       ),
       "normal" = leaflet::colorNumeric(
         palettes_dictionary[[var_daily_sel]]$pal(256),
-        domain = c(palettes_dictionary[[var_daily_sel]]$min, palettes_dictionary[[var_daily_sel]]$max),
+        domain = palette_domain,
         reverse = !palettes_dictionary[[var_daily_sel]]$rev,
         na.color = 'gray'
       )
@@ -226,7 +236,7 @@ mod_map <- function(
         position = "bottomright",
         title = translate_app(var_daily_sel, lang()),
         pal = pal_legend,
-        values = data_map[[var_daily_sel]],
+        values = c(palettes_dictionary[[var_daily_sel]]$min, data_map[[var_daily_sel]], palettes_dictionary[[var_daily_sel]]$max),
         labFormat = leaflet::labelFormat(transform = function(x) {sort(x, decreasing = TRUE)}),
         na.label = '',
         opacity = 1
