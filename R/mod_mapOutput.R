@@ -78,35 +78,14 @@ mod_map <- function(
         options = leaflet::layersControlOptions(collapsed = TRUE)
       ) |>
       leaflet::addMapPane('admin_divs', zIndex = 410) |>
-      leaflet::addMapPane('plots', zIndex = 420) #|>
-      # leaflet::addCircles(
-      #   data = data_map,
-      #   group = "plots_layer",
-      #   layerId = ~plot_id,
-      #   # label = "",
-      #   # labelOptions = leaflet::labelOptions(interactive = TRUE),
-      #   radius = dynamic_radius,
-      #   stroke = FALSE,
-      #   fillOpacity = 0.7,
-      #   fillColor = rlang::new_formula(lhs = NULL, rhs = rlang::sym(var_daily_sel)),
-      #   options = leaflet::pathOptions(pane = "plots")
-      # ) |>
-      # leaflet::clearControls() #|>
-      # leaflet::addLegend(
-      #   position = "bottomright",
-      #   title = translate_app(var_daily_sel, lang_declared),
-      #   pal = pal_legend,
-      #   values = value_legend,
-      #   labFormat = leaflet::labelFormat(transform = function(x) rev(x)),
-      #   opacity = 1
-      # )
+      leaflet::addMapPane('plots', zIndex = 420)
     
   })
   
   ## reactives ####
   # zoom-size transformation. Logic is as follows:
   #   - In closer zooms (10) go to the base size of 750. In far zooms increase
-  #     accordingly, until zoom 7 and further, with a max size of 1500
+  #     accordingly, until zoom 7 and further, with a max size of 2000
   base_size <- shiny::reactive({
     # we need zoom level to calculate this
     shiny::req(input$map_daily_zoom)
@@ -119,7 +98,7 @@ mod_map <- function(
       current_zoom <- 10
     }
     
-    size_transformed <- 750 + ((10 - current_zoom) * 250)
+    size_transformed <- 1000 + ((10 - current_zoom) * 500)
     
     return(size_transformed)
   })
@@ -156,9 +135,7 @@ mod_map <- function(
         0, max(data_map[[var_daily_sel]])
       )
     }
-    
-    browser("points_map_obs")
-    
+    # browser("points_map_obs")
     pal <- switch(
       viz_pal_config,
       "low" = leaflet::colorNumeric(
@@ -245,5 +222,24 @@ mod_map <- function(
     
   })
   
+  # tab update
+  shiny::observeEvent(
+    eventExpr = input$map_daily_shape_click,
+    handlerExpr = {
+      shiny::updateTabsetPanel(
+        parent_session, 'main_panel_tabset',
+        selected = 'series_panel'
+      )
+    }
+  )
   
+  # returning inputs
+  # reactive values to use in app and other modules
+  map_reactives <- shiny::reactiveValues()
+  shiny::observe({
+    map_reactives$map_daily_shape_click <- input$map_daily_shape_click
+    map_reactives$map_daily_zoom <- input$map_daily_zoom
+    map_reactives$map_daily_shape_mouseover <- input$map_daily_shape_mouseover
+  })
+  return(map_reactives)
 }
