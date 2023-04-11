@@ -157,7 +157,7 @@ mod_map <- function(
       )
     }
     
-    # browser("points_map_obs")
+    browser("points_map_obs")
     
     pal <- switch(
       viz_pal_config,
@@ -166,19 +166,20 @@ mod_map <- function(
           palettes_dictionary[[var_daily_sel]]$pal(9), c(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.35, 0.55, 1)
         ),
         domain = palette_domain,
-        reverse = palettes_dictionary[[var_daily_sel]]$rev, na.color = 'gray'
+        reverse = viz_pal_reverse, na.color = 'transparent'
       ),
       "high" = leaflet::colorNumeric(
         scales::gradient_n_pal(
           palettes_dictionary[[var_daily_sel]]$pal(9), c(0, 0.45, 0.65, 0.75, 0.8, 0.85, 0.9, 0.95, 1)
         ),
         domain = palette_domain,
-        reverse = palettes_dictionary[[var_daily_sel]]$rev, na.color = 'gray'
+        reverse = viz_pal_reverse, na.color = 'transparent'
       ),
       "normal" = leaflet::colorNumeric(
         palettes_dictionary[[var_daily_sel]]$pal(256),
         domain = palette_domain,
-        reverse = palettes_dictionary[[var_daily_sel]]$rev, na.color = 'gray'
+        reverse = viz_pal_reverse,
+        na.color = 'transparent'
       )
     )
     
@@ -189,20 +190,20 @@ mod_map <- function(
           palettes_dictionary[[var_daily_sel]]$pal(9), c(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.35, 0.55, 1)
         ),
         domain = palette_domain,
-        reverse = !palettes_dictionary[[var_daily_sel]]$rev, na.color = 'gray'
+        reverse = !viz_pal_reverse, na.color = 'transparent'
       ),
       "high" = leaflet::colorNumeric(
         scales::gradient_n_pal(
           palettes_dictionary[[var_daily_sel]]$pal(9), c(0, 0.45, 0.65, 0.75, 0.8, 0.85, 0.9, 0.95, 1)
         ),
         domain = palette_domain,
-        reverse = !palettes_dictionary[[var_daily_sel]]$rev, na.color = 'gray'
+        reverse = !viz_pal_reverse, na.color = 'transparent'
       ),
       "normal" = leaflet::colorNumeric(
         palettes_dictionary[[var_daily_sel]]$pal(256),
         domain = palette_domain,
-        reverse = !palettes_dictionary[[var_daily_sel]]$rev,
-        na.color = 'gray'
+        reverse = !viz_pal_reverse,
+        na.color = 'transparent'
       )
     )
     
@@ -236,7 +237,7 @@ mod_map <- function(
         position = "bottomright",
         title = translate_app(var_daily_sel, lang()),
         pal = pal_legend,
-        values = c(palettes_dictionary[[var_daily_sel]]$min, data_map[[var_daily_sel]], palettes_dictionary[[var_daily_sel]]$max),
+        values = c(palette_domain[1], data_map[[var_daily_sel]], palette_domain[2]),
         labFormat = leaflet::labelFormat(transform = function(x) {sort(x, decreasing = TRUE)}),
         na.label = '',
         opacity = 1
