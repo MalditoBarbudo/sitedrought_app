@@ -231,8 +231,8 @@ mod_map <- function(
       ) |>
       leaflet::addPolygons(
         data = admin_divs,
-        opacity = 1,
-        weight = 1,
+        opacity = 0.7,
+        weight = 1.5,
         fill = FALSE,
         color = "grey",
         group = "plots_layer",
@@ -267,8 +267,6 @@ mod_map <- function(
     ignoreNULL = TRUE,
     eventExpr = data_reactives$plot_origin,
     handlerExpr = {
-      
-      browser()
       
       setview_options <- switch(
         data_reactives$plot_origin,

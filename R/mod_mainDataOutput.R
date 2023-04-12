@@ -102,27 +102,29 @@ mod_mainData <- function(
   })
   
   # timeseries reactive
-  # data_ts <- shiny::reactive({
-  #   browser("data_ts")
-  #   # validations
-  #   shiny::validate(
-  #     shiny::need(data_reactives$var_daily, 'No var selected'),
-  #     shiny::need(data_reactives$date_daily, 'No var selected'),
-  #     shiny::need(map_reactives$map_daily_shape_click, 'no map click')
-  #   )
-  #   
-  #   plot_id_sel <- map_reactives$map_daily_shape_click$id
-  #   var_daily_sel <- data_reactives$var_daily
-  #   
-  #   plot_data <- main_data |>
-  #     dplyr::filter(plot_id == plot_id_sel)
-  #   
-  #   data_ts <- plot_data |>
-  #     dplyr::select(dplyr::contains(var_daily_sel)) |>
-  #     xts::as.xts(order.by = ts_data$date)
-  #   
-  #   return(data_ts)
-  # })
+  data_ts <- shiny::reactive({
+    # validations
+    shiny::validate(
+      shiny::need(data_reactives$var_daily, 'No var selected'),
+      shiny::need(data_reactives$date_daily, 'No var selected'),
+      shiny::need(map_reactives$map_daily_shape_click, 'no map click')
+    )
+
+    plot_id_sel <- map_reactives$map_daily_shape_click$id
+    var_daily_sel <- data_reactives$var_daily
+
+    plot_data <- main_data |>
+      dplyr::filter(plot_id == plot_id_sel) |>
+      dplyr::as_tibble() |>
+      dplyr::select(date, dplyr::contains(var_daily_sel))
+    
+    data_ts <- plot_data |>
+      dplyr::select(dplyr::contains(var_daily_sel)) |>
+      as.matrix() |>
+      xts::as.xts(order.by = plot_data$date)
+    
+    return(data_ts)
+  })
   
   
   # returning inputs
@@ -133,7 +135,7 @@ mod_mainData <- function(
     # user inputs
     main_data_reactives$data_day <- data_day()
     main_data_reactives$data_day_origin <- data_day_origin()
-    # main_data_reactives$data_ts <- data_ts()
+    main_data_reactives$data_ts <- data_ts()
   })
   
   return(main_data_reactives)
