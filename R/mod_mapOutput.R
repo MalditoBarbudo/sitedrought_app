@@ -87,24 +87,33 @@ mod_map <- function(
   #   - In closer zooms (10) go to the base size of 750. In far zooms increase
   #     accordingly, until zoom 7 and further, with a max size of 2000
   base_size <- shiny::reactive({
-    # we need zoom level to calculate this
-    shiny::req(input$map_daily_zoom)
-    current_zoom <- input$map_daily_zoom
+    # we need zoom level to calculate this. Also, plot origin to get defaults
+    shiny::req(input$map_daily_zoom, data_reactives$plot_origin)
     
-    if (current_zoom <= 7) {
-      current_zoom <- 7
-    }
-    if (current_zoom >= 10) {
-      current_zoom <- 10
-    }
+    default_size <- dplyr::case_match(
+      data_reactives$plot_origin,
+      # Matollar, bigger points as they are scattered dn difficult to see
+      "S" ~ 5000,
+      # Parks, bigger than normal, smaller than matollar because there is more closer points
+      c("O", "A", "PN") ~ 1500,
+      # default 1000, for the rest of origins
+      .default = 1000
+    )
     
-    size_transformed <- 1000 + ((10 - current_zoom) * 500)
+    current_zoom <- dplyr::case_when(
+      input$map_daily_zoom < 7 ~ 7,
+      input$map_daily_zoom > 10 ~ 10,
+      .default = input$map_daily_zoom
+    )
+    
+    # size calculation
+    size_transformed <- default_size + ((10 - current_zoom) * (default_size/2))
     
     return(size_transformed)
   })
   
   ## observers ####
-  # data and points update
+  # data and points update (also polygons to plot)
   shiny::observe({
     # we need at least the data and the variable selected to continue
     shiny::req(
@@ -195,6 +204,17 @@ mod_map <- function(
         }
       )
     
+    # polygons
+    admin_divs <- switch(
+      data_reactives$plot_origin,
+      "T" = all_polygons,
+      "A" = aiguestortes_big,
+      "PN" = parks_big,
+      "O" = ordesa_big,
+      "P" = catalunya, 
+      "S" = provincias
+    )
+    
     leaflet::leafletProxy("map_daily") |>
       leaflet::clearGroup("plots_layer") |>
       leaflet::addCircles(
@@ -209,6 +229,15 @@ mod_map <- function(
         fillColor = pal(data_map[[var_daily_sel]]),
         options = leaflet::pathOptions(pane = "plots")
       ) |>
+      leaflet::addPolygons(
+        data = admin_divs,
+        opacity = 1,
+        weight = 1,
+        fill = FALSE,
+        color = "grey",
+        group = "plots_layer",
+        options = leaflet::pathOptions(pane = "admin_divs")
+      ) |>
       leaflet::clearControls() |>
       leaflet::addLegend(
         position = "bottomright",
@@ -219,7 +248,6 @@ mod_map <- function(
         na.label = '',
         opacity = 1
       )
-    
   })
   
   # tab update
@@ -230,6 +258,34 @@ mod_map <- function(
         parent_session, 'main_panel_tabset',
         selected = 'series_panel'
       )
+    }
+  )
+  
+  # set view reset
+  shiny::observeEvent(
+    ignoreInit = TRUE,
+    ignoreNULL = TRUE,
+    eventExpr = data_reactives$plot_origin,
+    handlerExpr = {
+      
+      browser()
+      
+      setview_options <- switch(
+        data_reactives$plot_origin,
+        "P" = list(lng = 1.7458675, lat = 41.6922353, zoom = 8),
+        "PN" = list(lng = 0.502806, lat = 42.533565, zoom = 10),
+        "A" = list(lng = 0.9313699, lat = 42.5709769, zoom = 11),
+        "O" = list(lng = 0.0519259, lat = 42.6598781, zoom = 11),
+        list(lng = 2.2018256, lat = 41.089058, zoom = 7)
+      )
+      
+      # update map with the corresponding view
+      leaflet::leafletProxy("map_daily") |>
+        leaflet::setView(
+          lng = setview_options[["lng"]],
+          lat = setview_options[["lat"]],
+          zoom = setview_options[["zoom"]]
+        )
     }
   )
   
