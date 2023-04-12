@@ -58,7 +58,7 @@ mod_map <- function(
       leaflet::setView(2.2018256,41.089058, zoom = 7) |>
       leaflet.extras::addResetMapButton() |>
       leaflet::addProviderTiles(
-        leaflet::providers$Esri.WorldShadedRelief,
+        leaflet::providers$Esri.WorldTerrain,
         group = translate_app('Relief', lang())
       ) |>
       leaflet::addProviderTiles(
@@ -69,11 +69,36 @@ mod_map <- function(
         leaflet::providers$OpenStreetMap,
         group = translate_app('OSM', lang())
       ) |>
+      leaflet::addProviderTiles(
+        leaflet::providers$Stamen.TonerBackground,
+        group = translate_app('TonerBackground', lang())
+      ) |>
+      leaflet::addProviderTiles(
+        leaflet::providers$Stamen.TonerLines,
+        group = translate_app('TonerLines', lang())
+      ) |>
+      leaflet::addProviderTiles(
+        leaflet::providers$Stamen.TonerHybrid,
+        group = translate_app('TonerHybrid', lang())
+      ) |>
+      leaflet::addProviderTiles(
+        leaflet::providers$CartoDB.Positron,
+        group = translate_app('Positron', lang())
+      ) |>
+      leaflet::addProviderTiles(
+        leaflet::providers$CartoDB.DarkMatter,
+        group = translate_app('DarkMatter', lang())
+      ) |>
       leaflet::addLayersControl(
         baseGroups = c(
           translate_app('Relief', lang()),
           translate_app('Imagery', lang()),
-          translate_app('OSM', lang())
+          translate_app('OSM', lang()),
+          translate_app('TonerBackground', lang()),
+          translate_app('TonerLines', lang()),
+          translate_app('TonerHybrid', lang()),
+          translate_app('Positron', lang()),
+          translate_app('DarkMatter', lang())
         ),
         options = leaflet::layersControlOptions(collapsed = TRUE)
       ) |>

@@ -11,10 +11,8 @@ mod_tsOutput <- function(id) {
 
   # UI ####
   shiny::tagList(
-    dygraphs::dygraphOutput(ns('timeseries_daily')),
-    shiny::uiOutput(
-      ns('percentiles_container')
-    )
+    dygraphs::dygraphOutput(ns('timeseries_plot')),
+    shiny::uiOutput(ns('dygraph_explanation'))
   )
 }
 
@@ -23,7 +21,7 @@ mod_tsOutput <- function(id) {
 #' @param output internal
 #' @param session internal
 #'
-#' @param data_reactives,main_data_reactives reactives needed
+#' @param data_reactives,main_data_reactives,map_reactives reactives needed
 #' @param lang lang value
 #'
 #' @export
@@ -31,35 +29,54 @@ mod_tsOutput <- function(id) {
 #' @rdname mod_tsOutput
 mod_ts <- function(
   input, output, session,
-  data_reactives, main_data_reactives,
+  data_reactives, main_data_reactives, map_reactives,
   lang
 ) {
   
-  # ........... OUTPUT / GRAFICO ...........
-  # ........................................
-  
-  #      .) OUTPUT que muestra GRAFICO
-  #      .) Es el TIMESERIE del plot seleccionado
-
-  output$timeseries_daily <- dygraphs::renderDygraph({
+  # timeseries
+  output$timeseries_plot <- dygraphs::renderDygraph({
 
     shiny::validate(
-      shiny::need(data_reactives$variable_reactive, 'no var data yet')
-    ) 
+      shiny::need(map_reactives$map_daily_shape_click, 'no var data yet'),
+      shiny::need(main_data_reactives$data_ts, 'no ts data')
+    )
     
-    var <- data_reactives$variable_reactive
-    timeseries_data <- main_data_reactives$timeserie 
-
-    timeseries_data
+    data_ts <- main_data_reactives$data_ts
+    var_daily_sel <- data_reactives$var_daily
+    vars_translated <- translate_app(names(data_ts), lang())
+    
+    dygraph_domain <- c(
+      palettes_dictionary[[var_daily_sel]]$min,
+      palettes_dictionary[[var_daily_sel]]$max
+    )
+    
+    if (var_daily_sel %in% c("Precipitation", "LFMC", "DFMC")) {
+      dygraph_domain <- c(
+        0, max(data_ts[,1])
+      )
+    }
+    
+    dygraph_output <- data_ts |>
+      dygraphs::dygraph(main = translate_app('timeseries_title', lang())) |>
+      dygraphs::dySeries(label = vars_translated[1], axis = 'y', strokeWidth = 2) |> 
+      dygraphs::dyAxis("y", label = vars_translated[1], valueRange = dygraph_domain, rangePad = 5) |>
+      dygraphs::dyOptions(fillGraph = TRUE, fillAlpha = 0.1) |> 
+      dygraphs::dyEvent(data_reactives$date_daily, data_reactives$date_daily, labelLoc = "top") |> 
+      dygraphs::dyLegend(show = "follow")
+    
+    if (ncol(data_ts) > 1) {
+      dygraph_output <- dygraph_output |>
+        dygraphs::dySeries(label = vars_translated[2], axis = 'y2', strokeWidth = 1) |> 
+        dygraphs::dyAxis("y2", label = vars_translated[2], valueRange = dygraph_domain, rangePad = 5)
+        
+    }
+    
+    # return the dygraph
+    dygraph_output
   })
   
-  # ......... OUTPUT / EXPLICACIÓN .........
-  # ........................................
-  
-  #      .) DIV que muestra explicacion sobre percentiles históricos
-  #      .) Solo se visualiza con las variables que tiene percentil
-  
-  output$percentiles_container <- shiny::renderUI({
+  # explanation div
+  output$dygraph_explanation <- shiny::renderUI({
     
     # ......... INICIALIZAR .............
     # ...................................
@@ -69,51 +86,23 @@ mod_ts <- function(
     #       .) DATES_LANG = Cambio de nomenclatura de lengua
     
     ns <- session$ns
-    lang_declared <- lang()
-    dates_lang <- switch(
-      lang_declared,
-      'cat' = 'ca',
-      'spa' = 'es',
-      'eng' = 'en'              
-    )
-    
     shiny::div(
       id = ns('explanation_percentiles'),
-      shiny::HTML(translate_app('expl_percentiles', lang_declared))
+      shiny::HTML(translate_app('expl_percentiles', lang()))
     )
-    
   })
   
-  
-  # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  # ----------------------------    OBVSERVE    ---------------------------------
-  # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  
-  
-  # ....... SHOW/HIDDEN EXPLICACION ........
-  # ........................................
-  
-  #      .) Activar menú explicativo
-  #      .) SOLO cuando haya gráficos de PERCENTILES HISTÓRICOS
-  #      .) Por lo tanto cuando la variable es c("REW_q","DDS_q","LFMC_q","REW","DDS","LFMC")
-  
-  
+  ## Observers
   shiny::observe({
-    
     shiny::validate(
-      shiny::need(data_reactives$variable_reactive, 'no variable')
+      shiny::need(main_data_reactives$data_ts, 'no data')
     )
-    varialbe <- data_reactives$variable_reactive
-  
-    var_quantile <- c("REW_q","DDS_q","LFMC_q","REW","DDS","LFMC")
     
-    if (varialbe %in% var_quantile) {
+    if (ncol(main_data_reactives$data_ts > 1)) {
       shinyjs::show('explanation_percentiles')
     } else {
       shinyjs::hide('explanation_percentiles')
     }
-    
-    
   })
 
 }

@@ -7,7 +7,15 @@
 \usage{
 mod_tsOutput(id)
 
-mod_ts(input, output, session, data_reactives, main_data_reactives, lang)
+mod_ts(
+  input,
+  output,
+  session,
+  data_reactives,
+  main_data_reactives,
+  map_reactives,
+  lang
+)
 }
 \arguments{
 \item{id}{shiny id}
@@ -18,7 +26,7 @@ mod_ts(input, output, session, data_reactives, main_data_reactives, lang)
 
 \item{session}{internal}
 
-\item{data_reactives, main_data_reactives}{reactives needed}
+\item{data_reactives, main_data_reactives, map_reactives}{reactives needed}
 
 \item{lang}{lang value}
 }
