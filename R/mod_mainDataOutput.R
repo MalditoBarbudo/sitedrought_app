@@ -82,22 +82,21 @@ mod_mainData <- function(
       shiny::need(data_reactives$plot_origin, 'No plot origin selected')
     )
     
-    plot_origin_sel <- switch(
-      data_reactives$plot_origin,
-      "T" = "T",
-      "PN" = c("aiguestortes","ordesa"),
-      "P"  = "ifn",
-      "A"  = "aiguestortes",
-      "S"  = "matollar",
-      "O"  = "ordesa"
-    )
-    data_day_origin <- data_day()
     
-    # if not all, filter the data
-    if (plot_origin_sel != "T") {
-      data_day_origin <- data_day_origin |>
-        dplyr::filter(plot_origin %in% plot_origin_sel)
-    }
+    ## TODO
+    ## when selecting aiguestortes (A o PN), IFN plots inside the park must also be added.
+    ## Doing that here with an st_covered_by with the park perimeter is not cost-efficient, so
+    ## is better to add a column in the data table when preparing the raw data.
+    plot_origin_sel <- data_reactives$plot_origin
+    data_day_origin <- switch(
+      plot_origin_sel,
+      "PN" = data_day() |> sf::st_join(parks_big, left = FALSE, join = sf::st_covered_by),
+      "A" = data_day() |> sf::st_join(aiguestortes_big, left = FALSE, join = sf::st_covered_by),
+      "O" = data_day() |> sf::st_join(ordesa_big, left = FALSE, join = sf::st_covered_by),
+      "T" = data_day(),
+      "P" = data_day() |> dplyr::filter(plot_origin == "ifn"),
+      "S" = data_day() |> dplyr::filter(plot_origin == "matollar")
+    )
     
     return(data_day_origin)
   })

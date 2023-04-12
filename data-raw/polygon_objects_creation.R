@@ -37,6 +37,21 @@ peri_total <- all_parques  %>% dplyr::filter(Tipus %in% c("peri_OR","peri_AT"))
 peri_ordesa <- all_parques  %>% dplyr::filter(Tipus == "peri_OR")
 peri_aiguestortes <- all_parques  %>% dplyr::filter(Tipus == "peri_AT")
 
+ordesa_big <- sf::st_combine(rbind(ordesa, peri_ordesa)) |>
+  sf::st_make_valid() |>
+  sf::st_union(is_coverage = TRUE) |>
+  sf::st_as_sf()
+
+aiguestortes_big <- sf::st_combine(rbind(aiguestortes, peri_aiguestortes)) |>
+  sf::st_make_valid() |>
+  sf::st_union(is_coverage = TRUE) |>
+  sf::st_as_sf()
+
+parks_big <- sf::st_combine(rbind(parques, peri_total)) |>
+  sf::st_make_valid() |>
+  sf::st_union(is_coverage = TRUE) |>
+  sf::st_as_sf()
+
 
 
 # ..... TRANSFERÈNCIA DE DATAOS ALA APP .......
