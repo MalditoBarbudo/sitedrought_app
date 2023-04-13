@@ -56,9 +56,16 @@ mod_ts <- function(
       )
     }
     
+    # strokes should be dependent on the var selected. If is quantile, stroke should be 2 for the
+    # second axis and one for first.
+    quantile_modifier <- 0
+    if (stringr::str_detect(var_daily_sel, "_q$")) {
+      quantile_modifier <- 1
+    }
+    
     dygraph_output <- data_ts |>
       dygraphs::dygraph(main = translate_app('timeseries_title', lang())) |>
-      dygraphs::dySeries(label = vars_translated[1], axis = 'y', strokeWidth = 2) |> 
+      dygraphs::dySeries(label = vars_translated[1], axis = 'y', strokeWidth = 2 - quantile_modifier) |> 
       dygraphs::dyAxis("y", label = vars_translated[1], valueRange = dygraph_domain, rangePad = 5) |>
       dygraphs::dyOptions(fillGraph = TRUE, fillAlpha = 0.1) |> 
       dygraphs::dyEvent(data_reactives$date_daily, data_reactives$date_daily, labelLoc = "top") |> 
@@ -66,25 +73,16 @@ mod_ts <- function(
     
     if (ncol(data_ts) > 1) {
       dygraph_output <- dygraph_output |>
-        dygraphs::dySeries(label = vars_translated[2], axis = 'y2', strokeWidth = 1) |> 
+        dygraphs::dySeries(label = vars_translated[2], axis = 'y2', strokeWidth = 1 + quantile_modifier) |> 
         dygraphs::dyAxis("y2", label = vars_translated[2], valueRange = dygraph_domain, rangePad = 5)
         
     }
-    
     # return the dygraph
     dygraph_output
   })
   
   # explanation div
   output$dygraph_explanation <- shiny::renderUI({
-    
-    # ......... INICIALIZAR .............
-    # ...................................
-    
-    #       .) NS = IDs únicos
-    #       .) LANG = F(x) definida en APP.R
-    #       .) DATES_LANG = Cambio de nomenclatura de lengua
-    
     ns <- session$ns
     shiny::div(
       id = ns('explanation_percentiles'),
@@ -93,6 +91,7 @@ mod_ts <- function(
   })
   
   ## Observers
+  # show/hide the quantiles explanation
   shiny::observe({
     shiny::validate(
       shiny::need(main_data_reactives$data_ts, 'no data')

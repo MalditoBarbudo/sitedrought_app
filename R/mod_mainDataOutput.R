@@ -112,14 +112,18 @@ mod_mainData <- function(
 
     plot_id_sel <- map_reactives$map_daily_shape_click$id
     var_daily_sel <- data_reactives$var_daily
+    
+    # If we select a quantile variable, we need to select also the non-quantile version to show
+    # in the timeseries. We get the base name of the variable and use that as selecting filter.
+    stripped_var <- stringr::str_remove_all(var_daily_sel, "_q$")
 
     plot_data <- main_data |>
       dplyr::filter(plot_id == plot_id_sel) |>
       dplyr::as_tibble() |>
-      dplyr::select(date, dplyr::contains(var_daily_sel))
+    dplyr::select(date, dplyr::contains(stripped_var))
     
     data_ts <- plot_data |>
-      dplyr::select(dplyr::contains(var_daily_sel)) |>
+      dplyr::select(dplyr::contains(stripped_var)) |>
       as.matrix() |>
       xts::as.xts(order.by = plot_data$date)
     
