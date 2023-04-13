@@ -198,11 +198,9 @@ sitedrought_app <- function() {
       mod_mainData, "mod_mainDataOutput", data_reactives, map_reactives, main_data, lang
     )
     # ts
-    shiny::callModule(
-      mod_ts, 'mod_tsOutput', data_reactives, main_data_reactives, map_reactives, lang
-    )
-    # # help
-    # shiny::callModule(mod_help, "mod_helpOutput", main_data_reactives, lang)
+    shiny::callModule(mod_ts, 'mod_tsOutput', data_reactives, main_data_reactives, map_reactives, lang)
+    # help
+    shiny::callModule(mod_help, "mod_helpOutput", main_data_reactives, lang)
     # save
     shiny::callModule(mod_save, 'mod_saveOutput', data_reactives, main_data_reactives, main_data, lang)
     # tech specs

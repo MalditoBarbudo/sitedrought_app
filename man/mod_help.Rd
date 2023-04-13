@@ -4,7 +4,7 @@
 \alias{mod_help}
 \title{siteDrought_data server function}
 \usage{
-mod_help(input, output, session, siteDroughtdb, lang, main_data_reactives)
+mod_help(input, output, session, main_data_reactives, lang)
 }
 \arguments{
 \item{input}{internal}
@@ -12,6 +12,8 @@ mod_help(input, output, session, siteDroughtdb, lang, main_data_reactives)
 \item{output}{internal}
 
 \item{session}{internal}
+
+\item{main_data_reactives}{reactives needed from other modules}
 
 \item{lang}{lang reactive}
 }

@@ -64,55 +64,17 @@ translate_app <- function(id, lang) {
 }
 
  
-# ........ FUNCION TRANSLATE NAMES ..........
-# ...........................................
-
-#       .) La usaré EN MOD_DATAINPUT
-#       .) La usaré para SETEAR NAMES
-
-# shiny_set_names <- function(nom,lang) {
-#   nom %>%
-#   magrittr::set_names(translate_app(names(.), lang))
-# }
-
-
-# ...... FUNCION TRANSLATE THESUAURUS .......
-# ...........................................
-
-#       .) Función que traducirá
-#       .) Usará la tabla THESAURUS de la BBDD 
-#       .) DATOS PRÉVIOS:
-#                .) Creamos de nuevo SiteDroughtDB
-#                .) Creamos variable lfcdata::sitedrought_var_thes
-#                .) Es la tabla THESAURUS_VARIABLE 
-#       .) ARGUMENTOS.
-#                .) LANG = Lengua per definida en menu del NAV
-#                .) ID = código que usarà el DICCIONARIO para saber QUE TRADUCIR
-#                .) TYPE = description o units
-
-
 translate_thesaurus_app <- function(id, lang, type) {
-  id %>%
-    purrr::map_chr(
-      ~ sitedrought_var_thes %>%
-        dplyr::filter(var_id == .x ) %>% {
-          data_filtered <- .
-          
-          if (nrow(data_filtered) < 1) {
-            .x
-          } else {
-            
-            switch (type,
-              'description' = text <- dplyr::pull(data_filtered, !! rlang::sym(glue::glue("var_description_help_{lang}"))),
-              'units' = text <- dplyr::pull(data_filtered, !! rlang::sym(glue::glue("var_units_{lang}")))
-            )
-            
-            Encoding(text) <- "UTF-8"
-            text 
-            
-          }
-        }
-    )
+  var_row <- sitedrought_var_thes |>
+    dplyr::filter(var_id == id)
+  
+  # check if found something, if not return empty string
+  if (nrow(var_row) < 1) {
+    return("")
+  }
+  
+  # return the desired translation based on type and lang
+  return(dplyr::pull(var_row, glue::glue("var_{type}_{lang}")))
 }
 
 
