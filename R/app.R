@@ -205,8 +205,8 @@ sitedrought_app <- function() {
     # shiny::callModule(mod_help, "mod_helpOutput", main_data_reactives, lang)
     # # save
     # shiny::callModule(mod_save, 'mod_saveOutput', data_reactives, main_data_reactives, lang)
-    # # tech specs
-    # shiny::callModule(mod_techSpecs, 'mod_techSpecsOutput', lang)
+    # tech specs
+    shiny::callModule(mod_techSpecs, 'mod_techSpecsOutput', lang)
     
     # translation modules
     c(

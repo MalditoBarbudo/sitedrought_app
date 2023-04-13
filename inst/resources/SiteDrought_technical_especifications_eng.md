@@ -5,10 +5,6 @@ date: "24/10/2022"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 ### Introduction
 
 The application **SiteDrought** provides daily estimates of drought impacts and fire risk in forest and shrubland stands in Catalonia over the last year. This service is designed to provide information that is useful for estimating the daily fire danger in areas of vegetation of interest. The application updates soil moisture and vegetation stress daily from daily meteorological data obtained by interpolation from data from automatic station networks provided by the [*Agencia Estatal de Meteorologia (AEMET)*](http://www.aemet.es) and the [*Servei Meteorologic de Catalunya (SMC)*](http://www.meteo.cat). In order to perform the calculations, daily meteorological data is used as input to a forest water balance model parameterized with edaphic data (derived from global databases) and vegetation.

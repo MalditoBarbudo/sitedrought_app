@@ -5,10 +5,6 @@ date: "24/10/2022"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 ### Introducció
 
 L'aplicació **SiteDrought App** proporciona estimacions diàries d'**impacte de la sequera** i **risc d'incendi** en parcel·les bosc i matollar de Catalunya del darrer any. Aquest servei està pensat per proporcionar informació que resulti d'utilitat per a estimar el perill d'incendi diari en arees de vegetació d'interès. L'aplicació actualitza diàriament la humitat del sòl i l'estrés de la vegetació a partir de dades de meteorologia diària obtingudes per interpolació a partir de dades de les xarxes d'estacions automàtiques proporcionades l'[Agencia Estatal de Meteorologia (AEMET)](http://www.aemet.es) i el [Servei Meteorologic de Catalunya (SMC)](http://www.meteo.cat). Per a poder realitzar els càlculs, les dades de meteorologia diària s'empren com a entrada d'un model de balanç hídric forestal parametritzat amb dades edàfiques (derivades de bases de dades globals) i de vegetació.

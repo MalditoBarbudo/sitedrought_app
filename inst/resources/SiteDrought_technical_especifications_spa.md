@@ -1,4 +1,9 @@
-
+---
+title: "Especificaciones técnicas"
+author: "Miquel De Cáceres"
+date: "24/10/2022"
+output: html_document
+---
 
 ### Introducción
 

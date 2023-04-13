@@ -8,9 +8,7 @@
 mod_techSpecsOutput <- function(id) {
   # ns
   ns <- shiny::NS(id)
-  shiny::tagList(
-    shiny::uiOutput(ns('techSpecs'))
-  )
+  shiny::tagList(shiny::uiOutput(ns('techSpecs')))
 }
 
 #' mod_techSpecs server function
@@ -32,52 +30,21 @@ mod_techSpecs <- function(
 
   output$techSpecs <- shiny::renderUI({
     
-    # ...... RMD TRANSLATE ........
-    # .............................
+    markdown_translated <- glue::glue("SiteDrought_technical_especifications_{lang()}.md")
     
-    #       .) Cuando tenga los 3 MD (Markdown) traducidos
-    #       .) Aplicaré este còdigo
-
-    markdown_translated <- glue::glue(  "SiteDrought_technical_especifications_{lang()}.Rmd" )
-    
-    
-    # ...... RMD NO TRANSALATE ........
-    # .................................
-    
-    #       .) solo tengo MD Catalan
-    #       .) uso un solo MD
-    
-    # markdown_translated <-  "SiteDrought_technical_especifications_cat.md" 
-    # markdown_translated <-"SiteDrought_technical_especifications_cat_MIQUEL.Rmd"
-     
-    # .......... RENDER RMD ..............
-    # ....................................
-      
-    #       .) TAGLIST = Pestaña en la que vamos a visualizar
-    #       .) FLUID PAGE = Tipo de Pestaña
-    #       .) WITHMATHJAX = Para visualizar FORMULAS del MD
-    #       .) READLINE = Para activar el RENDER RMARKDOWN
-    #       .) RENDER MARKDOWN = Renderiza un MD
-       
-    
-    shiny::tagList(
-      shiny::fluidPage(
-          shiny::withMathJax(
-            shiny::HTML(
-                 readLines(
-                   encoding = "UTF-8",
-                   rmarkdown::render(  
-                     input = system.file('resources', markdown_translated, package = 'siteDroughtApp'),
-                     output_format = rmarkdown::html_fragment(),
-                     quiet = TRUE
-                   )
-                )
-             )
-          )
-       )
-    )
- 
-
+    shiny::tagList(shiny::fluidPage(shiny::withMathJax(shiny::includeMarkdown(
+      system.file("resources", markdown_translated, package = 'sitedroughtapp')
+    ))))
+    # shiny::HTML(
+    #      readLines(
+    #        encoding = "UTF-8",
+    #        rmarkdown::render(  
+    #          input = system.file('resources', markdown_translated, package = 'siteDroughtApp'),
+    #          output_format = rmarkdown::html_fragment(),
+    #          quiet = TRUE
+    #        )
+    #     )
+    # )
   })
 
 }
