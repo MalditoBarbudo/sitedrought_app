@@ -18,53 +18,41 @@ navbarPageWithInputs <- function(..., inputs) {
 #' translate app function
 #'
 #' translate the app based on the lang selected
-
-
-# ............. FUNCION TRANSLATE ...........
-# ...........................................
-
-#       .) Función que traducirá
-#       .) Usará el DICCIONARIO ya creado (language_dictionary)
-#       .) ARGUMENTOS.
-#                .) LANG = Lengua per definida en menu del NAV
-#                .) ID = código que usarà el DICCIONARIO para saber QUE TRADUCIR
-
 translate_app <- function(id, lang) {
   
-  id %>%
-    purrr::map_chr(
-      ~ language_dictionary %>%
-        dplyr::filter(text_id == .x) %>% {
-          data_filtered <- .
-          if (nrow(data_filtered) < 1) {
-            .x
-          } else {
-            
-            # ........ NO PROBLEM ENCODING .......
-            # ....................................
-            
-            #    .) dplyr::pull(data_filtered, !! rlang::sym(glue::glue("translation_{lang}")))
-            
-            # ........ SI PROBLEM ENCODING .......
-            # ....................................
-            
-            #    .) A veces SHINY no transforma a UTF-8
-            #    .) La fórmula para hacerlo es 
-            #    .) Encoding(text) <- "UTF-8"
-            
-
-             text <- dplyr::pull(data_filtered, !! rlang::sym(glue::glue("translation_{lang}")))
-             
-             Encoding(text) <- "UTF-8"
-             text 
-
-            }
-        }
+  if (length(id) > 1) {
+    res <- purrr::map_chr(
+      id,
+      .f = \(.id) {
+        translate_app(.id, lang)
+      }
     )
+    return(res)
+  }
+  
+  id_row <- language_dictionary |>
+    dplyr::filter(text_id == id)
+  
+  if (nrow(id_row) < 1) {
+    return("")
+  }
+  
+  return(dplyr::pull(id_row, glue::glue("translation_{lang}")))
 }
 
  
 translate_thesaurus_app <- function(id, lang, type) {
+  
+  if (length(id) > 1) {
+    res <- purrr::map_chr(
+      id,
+      .f = \(.id) {
+        translate_thesaurus_app(.id, lang, type)
+      }
+    )
+    return(res)
+  }
+  
   var_row <- sitedrought_var_thes |>
     dplyr::filter(var_id == id)
   
