@@ -4,7 +4,15 @@
 \alias{mod_save}
 \title{siteDrought_data server function}
 \usage{
-mod_save(input, output, session, main_data_reactives, data_reactives, lang)
+mod_save(
+  input,
+  output,
+  session,
+  data_reactives,
+  main_data_reactives,
+  main_data,
+  lang
+)
 }
 \arguments{
 \item{input}{internal}
@@ -12,6 +20,10 @@ mod_save(input, output, session, main_data_reactives, data_reactives, lang)
 \item{output}{internal}
 
 \item{session}{internal}
+
+\item{data_reactives, main_data_reactives}{necessary reactives form other modules}
+
+\item{main_data}{main_data table}
 
 \item{lang}{lang reactive}
 }

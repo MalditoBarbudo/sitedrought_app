@@ -70,10 +70,10 @@ translate_app <- function(id, lang) {
 #       .) La usaré EN MOD_DATAINPUT
 #       .) La usaré para SETEAR NAMES
 
-shiny_set_names <- function(nom,lang) {
-  nom %>%
-  magrittr::set_names(translate_app(names(.), lang))
-}
+# shiny_set_names <- function(nom,lang) {
+#   nom %>%
+#   magrittr::set_names(translate_app(names(.), lang))
+# }
 
 
 # ...... FUNCION TRANSLATE THESUAURUS .......

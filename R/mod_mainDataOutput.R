@@ -53,21 +53,6 @@ mod_mainData <- function(
         shiny::need(data_reactives$date_daily, 'No date selected')
       )
       
-      # waiter for data filtering
-      # waiter_map <- waiter::Waiter$new(
-      #   id = 'overlay_div',
-      #   html = shiny::tagList(
-      #     hostess_plots$get_loader(),
-      #     shiny::h3(translate_app("progress_plots", lang())),
-      #     shiny::p(translate_app("progress_detail_plots", lang()))
-      #   ),
-      #   color = "#E8EAEB"
-      # )
-      # waiter_map$show()
-      # hostess_plots$start()
-      # on.exit(hostess_plots$close(), add = TRUE)
-      # on.exit(waiter_map$hide(), add = TRUE)
-      
       data_day <- main_data |>
         dplyr::filter(date == data_reactives$date_daily)
       
