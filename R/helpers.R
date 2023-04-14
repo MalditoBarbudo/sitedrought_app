@@ -7,8 +7,6 @@ navbarPageWithInputs <- function(..., inputs) {
   navbar <- shiny::navbarPage(...)
   form <- shiny::tags$form(class = "navbar-form", inputs)
 
-  # browser()
-
   navbar[[4]][[1]][[1]]$children[[1]]$children[[2]] <- htmltools::tagAppendChild(
     navbar[[4]][[1]][[1]]$children[[1]]$children[[2]], form
   )
@@ -20,6 +18,7 @@ navbarPageWithInputs <- function(..., inputs) {
 #' translate the app based on the lang selected
 translate_app <- function(id, lang) {
   
+  # recursive call for vectors
   if (length(id) > 1) {
     res <- purrr::map_chr(
       id,
@@ -30,19 +29,23 @@ translate_app <- function(id, lang) {
     return(res)
   }
   
+  # get id translations
   id_row <- language_dictionary |>
     dplyr::filter(text_id == id)
   
+  # return empty string if no matching id found
   if (nrow(id_row) < 1) {
     return("")
   }
   
+  # get the lang translation
   return(dplyr::pull(id_row, glue::glue("translation_{lang}")))
 }
 
  
 translate_thesaurus_app <- function(id, lang, type) {
   
+  # recursive call for id vectors
   if (length(id) > 1) {
     res <- purrr::map_chr(
       id,
@@ -53,6 +56,7 @@ translate_thesaurus_app <- function(id, lang, type) {
     return(res)
   }
   
+  # get id translations
   var_row <- sitedrought_var_thes |>
     dplyr::filter(var_id == id)
   
@@ -64,50 +68,3 @@ translate_thesaurus_app <- function(id, lang, type) {
   # return the desired translation based on type and lang
   return(dplyr::pull(var_row, glue::glue("var_{type}_{lang}")))
 }
-
-
-
-
-
-# ........ FUNCION CALL MODULES ..........
-# ...........................................
-
-#       .) Cada elemento de la APP a traducir
-#       .) Necesita un CALLMODULE
-#       .) Hago una FUNCIÓN para automatizar y no reescribir de nuevo
-
-#       .) Para pasar de un STRING a CODE R usamos
-#       .) GLUE + EVAL + PARSE (TEXT) + EVAL
-
-callModule_function <- function(tabs,lang){
-  
-  tabs <- tabs
-  
-  # Función CREA CallModule de STRING a R CODE
-  CM <- function(tabs,a){
-    glue::glue("
-        shiny::callModule(
-          mod_tab_translate, '",tabs[a],"',
-          '",tabs[a],"', lang
-        )") %>%
-          eval() %>%
-           parse(text = .) %>%
-             eval()
-  }
-  
-  
-  # Repetición de TODOS los CALL MODULES
-  for (i in 1:length(tabs)) {
-    CM(tabs,i)
-    
-  }
-  
-}
-
-
-
-
-
-
-
-

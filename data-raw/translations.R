@@ -1,7 +1,5 @@
 ## Script for creating the translations
-
-
-tibble::tribble(
+language_dictionary <- tibble::tribble(
   ~text_id, ~translation_cat, ~translation_eng, ~translation_spa,
 
   # ........ SITEDROUGHT .........
@@ -143,11 +141,10 @@ tibble::tribble(
   
  
   
-) %>%
-  {.} -> language_dictionary  
+)
 
 
-tibble::tribble(
+sitedrought_var_thes <- tibble::tribble(
   ~num, ~var_id, ~var_table, ~var_description_cat, ~var_description_eng, ~var_description_spa, ~var_description_help_cat, ~var_description_help_eng, ~var_description_help_spa, ~var_units_cat, ~var_units_eng, ~var_units_spa,
   
   "1","REW","data_day","Aigua disponible sòl","Available soil water","Agua disponible suelo","Percentatge d’aigua disponible al sòl, en relació al total d’aigua que pot ser extreta per les plantes.","Percentage of available water in the soil, in relation to the total water that can be extracted by plants.","Porcentaje de agua disponible en el suelo, en relación al total de agua que puede ser extraída por las plantas.","(%)","(%)","(%)",
@@ -162,12 +159,4 @@ tibble::tribble(
   "10","DDS_q","data_day","Percentil Estrés de la vegetació ","Percentile Stress on vegetation","Percentil Estrés de la vegetación","Percentil d’estrés de la vegetació, en relació a la distribució de valors de la sèrie històrica (1981-2020).","Vegetation stress percentile, in relation to the distribution of values of the historical series (1981-2020).","Percentil de estrés de la vegetación, en relación con la distribución de valores de la serie histórica (1981-2020).","(%)","(%)","(%)",
   "11","LFMC_q","data_day","Percentil Contingut d’Humitat de Combustible Viu","Percentile Live Fuel Moisture Content","Percentil Contendio de Humedad de Combustible Vivo","Percentil de contingut d’humitat del combustible viu, en relació a la distribució de valors de la sèrie històrica (1981-2020).","Percentage of moisture content of live fuel, in relation to the distribution of values of the historical series (1981-2020).","Percentil de contenido de humedad del combustible vivo, en relación a la distribución de valores de la serie histórica (1981-2020).","(%)","(%)","(%)",
   
-) %>%
-  {.} -> sitedrought_var_thes 
-
-
-# usethis::use_data(
-#   language_dictionary,
-#   
-#   internal = TRUE, overwrite = TRUE
-# )
+) 
