@@ -176,7 +176,7 @@ mod_map <- function(
       palettes_dictionary[[var_daily_sel]]$max
     )
     
-    if (var_daily_sel %in% c("Precipitation", "LFMC", "DFMC")) {
+    if (var_daily_sel %in% c("Precipitation", "LFMC", "DFMC", "PET")) {
       palette_domain <- c(
         0, max(data_map[[var_daily_sel]])
       )
@@ -245,13 +245,50 @@ mod_map <- function(
     admin_divs <- switch(
       data_reactives$plot_origin,
       "T" = all_polygons,
-      "A" = aiguestortes_big,
-      "PN" = parks_big,
-      "O" = ordesa_big,
+      "A" = aiguestortes,
+      "PN" = parques,
+      "O" = ordesa,
       "P" = catalunya, 
       "S" = provincias
     )
     
+    color_polygon <- dplyr::case_match(
+      data_reactives$plot_origin,
+      c("A", "PN", "O") ~ "#c41606",
+      .default = "grey"
+    )
+    
+    
+    add_parks_perimeters <- function(map, origin) {
+      
+      # get perimeters if any
+      park_perimeters <- switch(
+        origin,
+        "A" = peri_aiguestortes,
+        "PN" = peri_total,
+        "O" = peri_ordesa,
+        NULL
+      )
+      
+      # if no perimeter, return the map
+      if (is.null(park_perimeters)) {
+        return(map)
+      }
+      
+      # add polygons for the perimeter, with less weight and more transparency
+      map |>
+        leaflet::addPolygons(
+          data = park_perimeters,
+          opacity = 0.3,
+          weight = 1,
+          fill = FALSE,
+          color = "#004202",
+          group = "plots_layer",
+          options = leaflet::pathOptions(pane = "admin_divs")
+        )
+    }
+    
+    # Update the map with points and polygons
     leaflet::leafletProxy("map_daily") |>
       leaflet::clearGroup("plots_layer") |>
       leaflet::addCircles(
@@ -271,10 +308,11 @@ mod_map <- function(
         opacity = 0.7,
         weight = 1.5,
         fill = FALSE,
-        color = "grey",
+        color = color_polygon,
         group = "plots_layer",
         options = leaflet::pathOptions(pane = "admin_divs")
       ) |>
+      add_parks_perimeters(data_reactives$plot_origin) |>
       leaflet::clearControls() |>
       leaflet::addLegend(
         position = "bottomright",

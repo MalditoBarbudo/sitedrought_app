@@ -47,12 +47,13 @@ mod_ts <- function(
     
     dygraph_domain <- c(
       palettes_dictionary[[var_daily_sel]]$min,
-      palettes_dictionary[[var_daily_sel]]$max
+      palettes_dictionary[[var_daily_sel]]$max + (0.1 * palettes_dictionary[[var_daily_sel]]$max)
     )
     
-    if (var_daily_sel %in% c("Precipitation", "LFMC", "DFMC")) {
+    if (var_daily_sel %in% c("Precipitation", "LFMC", "LFMC_q", "DFMC", "PET")) {
+      max_value <- max(data_ts[,1])
       dygraph_domain <- c(
-        0, max(data_ts[,1])
+        0, max_value + (0.1 * max_value)
       )
     }
     
