@@ -48,19 +48,7 @@ mod_data <- function(
     
     ## inputs choices
     # variables
-    var_daily_choices <- list(
-      c("REW","DDS") |> 
-        purrr::set_names(translate_app(c("REW","DDS"), lang_declared)),
-      c("PET", "Precipitation") |> 
-        purrr::set_names(translate_app(c("PET", "Precipitation"), lang_declared)),
-      c("LFMC","DFMC","SFP","CFP") |> 
-        purrr::set_names(translate_app(c("LFMC","DFMC","SFP","CFP"), lang_declared)),
-      c("REW_q","DDS_q","LFMC_q") |> 
-        purrr::set_names(translate_app(c("REW_q","DDS_q","LFMC_q"), lang_declared))
-    ) |>
-      purrr::set_names(
-        translate_app(c("drought_vars", "climate_vars", "fire_vars", "quantiles"), lang_declared)
-      )
+    var_daily_choices <- create_var_list_for_input(lang_declared)
     
     # plots
     plot_origin_choices <- c("T", "P", "PN", "A", "O", "S") |>
@@ -98,7 +86,7 @@ mod_data <- function(
             ns('viz_pal_config'),
             translate_app('viz_pal_config_input', lang_declared),
             size = 'sm',
-            choices = c('high', 'normal', 'low') %>%
+            choices = c('high', 'normal', 'low') |> 
               purrr::set_names(c(
                 translate_app('pal_high', lang_declared),
                 translate_app('pal_normal', lang_declared),
@@ -134,19 +122,7 @@ mod_data <- function(
       
       lang_declared <- lang()
       plot_origin <- input$plot_origin
-      var_daily_choices_updated <- list(
-        c("REW","DDS") %>%
-          purrr::set_names(translate_app(., lang_declared)),
-        c("PET", "Precipitation") %>%
-          purrr::set_names(translate_app(., lang_declared)),
-        c("LFMC","DFMC","SFP","CFP") %>%
-          purrr::set_names(translate_app(., lang_declared)),
-        c("REW_q","DDS_q","LFMC_q") %>%
-          purrr::set_names(translate_app(., lang_declared))
-      ) |>
-        purrr::set_names(
-          translate_app(c("drought_vars", "climate_vars", "fire_vars", "quantiles"), lang_declared)
-        )
+      var_daily_choices_updated <- create_var_list_for_input(lang_declared)
       
       if (plot_origin == "S") {
         # remove CFP

@@ -72,7 +72,7 @@ language_dictionary <- tibble::tribble(
   "tech_specs_translation", "Especificacions tècniques", "Technical specifications", "Especificaciones técnicas",
   "date_daily_label", 'Data', 'Date', 'Fecha',
   'series_tab_translation', "Sèries temporals", "Time series", "Series temporales",
-  "type_legend_label", "Configurar paleta","Config palette", "Configurar paleta",
+  "viz_pal_config_input", "Configurar paleta","Config palette", "Configurar paleta",
   
   'percentiles_axis_label','Percentils comparació històrica (1981 - 2020)','Percentiles historical comparison (1981 - 2020)','Percentiles comparación histórica (1981 - 2020)',
   "save_main_label","Selecciona format per descargar les dades","Select format for downloading data","Selecciona formato para descargas los datos",
@@ -80,7 +80,7 @@ language_dictionary <- tibble::tribble(
   "save_table_button", "Descarrega","Download", "Descarga", 
   'help_description','Descripció : ','Description : ','Descripción : ',
   'units_description','Unitats : ','Units : ','Unidades : ',
-  'reverse_legend', "Invertir la paleta?","Reverse the palette?", "¿Invertir la paleta?", 
+  'viz_pal_reverse_input', "Invertir la paleta?","Reverse the palette?", "¿Invertir la paleta?", 
   
   # ........... SAVE .............
   # ..............................

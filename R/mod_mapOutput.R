@@ -120,9 +120,21 @@ mod_map <- function(
       # Matollar, bigger points as they are scattered dn difficult to see
       "S" ~ 5000,
       # Parks, bigger than normal, smaller than matollar because there is more closer points
-      c("O", "A", "PN") ~ 1500,
+      c("O", "A", "PN") ~ 500,
       # default 1000, for the rest of origins
       .default = 1000
+    )
+    
+    # step, which is calculated by max size (at zoom 7) minus default size (zoom 10) divided by
+    # 10 - 7 = 3 steps
+    step_zoom_increase <- dplyr::case_match(
+      data_reactives$plot_origin,
+      # Matollar, bigger points as they are scattered dn difficult to see
+      "S" ~ ((12500 - default_size) / 3),
+      # Parks, bigger than normal, smaller than matollar because there is more closer points
+      c("O", "A", "PN") ~ ((4000 - default_size) / 3),
+      # default 1000, for the rest of origins
+      .default = ((3000 - default_size) / 3)
     )
     
     current_zoom <- dplyr::case_when(
@@ -132,7 +144,7 @@ mod_map <- function(
     )
     
     # size calculation
-    size_transformed <- default_size + ((10 - current_zoom) * (default_size/2))
+    size_transformed <- default_size + ((10 - current_zoom) * step_zoom_increase)
     
     return(size_transformed)
   })

@@ -33,9 +33,9 @@ translate_app <- function(id, lang) {
   id_row <- language_dictionary |>
     dplyr::filter(text_id == id)
   
-  # return empty string if no matching id found
+  # return raw id if no matching id found
   if (nrow(id_row) < 1) {
-    return("")
+    return(id)
   }
   
   # get the lang translation
@@ -60,11 +60,29 @@ translate_thesaurus_app <- function(id, lang, type) {
   var_row <- sitedrought_var_thes |>
     dplyr::filter(var_id == id)
   
-  # check if found something, if not return empty string
+  # check if found something, if not return raw id
   if (nrow(var_row) < 1) {
-    return("")
+    return(id)
   }
   
   # return the desired translation based on type and lang
   return(dplyr::pull(var_row, glue::glue("var_{type}_{lang}")))
+}
+
+# we repeat several times the creation and translation of variables list, so se create a function
+# to do it
+create_var_list_for_input <- function(lang_declared) {
+  list(
+    c("REW","DDS") |> 
+      purrr::set_names(translate_app(c("REW","DDS"), lang_declared)),
+    c("PET", "Precipitation") |> 
+      purrr::set_names(translate_app(c("PET", "Precipitation"), lang_declared)),
+    c("LFMC","DFMC","SFP","CFP") |> 
+      purrr::set_names(translate_app(c("LFMC","DFMC","SFP","CFP"), lang_declared)),
+    c("REW_q","DDS_q","LFMC_q") |> 
+      purrr::set_names(translate_app(c("REW_q","DDS_q","LFMC_q"), lang_declared))
+  ) |>
+    purrr::set_names(
+      translate_app(c("drought_vars", "climate_vars", "fire_vars", "quantiles"), lang_declared)
+    )
 }

@@ -17,7 +17,6 @@ Imports:
     leaflet,
     leaflet.extras,
     lubridate,
-    magrittr,
     purrr,
     raster,
     readr,

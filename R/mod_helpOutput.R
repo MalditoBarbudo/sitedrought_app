@@ -36,26 +36,14 @@ mod_help <- function(
     ns <- session$ns
     lang_declared <- lang()
     
-    variable_help_choices <- list(
-      c("REW","DDS") |> 
-        purrr::set_names(translate_app(c("REW","DDS"), lang_declared)),
-      c("PET", "Precipitation") |> 
-        purrr::set_names(translate_app(c("PET", "Precipitation"), lang_declared)),
-      c("LFMC","DFMC","SFP","CFP") |> 
-        purrr::set_names(translate_app(c("LFMC","DFMC","SFP","CFP"), lang_declared)),
-      c("REW_q","DDS_q","LFMC_q") |> 
-        purrr::set_names(translate_app(c("REW_q","DDS_q","LFMC_q"), lang_declared))
-    ) |>
-      purrr::set_names(
-        translate_app(c("drought_vars", "climate_vars", "fire_vars", "quantiles"), lang_declared)
-      )
+    # input choices
+    variable_help_choices <- create_var_list_for_input(lang_declared)
      
     shiny::tagList(
       shiny::selectInput(
         ns('variable_help'), translate_app('var_daily_label', lang_declared),
         choices = variable_help_choices
       ),
-      
       # help text
       shiny::uiOutput(
         ns('help_text')
