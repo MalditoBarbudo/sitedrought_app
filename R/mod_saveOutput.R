@@ -132,7 +132,7 @@ mod_save <- function(
           shiny::h3(translate_app("progress_ddbb", lang())),
           shiny::p(translate_app("progress_detail_plots", lang()))
         ),
-        color = "#1C1C20"
+        color = "#E8EAEB"
       )
       
       waiter_ddbb$show()
