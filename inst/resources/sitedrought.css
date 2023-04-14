@@ -98,6 +98,7 @@ dygraph-axis-label.dygraph-axis-label-y {
   background-color: #d9dadb !important;
   border-radius: 5px;
   padding: 5px;
+  border: 1px solid grey ;
 }
 
 .dygraph-axis-label-y2 {   /* esconder valores al eje Y2 del time serie*/
