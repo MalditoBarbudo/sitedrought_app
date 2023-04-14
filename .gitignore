@@ -4,3 +4,4 @@
 .Ruserdata
 
 inst/resources/*html
+data-raw/shapefiles

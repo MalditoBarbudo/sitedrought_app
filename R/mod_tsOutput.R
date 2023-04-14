@@ -63,8 +63,12 @@ mod_ts <- function(
       quantile_modifier <- 1
     }
     
+    dygraph_title <- glue::glue(
+      "{map_reactives$map_daily_shape_click$id} [Lng: {map_reactives$map_daily_shape_click$lng}, Lat: {map_reactives$map_daily_shape_click$lat}]"
+    )
+    
     dygraph_output <- data_ts |>
-      dygraphs::dygraph(main = translate_app('timeseries_title', lang())) |>
+      dygraphs::dygraph(main = dygraph_title) |>
       dygraphs::dySeries(label = vars_translated[1], axis = 'y', strokeWidth = 2 - quantile_modifier) |> 
       dygraphs::dyAxis("y", label = vars_translated[1], valueRange = dygraph_domain, rangePad = 5) |>
       dygraphs::dyOptions(fillGraph = TRUE, fillAlpha = 0.1) |> 
@@ -74,7 +78,11 @@ mod_ts <- function(
     if (ncol(data_ts) > 1) {
       dygraph_output <- dygraph_output |>
         dygraphs::dySeries(label = vars_translated[2], axis = 'y2', strokeWidth = 1 + quantile_modifier) |> 
-        dygraphs::dyAxis("y2", label = vars_translated[2], valueRange = dygraph_domain, rangePad = 5)
+        dygraphs::dyAxis(
+          "y2",
+          label = translate_app("percentiles_axis_label", lang()),
+          valueRange = dygraph_domain, rangePad = 5
+        )
         
     }
     # return the dygraph

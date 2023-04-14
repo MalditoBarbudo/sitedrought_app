@@ -1,41 +1,37 @@
+### polygons creation script
+# there is a problem here. I don't have the original code to create the all polygons file
+# because Oleguer did it on QGIS.
 
-
-
-# ..... PROVINCIAS Y PARQUES NACIONALES .......
-# .............................................
-
-#      .) Si usamos el SIMPLIFY el tamaño varia
-#      .) Para calcular el tamaño usamos FORMAT(objet.size)
-#            .) format(object.size(all_polygons), units = "auto")
-#            .) format(object.size(all_polygons), units = "auto")
-
-#      .) all_polygons = "131 Kb"
-#      .) parques      = "178 Kb"
-
-
-
-all_polygons <- sf::st_read("SHAPES/POLYGONS/all_polygons.shp") %>%
-  # rmapshaper::ms_simplify(0.2) %>%
+all_polygons <- sf::st_read("data-raw/shapefiles/all_polygons.shp") |>
+  # rmapshaper::ms_simplify(0.2) |>
   sf::st_transform(4326)
 
-all_parques <- sf::st_read("SHAPES/POLYGONS/all_polygons.shp") %>%
-  dplyr::filter(Tipus == "OR" | Tipus == "AT" | Tipus == "peri_OR" | Tipus == "peri_AT" ) %>%
-  # rmapshaper::ms_simplify(0.5) %>%
+all_parques <- sf::st_read("data-raw/shapefiles/all_polygons.shp") |>
+  dplyr::filter(Tipus == "OR" | Tipus == "AT" | Tipus == "peri_OR" | Tipus == "peri_AT" ) |>
+  # rmapshaper::ms_simplify(0.5) |>
   sf::st_transform(4326)
 
 
 #  PARQUES / PROVINCIAS
-provincias <- all_polygons %>% dplyr::filter(Tipus == "PROV")
-catalunya <- all_polygons %>% dplyr::filter(Cod_CCAA == "09")
+provincias <- all_polygons |> dplyr::filter(Tipus == "PROV") |>
+  sf::st_make_valid()
+catalunya <- all_polygons |> dplyr::filter(Cod_CCAA == "09") |>
+  sf::st_make_valid()
 
-parques <- all_parques %>% dplyr::filter(Tipus == "OR" | Tipus == "AT")
-ordesa <- all_parques %>% dplyr::filter(Tipus == "OR")
-aiguestortes <- all_parques %>% dplyr::filter(Tipus == "AT")
+parques <- all_parques |> dplyr::filter(Tipus == "OR" | Tipus == "AT") |>
+  sf::st_make_valid()
+ordesa <- all_parques |> dplyr::filter(Tipus == "OR") |>
+  sf::st_make_valid()
+aiguestortes <- all_parques |> dplyr::filter(Tipus == "AT") |>
+  sf::st_make_valid()
 
 # PERIMETRE
-peri_total <- all_parques  %>% dplyr::filter(Tipus %in% c("peri_OR","peri_AT"))
-peri_ordesa <- all_parques  %>% dplyr::filter(Tipus == "peri_OR")
-peri_aiguestortes <- all_parques  %>% dplyr::filter(Tipus == "peri_AT")
+peri_total <- all_parques  |> dplyr::filter(Tipus %in% c("peri_OR", "peri_AT")) |>
+  sf::st_make_valid()
+peri_ordesa <- all_parques  |> dplyr::filter(Tipus == "peri_OR") |>
+  sf::st_make_valid()
+peri_aiguestortes <- all_parques  |> dplyr::filter(Tipus == "peri_AT") |>
+  sf::st_make_valid()
 
 ordesa_big <- sf::st_combine(rbind(ordesa, peri_ordesa)) |>
   sf::st_make_valid() |>
@@ -51,33 +47,3 @@ parks_big <- sf::st_combine(rbind(parques, peri_total)) |>
   sf::st_make_valid() |>
   sf::st_union(is_coverage = TRUE) |>
   sf::st_as_sf()
-
-
-
-# ..... TRANSFERÈNCIA DE DATAOS ALA APP .......
-# .............................................
-
-#      .) Enviar DATOS al resto dela App
-#      .) Usamos USE_DATE_RAW
-
-# usethis::use_data_raw(
-#   all_polygons,all_parques,
-#   catalunya,
-#   parques,
-#   ordesa,
-#   aiguestortes,
-#   peri_total ,
-#   peri_ordesa,
-#   peri_aiguestortes,
-# 
-#   internal = TRUE, overwrite = TRUE
-# )
-
-
-# format(object.size(parques), units = "auto")
-
-# format(object.size(provincias), units = "auto")
-# format(object.size(catalunya), units = "auto")
-# 
-# format(object.size(ordesa), units = "auto")
-# format(object.size(aiguestortes), units = "auto")
