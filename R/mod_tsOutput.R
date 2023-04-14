@@ -51,7 +51,7 @@ mod_ts <- function(
     )
     
     if (var_daily_sel %in% c("Precipitation", "LFMC", "LFMC_q", "DFMC", "PET")) {
-      max_value <- max(data_ts[,1])
+      max_value <- max(data_ts[,1], na.rm = TRUE)
       dygraph_domain <- c(
         0, max_value + (0.1 * max_value)
       )

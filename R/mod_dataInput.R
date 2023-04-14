@@ -102,6 +102,8 @@ mod_data <- function(
         ),
         shiny::column(
           6, align = "center",
+          # some space
+          shiny::br(), shiny::br(),
           # reverse palette
           shinyWidgets::awesomeCheckbox(
             ns('viz_pal_reverse'),

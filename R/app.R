@@ -24,7 +24,7 @@ sitedrought_app <- function() {
   
   # Language input ----------------------------------------------------------
   shiny::addResourcePath(
-    'images', system.file('resources', 'images', package = 'siteDroughtApp')
+    'images', system.file('resources', 'images', package = 'sitedroughtapp')
   )
   lang_choices <- c('cat', 'spa', 'eng')
   lang_flags <- c(
@@ -122,17 +122,17 @@ sitedrought_app <- function() {
             shiny::div(
               id = "overlay_div",
               ########################################################### debug ####
-              shiny::absolutePanel(
-               id = 'debug', class = 'panel panel-default', fixed = TRUE,
-               draggable = TRUE, width = 640, height = 'auto',
-               # top = 100, left = 100, rigth = 'auto', bottom = 'auto',
-               # top = 'auto', left = 'auto', right = 100, bottom = 100,
-               top = 60, left = 'auto', right = 50, bottom = 'auto',
-
-               shiny::textOutput('debug1'),
-               shiny::textOutput('debug2'),
-               shiny::textOutput('debug3')
-              ),
+              # shiny::absolutePanel(
+              #  id = 'debug', class = 'panel panel-default', fixed = TRUE,
+              #  draggable = TRUE, width = 640, height = 'auto',
+              #  # top = 100, left = 100, rigth = 'auto', bottom = 'auto',
+              #  # top = 'auto', left = 'auto', right = 100, bottom = 100,
+              #  top = 60, left = 'auto', right = 50, bottom = 'auto',
+              # 
+              #  shiny::textOutput('debug1'),
+              #  shiny::textOutput('debug2'),
+              #  shiny::textOutput('debug3')
+              # ),
               ####################################################### end debug ####
               shiny::tabsetPanel(
                 id  = "main_panel_tabset", type = "pills",
@@ -176,15 +176,15 @@ sitedrought_app <- function() {
     })
     
     ## debug #####
-    output$debug1 <- shiny::renderPrint({
-      map_reactives$map_daily_shape_click
-    })
-    output$debug2 <- shiny::renderPrint({
-      map_reactives$map_daily_zoom
-    })
-    output$debug3 <- shiny::renderPrint({
-      map_reactives$map_daily_shape_mouseover
-    })
+    # output$debug1 <- shiny::renderPrint({
+    #   map_reactives$map_daily_shape_click
+    # })
+    # output$debug2 <- shiny::renderPrint({
+    #   map_reactives$map_daily_zoom
+    # })
+    # output$debug3 <- shiny::renderPrint({
+    #   map_reactives$map_daily_shape_mouseover
+    # })
     
     # modules
     # data input

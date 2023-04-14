@@ -35,16 +35,6 @@ mod_techSpecs <- function(
     shiny::tagList(shiny::fluidPage(shiny::withMathJax(shiny::includeMarkdown(
       system.file("resources", markdown_translated, package = 'sitedroughtapp')
     ))))
-    # shiny::HTML(
-    #      readLines(
-    #        encoding = "UTF-8",
-    #        rmarkdown::render(  
-    #          input = system.file('resources', markdown_translated, package = 'siteDroughtApp'),
-    #          output_format = rmarkdown::html_fragment(),
-    #          quiet = TRUE
-    #        )
-    #     )
-    # )
   })
 
 }

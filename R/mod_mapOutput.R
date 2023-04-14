@@ -170,15 +170,20 @@ mod_map <- function(
     
     # palettes
     viz_pal_config <- data_reactives$viz_pal_config
-    viz_pal_reverse <- data_reactives$viz_pal_reverse
     palette_domain <- c(
       palettes_dictionary[[var_daily_sel]]$min,
       palettes_dictionary[[var_daily_sel]]$max
     )
+    viz_pal_reverse_sel <- data_reactives$viz_pal_reverse
+    viz_pal_reverse_default <- palettes_dictionary[[var_daily_sel]]$rev
+    # if sel and default are the same (FALSE-FALSE or TRUE-TRUE), then don't reverse the palette (FALSE)
+    # because is not needed. If they are different (TRUE-FALSE, FALSE-TRUE), then change the palette
+    # (TRUE), because default or user want it changed.
+    viz_pal_reverse <- !identical(viz_pal_reverse_sel, viz_pal_reverse_default)
     
     if (var_daily_sel %in% c("Precipitation", "LFMC", "DFMC", "PET")) {
       palette_domain <- c(
-        0, max(data_map[[var_daily_sel]])
+        0, max(data_map[[var_daily_sel]], na.rm = TRUE)
       )
     }
     # browser("points_map_obs")
