@@ -140,6 +140,9 @@ language_dictionary <- tibble::tribble(
   
   'expl_percentiles','Variació anual de la variable seleccionada de color verd i percentil del comparació històrica (1981 - 2020) en color blau. La variable seleccionada queda remarcada en el gràfic.','Annual variation of the selected variable in green and percentile of the historical comparison (1981-2020) in blue. The selected variable is highlighted in the graph.','Variación anual de la variable seleccionada de color verde y percentil de la comparación histórica (1981-2020) en color azul. La variable seleccionada queda remarcada en el gráfico.',
   
+  ## sweet alerts
+  "under_construction_title", "Meteoland App està en manteniment.", "Meteoland App is under maintenance.", "Meteoland App está bajo mantenimiento.",
+  "under_construction_text", "Algunes funcionalitats i dades poden faltar temporalment. Es poden produir errors (pantalles grises) en consultar les dades que falten.", "Some functionality, data can be temporally missing. Errors (gray screens) can happen when consulting missing data.", "Alguna funcionalidad o datos pueden faltar temporalmente. Pueden ocurrir errores (pantallazo gris) al consultar estos datos faltantes.",
  
   
 )

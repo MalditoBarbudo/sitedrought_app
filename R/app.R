@@ -175,6 +175,17 @@ sitedrought_app <- function() {
       input$lang
     })
     
+    # send an alarm when loading app or changes langs
+    shiny::observeEvent(
+      lang(),
+      {
+        shinyWidgets::show_alert(
+          title = translate_app('under_construction_title', lang()),
+          text = translate_app('under_construction_text', lang())
+        )
+      }
+    )
+    
     ## debug #####
     # output$debug1 <- shiny::renderPrint({
     #   map_reactives$map_daily_shape_click
