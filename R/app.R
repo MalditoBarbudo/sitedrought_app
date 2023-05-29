@@ -150,14 +150,15 @@ sitedrought_app <- function() {
           
           
         ) # end of sidebarLayout
-      ), # end of main tab
+      ) # end of main tab
       
       # technical specifications tab
-      shiny::tabPanel(
-        title = mod_tab_translateOutput('tech_specs_translation'),
-        value = 'tech_spec_panel',
-        mod_techSpecsOutput('mod_techSpecsOutput')
-      )
+      # commented for now until new tech specs are written
+      # shiny::tabPanel(
+      #   title = mod_tab_translateOutput('tech_specs_translation'),
+      #   value = 'tech_spec_panel',
+      #   mod_techSpecsOutput('mod_techSpecsOutput')
+      # )
     ) # enf od navbar 
   ) # end of UI
   
