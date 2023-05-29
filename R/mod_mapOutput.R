@@ -100,27 +100,29 @@ mod_map <- function(
     # we need zoom level to calculate this. Also, plot origin to get defaults
     shiny::req(input$map_daily_zoom, data_reactives$plot_origin)
     
-    default_size <- dplyr::case_match(
-      data_reactives$plot_origin,
-      # Matollar, bigger points as they are scattered dn difficult to see
-      "S" ~ 5000,
-      # Parks, bigger than normal, smaller than matollar because there is more closer points
-      c("O", "A", "PN") ~ 500,
-      # default 1000, for the rest of origins
-      .default = 1000
-    )
+    # default_size <- dplyr::case_match(
+    #   data_reactives$plot_origin,
+    #   # Matollar, bigger points as they are scattered dn difficult to see
+    #   "S" ~ 5000,
+    #   # Parks, bigger than normal, smaller than matollar because there is more closer points
+    #   c("O", "A", "PN") ~ 500,
+    #   # default 1000, for the rest of origins
+    #   .default = 1000
+    # )
+    default_size <- 1000
     
     # step, which is calculated by max size (at zoom 7) minus default size (zoom 10) divided by
     # 10 - 7 = 3 steps
-    step_zoom_increase <- dplyr::case_match(
-      data_reactives$plot_origin,
-      # Matollar, bigger points as they are scattered dn difficult to see
-      "S" ~ ((12500 - default_size) / 3),
-      # Parks, bigger than normal, smaller than matollar because there is more closer points
-      c("O", "A", "PN") ~ ((4000 - default_size) / 3),
-      # default 1000, for the rest of origins
-      .default = ((3000 - default_size) / 3)
-    )
+    # step_zoom_increase <- dplyr::case_match(
+    #   data_reactives$plot_origin,
+    #   # Matollar, bigger points as they are scattered dn difficult to see
+    #   "S" ~ ((12500 - default_size) / 3),
+    #   # Parks, bigger than normal, smaller than matollar because there is more closer points
+    #   c("O", "A", "PN") ~ ((4000 - default_size) / 3),
+    #   # default 1000, for the rest of origins
+    #   .default = ((3000 - default_size) / 3)
+    # )
+    step_zoom_increase <- ((3000 - default_size) / 3)
     
     current_zoom <- dplyr::case_when(
       input$map_daily_zoom < 7 ~ 7,
