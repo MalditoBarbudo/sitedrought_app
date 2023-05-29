@@ -116,7 +116,7 @@ language_dictionary <- tibble::tribble(
   # ..............................
 
   "PN", "Parcs Nacionals", "Nationals Parks", "Parques Nacionales",
-  "P", "IFN 4", "NFI 4" , "IFN 4",
+  "P", "IFN", "NFI" , "IFN",
   "A", "Parc Nacional d'Aigüestortes i Estany de Sant Maurici", "Aigüestortes i Estany de Sant Maurici National Park", "Parque Nacional de Aigüestortes i Estany de Sant Maurici",
   "S", "Matollar", "Shrubland", "Matorral",
   "T", "Totes les parcel·les", "All plots", "Todas las parcelas",
