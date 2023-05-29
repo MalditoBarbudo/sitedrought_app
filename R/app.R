@@ -181,7 +181,8 @@ sitedrought_app <- function() {
           fill_direction = 'btt',
           center_page = TRUE
         ),
-        shiny::h4(translate_app('long_time_waiter', lang()))
+        shiny::br(), shiny::br(),
+        shiny::h4("Estem carregant 6,5 milions de registres (un any de dades diàries), això trigarà uns quants minuts (3~5 minuts)")
       )
     )
     hostess_init <- waiter::Hostess$new('loader', infinite = TRUE)
