@@ -149,6 +149,12 @@ div#shiny-notification-panel {
   text-align: center;
   color: #1C1C20;
 }
+.waiter-overlay-content > h4 {
+  width: 100%;
+  left: 0%;
+  text-align: center;
+  color: #1C1C20;
+}
 .waiter-overlay-content > p {
   width: 100%;
   left: 0%;
