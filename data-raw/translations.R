@@ -109,6 +109,8 @@ language_dictionary <- tibble::tribble(
   "progress_ts", "Càlcul de les sèries temporals", "Calculating the time series", "Calculando las series temporales",
   "progress_detail_ts", "Això pot trigar una mica, en funció del nombre i / o la mida dels objectes espacials", "This may take some time, depending on the number and/or size of the spatial objects", "Esto puede llevar algún tiempo, dependiendo de número y/o tamaño de los objetos espaciales",
   
+  "long_time_waiter", "Estem carregant 6,5 milions de registres (un any de dades diàries), això trigarà uns quants minuts (3~5 minuts)", "We are loading 6.5 millions of records (one year worth of daily data), this will take several minutes (3~5min)", "Estamos cargando 6,5 millones de registros (un año de datos diarios), esto llevará varios minutos (3 ~ 5 min)",
+  
   
   # ........ PLOT ORIGEN .........
   # ..............................

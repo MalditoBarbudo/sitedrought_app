@@ -80,7 +80,7 @@ mod_mainData <- function(
       "O" = data_day() |> sf::st_join(ordesa_big, left = FALSE, join = sf::st_covered_by),
       "T" = data_day(),
       "P" = data_day() |> dplyr::filter(plot_origin == "ifn"),
-      "S" = data_day() |> dplyr::filter(plot_origin == "matollar")
+      "S" = data_day() |> dplyr::filter(plot_origin %in% c("matollar", "combuscat"))
     )
     
     return(data_day_origin)
@@ -105,7 +105,7 @@ mod_mainData <- function(
     plot_data <- main_data |>
       dplyr::filter(plot_id == plot_id_sel) |>
       dplyr::as_tibble() |>
-    dplyr::select(date, dplyr::contains(stripped_var))
+      dplyr::select(date, dplyr::contains(stripped_var))
     
     data_ts <- plot_data |>
       dplyr::select(dplyr::contains(stripped_var)) |>

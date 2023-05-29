@@ -33,17 +33,6 @@ sitedrought_app <- function() {
     glue::glue("<img class='flag-image' src='images/eng.png' width=20px><div class='flag-lang'>%s</div></img>")
   )
   
-  # Static data -------------------------------------------------------------
-  # Main table is static, we only need to load it once, so better at the
-  # beginning. We also calculate the min and max date already
-  tictoc::tic()
-  main_data <- sddb$get_data()
-  main_date_range <- c(
-    max = main_data$date |> max(na.rm = TRUE),
-    min = main_data$date |> min(na.rm = TRUE)
-  )
-  tictoc::toc()
-  
   # UI ------------------------------------------------------------------------------------------
   ui <- shiny::tagList(
     
@@ -51,6 +40,12 @@ sitedrought_app <- function() {
     shinyjs::useShinyjs(),
     waiter::use_waiter(),
     waiter::use_hostess(),
+    
+    # show waiter on load
+    waiter::waiter_show_on_load(
+      color = 'transparent',
+      html = waiter::spin_chasing_dots()
+    ),
     
     # head
     shiny::tags$head(
@@ -174,6 +169,37 @@ sitedrought_app <- function() {
     lang <- shiny::reactive({
       input$lang
     })
+    
+    # hostess init
+    waiter::waiter_update(
+      html = shiny::tagList(
+        shiny::br(), shiny::br(),
+        waiter::hostess_loader(
+          "loader",
+          svg = 'images/hostess_image.svg',
+          progress_type = 'fill',
+          fill_direction = 'btt',
+          center_page = TRUE
+        ),
+        shiny::h4(translate_app('long_time_waiter', lang()))
+      )
+    )
+    hostess_init <- waiter::Hostess$new('loader', infinite = TRUE)
+    hostess_init$start()
+    # close init
+    on.exit(hostess_init$close(), add = TRUE)
+    on.exit(waiter::waiter_hide(), add = TRUE)
+    
+    # Static data
+    # Main table is static, we only need to load it once, so better at the
+    # beginning. We also calculate the min and max date already
+    tictoc::tic()
+    main_data <- sddb$get_data()
+    main_date_range <- c(
+      max = main_data$date |> max(na.rm = TRUE),
+      min = main_data$date |> min(na.rm = TRUE)
+    )
+    tictoc::toc()
     
     # send an alarm when loading app or changes langs
     shiny::observeEvent(
