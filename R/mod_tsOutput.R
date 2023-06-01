@@ -11,7 +11,7 @@ mod_tsOutput <- function(id) {
 
   # UI ####
   shiny::tagList(
-    dygraphs::dygraphOutput(ns('timeseries_plot')),
+    dygraphs::dygraphOutput(ns('timeseries_plot'), height = 600),
     shiny::uiOutput(ns('dygraph_explanation'))
   )
 }

@@ -56,7 +56,7 @@ mod_save <- function(
               c("col_vis", "col_all"),
               translate_app(c("col_vis", "col_all"), lang_declared)
             ),
-            status = 'success', fill = TRUE, shape = 'round'
+            status = 'info', fill = TRUE, shape = 'round'
           ),
           shinyWidgets::prettyRadioButtons(
             ns("data_day"), translate_app("select_by_date", lang_declared),
@@ -64,7 +64,7 @@ mod_save <- function(
               c("day", "ddbb"),
               translate_app(c("day", "ddbb"), lang_declared)
             ),
-            status = 'success', fill = TRUE, shape = 'round'
+            status = 'info', fill = TRUE, shape = 'round'
           ),
           shinyWidgets::prettyRadioButtons(
             ns("data_format"), translate_app("select_format_label", lang_declared),
@@ -72,7 +72,7 @@ mod_save <- function(
               c("csv", "gpkg"),
               translate_app(c("csv", "gpkg"), lang_declared)
             ),
-            status = 'success', fill = TRUE, shape = 'round'
+            status = 'info', fill = TRUE, shape = 'round'
           )
 
         ), # end fluid row
