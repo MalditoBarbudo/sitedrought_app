@@ -52,8 +52,8 @@ sitedrought_app <- function() {
       # js scripts
       shiny::tags$script(keep_alive_script),
       # ci and custom css
-      shiny::includeCSS(system.file("resources", "sitedrought.css", package = "sitedroughtapp")),
-      shiny::includeCSS(system.file("resources", "corp_image.css", package = "sitedroughtapp"))
+      shiny::includeCSS(system.file("apps_css", "corp_image.css", package = "lfcdata")),
+      shiny::includeCSS(system.file("apps_css", "sitedrought.css", package = "lfcdata"))
     ),
     
     navbarPageWithInputs(
