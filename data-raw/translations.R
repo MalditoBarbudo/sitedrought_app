@@ -144,7 +144,7 @@ language_dictionary <- tibble::tribble(
   
   ## sweet alerts
   "under_construction_title", "SiteDrought App està en manteniment.", "SiteDrought App is under maintenance.", "SiteDrought App está bajo mantenimiento.",
-  "under_construction_text", "Hem trobat un problema a la base de dades i estem treballant per resoldre'l. Les dades a partir del 20 de maig de 2023 no estan disponibles en aquests moments.", "We've encountered a problem within the database and we are working is solving it. Data starting from 20th May 2023 is not available at the moment.", "Hemos encontrado un problema dentro de la base de datos y estamos trabajando para solucionarlo. Los datos a partir del 20 de mayo de 2023 no están disponibles en este momento.",
+  "under_construction_text", "Hem trobat un problema a la base de dades i estem treballant per resoldre'l. Les dades a partir del 10 de maig de 2023 no estan disponibles en aquests moments.", "We've encountered a problem within the database and we are working is solving it. Data starting from 10th May 2023 is not available at the moment.", "Hemos encontrado un problema dentro de la base de datos y estamos trabajando para solucionarlo. Los datos a partir del 10 de mayo de 2023 no están disponibles en este momento.",
  
   
 )

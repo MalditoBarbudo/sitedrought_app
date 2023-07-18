@@ -66,8 +66,10 @@ mod_data <- function(
       shiny::dateInput(
         ns("date_daily"), translate_app("date_daily_label", lang_declared),
         # format = "yyyy/mm/dd",
-        value = main_date_range["max"],
-        max = main_date_range["max"],
+        # value = main_date_range["max"],
+        # max = main_date_range["max"],
+        value = "2023/05/10",
+        max = "2023/05/10",
         min = main_date_range["min"],
         weekstart = 1, language = dates_lang
       ),
