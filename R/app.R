@@ -39,7 +39,7 @@ sitedrought_app <- function() {
     # needed initializations
     shinyjs::useShinyjs(),
     waiter::use_waiter(),
-    waiter::use_hostess(),
+    # waiter::use_hostess(),
     
     # show waiter on load
     waiter::waiter_show_on_load(
