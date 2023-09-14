@@ -218,15 +218,15 @@ sitedrought_app <- function() {
     tictoc::toc()
     
     # send an alarm when loading app or changes langs
-    shiny::observeEvent(
-      lang(),
-      {
-        shinyWidgets::show_alert(
-          title = translate_app('under_construction_title', lang()),
-          text = translate_app('under_construction_text', lang())
-        )
-      }
-    )
+    # shiny::observeEvent(
+    #   lang(),
+    #   {
+    #     shinyWidgets::show_alert(
+    #       title = translate_app('under_construction_title', lang()),
+    #       text = translate_app('under_construction_text', lang())
+    #     )
+    #   }
+    # )
     
     ## debug #####
     # output$debug1 <- shiny::renderPrint({
