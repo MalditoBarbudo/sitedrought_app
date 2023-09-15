@@ -189,21 +189,21 @@ sitedrought_app <- function() {
     waiter::waiter_update(
       html = shiny::tagList(
         shiny::br(), shiny::br(),
-        waiter::hostess_loader(
-          "loader",
-          svg = 'images/hostess_image.svg',
-          progress_type = 'fill',
-          fill_direction = 'btt',
-          center_page = TRUE
-        ),
         shiny::br(), shiny::br(),
-        shiny::h4("Estem carregant 6,5 milions de registres (un any de dades diàries), això trigarà uns quants minuts (3~5 minuts)")
+        shiny::br(), shiny::br(),
+        waiter::spin_flowers(),
+        shiny::br(), shiny::br(),
+        shiny::br(), shiny::br(),
+        shiny::br(), shiny::br(),
+        shiny::br(), shiny::br(),
+        shiny::h3("Estem carregant 6,5 milions de registres (un any de dades diàries),"),
+        shiny::h4("això trigarà uns quants minuts (3~5 minuts)")
       )
     )
-    hostess_init <- waiter::Hostess$new('loader', infinite = TRUE)
-    hostess_init$start()
+    # hostess_init <- waiter::Hostess$new('loader', infinite = TRUE)
+    # hostess_init$start()
     # close init
-    on.exit(hostess_init$close(), add = TRUE)
+    # on.exit(hostess_init$close(), add = TRUE)
     on.exit(waiter::waiter_hide(), add = TRUE)
     
     # Static data

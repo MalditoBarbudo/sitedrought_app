@@ -36,12 +36,12 @@ mod_mainData <- function(
   ## waiter and hostess progress
   # set a progress with waiter. We will use infinite = TRUE, that way we dont need to calculate
   # the, on the other hand unknown, step durations
-  hostess_plots <- waiter::Hostess$new(infinite = TRUE)
-  hostess_plots$set_loader(waiter::hostess_loader(
-    svg = 'images/hostess_image.svg',
-    progress_type = 'fill',
-    fill_direction = 'btt'
-  ))
+  # hostess_plots <- waiter::Hostess$new(infinite = TRUE)
+  # hostess_plots$set_loader(waiter::hostess_loader(
+  #   svg = 'images/hostess_image.svg',
+  #   progress_type = 'fill',
+  #   fill_direction = 'btt'
+  # ))
   
   ## reactives
   # data for the selected day

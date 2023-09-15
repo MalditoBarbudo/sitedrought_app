@@ -116,19 +116,20 @@ mod_save <- function(
     content = function(file) {
       
       # we need a waiter to show the progress due to size of files when saving whole database
-      hostess_plots <- waiter::Hostess$new(infinite = TRUE)
-      hostess_plots$set_loader(
-        waiter::hostess_loader(
-          svg = 'images/hostess_image.svg',
-          progress_type = 'fill',
-          fill_direction = 'btt'
-        )
-      )
+      # hostess_plots <- waiter::Hostess$new(infinite = TRUE)
+      # hostess_plots$set_loader(
+      #   waiter::hostess_loader(
+      #     svg = 'images/hostess_image.svg',
+      #     progress_type = 'fill',
+      #     fill_direction = 'btt'
+      #   )
+      # )
       
       waiter_ddbb <- waiter::Waiter$new(
         id = 'overlay_div',
         html = shiny::tagList(
-          hostess_plots$get_loader(),
+          # hostess_plots$get_loader(),
+          waiter::spin_flowers(),
           shiny::h3(translate_app("progress_ddbb", lang())),
           shiny::p(translate_app("progress_detail_plots", lang()))
         ),
@@ -136,8 +137,8 @@ mod_save <- function(
       )
       
       waiter_ddbb$show()
-      hostess_plots$start()
-      on.exit(hostess_plots$close(), add = TRUE)
+      # hostess_plots$start()
+      # on.exit(hostess_plots$close(), add = TRUE)
       on.exit(waiter_ddbb$hide(), add = TRUE)
       
       
